@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../../build/public.props" />
+  <Import Project="../../../build/version.props" />
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netcoreapp3.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\OSharp.EntityFrameworkCore\OSharp.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\src\OSharp.Permissions\OSharp.Permissions.csproj" />
+    <ProjectReference Include="..\Liuliu.Demo.Core\Liuliu.Demo.Core.csproj" />
+  </ItemGroup>
+
+</Project>
