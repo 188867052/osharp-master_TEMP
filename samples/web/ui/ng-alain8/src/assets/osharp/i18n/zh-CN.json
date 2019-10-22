@@ -12,6 +12,7 @@
   "menu.nav": "导航菜单",
   "menu.nav.home": "主页",
   "menu.nav.docs": "文档中心",
+  "menu.nav.release.version": "版本管理",
   "menu.nav.permission": "权限模块",
   "menu.nav.permission.identity": "身份认证",
   "menu.nav.permission.identity.user": "用户管理",

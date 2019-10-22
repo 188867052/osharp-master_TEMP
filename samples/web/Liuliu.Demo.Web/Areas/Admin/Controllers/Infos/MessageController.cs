@@ -16,7 +16,8 @@ using System;
 using OSharp.Filter;
 
 using Liuliu.Demo.Infos;
-
+using OSharp.Core.Modules;
+using System.ComponentModel;
 
 namespace Liuliu.Demo.Web.Areas.Admin.Controllers
 {
@@ -29,6 +30,19 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         /// 初始化一个<see cref="MessageController"/>类型的新实例
         /// </summary>
         public MessageController(IInfosContract infosContract,
+            IFilterService filterService)
+            : base(infosContract, filterService)
+        { }
+    }
+
+    [ModuleInfo(Position = "Infos2", PositionName = "信息模块2")]
+    [Description("管理-站内信信息2")]
+    public class Message2Controller : MessageControllerBase
+    {
+        /// <summary>
+        /// 初始化一个<see cref="MessageController"/>类型的新实例
+        /// </summary>
+        public Message2Controller(IInfosContract infosContract,
             IFilterService filterService)
             : base(infosContract, filterService)
         { }

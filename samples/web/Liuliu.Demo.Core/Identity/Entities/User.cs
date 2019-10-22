@@ -7,7 +7,9 @@
 //  <last-date>2018-06-27 4:44</last-date>
 // -----------------------------------------------------------------------
 
+using OSharp.Entity;
 using OSharp.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
