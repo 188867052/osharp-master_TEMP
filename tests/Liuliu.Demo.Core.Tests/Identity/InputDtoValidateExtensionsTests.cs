@@ -1,12 +1,7 @@
-using System;
 using System.ComponentModel.DataAnnotations;
-
 using Liuliu.Demo.Identity.Dtos;
-
 using OSharp.Entity;
-
 using Shouldly;
-
 using Xunit;
 
 namespace Liuliu.Demo.Core.Identity.Tests

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.TestHost;
-
 
 namespace OSharp.UnitTest.Infrastructure
 {
@@ -16,9 +12,7 @@ namespace OSharp.UnitTest.Infrastructure
         {
             var builder = CreateWebHostBuilder();
             Server = CreateTestServer(builder);
-
             Client = Server.CreateClient();
-
             ServerProvider = Server.Host.Services;
         }
 

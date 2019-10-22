@@ -55,59 +55,7 @@ export class VersionComponent extends STComponentBase implements OnInit {
         this.st.reload();
     }
 
-    // #region 角色设置
-
-    roleTitle: string;
-    roleTreeDataUrl: string;
-    @ViewChild("roleModal", { static: false }) roleModal: ModalTreeComponent;
-
-    private roles(row: STData) {
-        this.editRow = row;
-        this.roleTitle = `设置用户角色 - ${row.UserName}`;
-        this.roleTreeDataUrl = `api/admin/role/ReadUserRoles?userId=${row.Id}`;
-        this.roleModal.open();
-    }
-
-    setRoles(value: NzTreeNode[]) {
-        let ids = this.alain.GetNzTreeCheckedIds(value);
-        let body = { userId: this.editRow.Id, roleIds: ids };
-        this.http.post('api/admin/user/setRoles', body).subscribe(result => {
-            this.osharp.ajaxResult(result, () => {
-                this.st.reload();
-                this.roleModal.close();
-            });
-        });
-    }
-
-    // #endregion
-
-    // #region 权限设置
-
-    moduleTitle: string;
-    moduleTreeDataUrl: string;
-    @ViewChild("moduleModal", { static: false }) moduleModal: ModalTreeComponent;
-
-    private module(row: STData) {
-        this.editRow = row;
-        this.moduleTitle = `设置用户权限 - ${row.UserName}`;
-        this.moduleTreeDataUrl = `api/admin/module/ReadUserModules?userId=${row.Id}`;
-        this.moduleModal.open();
-    }
-
-    setModules(value: NzTreeNode[]) {
-        let ids = this.alain.GetNzTreeCheckedIds(value);
-        let body = { userId: this.editRow.Id, moduleIds: ids };
-        this.http.post('api/admin/user/setModules', body).subscribe(result => {
-            this.osharp.ajaxResult(result, () => {
-                this.st.reload();
-                this.moduleModal.close();
-            });
-        });
-    }
-
-    // #endregion
-
-    // #region 查看功能
+    // #region 查看配置
 
     functionTitle: string;
     functionVisible = false;
@@ -115,7 +63,7 @@ export class VersionComponent extends STComponentBase implements OnInit {
     @ViewChild('function', { static: false }) function: FunctionViewComponent;
 
     private viewFunction(row: STData) {
-        this.functionTitle = `查看用户功能 - ${row.Id}. ${row.UserName}`;
+        this.functionTitle = `查看用户功能 - ${row.Id}. ${row.Name}`;
         this.functionVisible = true;
 
         this.functionReadUrl = `api/admin/userfunction/readfunctions?userId=${row.Id}`;
