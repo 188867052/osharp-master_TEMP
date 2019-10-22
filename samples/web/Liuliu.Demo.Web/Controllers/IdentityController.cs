@@ -1,19 +1,8 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="IdentityController.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2018 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2018-06-27 4:50</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Security.Claims;
 using System.Threading.Tasks;
-
 using Liuliu.Demo.Identity;
 using Liuliu.Demo.Identity.Dtos;
 using Liuliu.Demo.Identity.Entities;
@@ -22,7 +11,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-
 using OSharp.AspNetCore;
 using OSharp.AspNetCore.Mvc;
 using OSharp.AspNetCore.Mvc.Filters;
