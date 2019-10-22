@@ -32,9 +32,9 @@ steps:
   inputs:
     command: 'install'
 
-- task: Npm@1
+- task: CmdLine@2
   inputs:
-    command: 'publish'
+    script: 'npm start'
 
 - task: VSTest@2
   inputs:
