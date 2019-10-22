@@ -11,16 +11,15 @@ namespace OSharp.Develop.Tests
         public void Ram_Test()
         {
             CodeRamer.Initialize();
-            CodeRamer.Ram("name",
-                () =>
+            CodeRamer.Ram("name", () =>
+            {
+                int sum = 0;
+                for (int i = 1; i <= 1000; i++)
                 {
-                    int sum = 0;
-                    for (int i = 1; i <= 10000; i++)
-                    {
-                        sum += i;
-                    }
-                    Console.WriteLine($"sum: {sum}");
-                });
+                    sum += i;
+                }
+                Console.Write($"sum: {sum}, ");
+            });
         }
     }
 }
