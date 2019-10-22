@@ -26,7 +26,7 @@ const routes: Routes = [
             { path: 'security', loadChildren: () => import('./security/security.module').then(m => m.SecurityModule) },
             { path: 'systems', loadChildren: () => import('./systems/systems.module').then(m => m.SystemsModule) },
             { path: 'infos', loadChildren: () => import('./infos/infos.module').then(m => m.InfosModule), canActivateChild: [ACLGuard], data: { guard: 'Root.Admin.Infos' } },
-            { path: 'release', loadChildren: () => import('./release/release.module').then(m => m.ReleaseModule) },
+            { path: 'release', loadChildren: () => import('./release.manage/release.module').then(m => m.ReleaseModule) },
         ]
     },
     // 全屏布局
