@@ -32,10 +32,6 @@ steps:
   inputs:
     command: 'install'
 
-- task: CmdLine@2
-  inputs:
-    script: 'npm start'
-
 - task: VSTest@2
   inputs:
     testSelector: 'testAssemblies'
