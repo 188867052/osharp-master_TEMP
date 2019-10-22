@@ -1,3 +1,7 @@
+# master [![Build Status](https://542153354-qq.visualstudio.com/OSharp/_apis/build/status/master?branchName=master)](https://542153354-qq.visualstudio.com/OSharp/_build/latest?definitionId=20&branchName=master)
+
+# npm [![Build Status](https://542153354-qq.visualstudio.com/OSharp/_apis/build/status/npm?branchName=master)](https://542153354-qq.visualstudio.com/OSharp/_build/latest?definitionId=21&branchName=master)
+
 # OSharp Framework with .NETStandard2.0
 
 [![osharp@66soft](https://img.shields.io/badge/66soft-osharp.org-bc17da.svg)](http://www.osharp.org)
