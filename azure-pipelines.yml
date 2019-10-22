@@ -28,10 +28,6 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: Npm@1
-  inputs:
-    command: 'install'
-
 - task: VSTest@2
   inputs:
     testSelector: 'testAssemblies'
