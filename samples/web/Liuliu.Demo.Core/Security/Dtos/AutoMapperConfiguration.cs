@@ -17,7 +17,6 @@ using OSharp.AutoMapper;
 using OSharp.Dependency;
 using OSharp.Json;
 
-
 namespace Liuliu.Demo.Security.Dtos
 {
     /// <summary>
@@ -35,7 +34,7 @@ namespace Liuliu.Demo.Security.Dtos
             mapper.CreateMap<EntityRoleInputDto, EntityRole>()
                 .ForMember(mr => mr.FilterGroupJson, opt => opt.MapFrom(dto => dto.FilterGroup.ToJsonString(false, false)));
 
-            //mapper.CreateMap<EntityRole, EntityRoleOutputDto>()
+            // mapper.CreateMap<EntityRole, EntityRoleOutputDto>()
             //    .ForMember(dto => dto.FilterGroup, opt => opt.ResolveUsing(mr => mr.FilterGroupJson?.FromJsonString<FilterGroup>()));
         }
     }

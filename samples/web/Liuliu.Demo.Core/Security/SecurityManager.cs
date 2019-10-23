@@ -19,7 +19,6 @@ using OSharp.Entity;
 using OSharp.EventBuses;
 using OSharp.Security;
 
-
 namespace Liuliu.Demo.Security
 {
     /// <summary>
@@ -56,6 +55,7 @@ namespace Liuliu.Demo.Security
                 userRoleRepository,
                 roleRepository,
                 userRepository)
-        { }
+        {
+        }
     }
 }

@@ -10,7 +10,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-
 namespace OSharp.EventBuses
 {
     /// <summary>
@@ -34,11 +33,12 @@ namespace OSharp.EventBuses
         /// <param name="eventData">事件源数据</param>
         public virtual void Handle(IEventData eventData)
         {
-            if (!CanHandle(eventData))
+            if (!this.CanHandle(eventData))
             {
                 return;
             }
-            Handle((TEventData)eventData);
+
+            this.Handle((TEventData)eventData);
         }
 
         /// <summary>
@@ -49,11 +49,12 @@ namespace OSharp.EventBuses
         /// <returns></returns>
         public virtual Task HandleAsync(IEventData eventData, CancellationToken cancelToken = default(CancellationToken))
         {
-            if (!CanHandle(eventData))
+            if (!this.CanHandle(eventData))
             {
                 return Task.FromResult(0);
             }
-            return HandleAsync((TEventData)eventData, cancelToken);
+
+            return this.HandleAsync((TEventData)eventData, cancelToken);
         }
 
         /// <summary>
@@ -70,7 +71,7 @@ namespace OSharp.EventBuses
         /// <returns>是否成功</returns>
         public virtual Task HandleAsync(TEventData eventData, CancellationToken cancelToken = default(CancellationToken))
         {
-            return Task.Run(() => Handle(eventData), cancelToken);
+            return Task.Run(() => this.Handle(eventData), cancelToken);
         }
     }
 }

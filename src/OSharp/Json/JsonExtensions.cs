@@ -10,7 +10,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-
 namespace OSharp.Json
 {
     /// <summary>
@@ -32,10 +31,12 @@ namespace OSharp.Json
             {
                 settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             }
+
             if (indented)
             {
                 settings.Formatting = Formatting.Indented;
             }
+
             return JsonConvert.SerializeObject(obj, settings);
         }
     }

@@ -17,7 +17,6 @@ using Microsoft.Extensions.DependencyInjection;
 using OSharp.Data;
 using OSharp.Exceptions;
 
-
 namespace OSharp.Identity.JwtBearer
 {
     /// <summary>
@@ -36,7 +35,7 @@ namespace OSharp.Identity.JwtBearer
         /// </summary>
         public AccessClaimsProvider(IServiceProvider provider)
         {
-            _provider = provider;
+            this._provider = provider;
         }
 
         /// <summary>
@@ -48,7 +47,7 @@ namespace OSharp.Identity.JwtBearer
         {
             Check.NotNullOrEmpty(userId, nameof(userId));
 
-            UserManager<TUser> userManager = _provider.GetService<UserManager<TUser>>();
+            UserManager<TUser> userManager = this._provider.GetService<UserManager<TUser>>();
             TUser user = await userManager.FindByIdAsync(userId);
             if (user == null)
             {
@@ -58,7 +57,7 @@ namespace OSharp.Identity.JwtBearer
             Claim[] claims =
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName)
+                new Claim(ClaimTypes.Name, user.UserName),
             };
             return claims;
         }

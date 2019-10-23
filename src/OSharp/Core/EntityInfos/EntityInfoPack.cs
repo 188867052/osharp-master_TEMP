@@ -14,7 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.Core.Packs;
 
-
 namespace OSharp.Core.EntityInfos
 {
     /// <summary>
@@ -36,7 +35,7 @@ namespace OSharp.Core.EntityInfos
         {
             IEntityInfoHandler handler = provider.GetService<IEntityInfoHandler>();
             handler.Initialize();
-            IsEnabled = true;
+            this.IsEnabled = true;
         }
     }
 }

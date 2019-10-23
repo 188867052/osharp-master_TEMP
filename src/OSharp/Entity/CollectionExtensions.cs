@@ -19,7 +19,6 @@ using OSharp.Mapping;
 using OSharp.Reflection;
 using OSharp.Security;
 
-
 namespace OSharp.Entity
 {
     /// <summary>
@@ -154,6 +153,7 @@ namespace OSharp.Entity
                 dto2.Deletable = deleteFunc(entity);
                 dtos.Add(dto);
             }
+
             return dtos.AsQueryable();
         }
 
@@ -229,8 +229,10 @@ namespace OSharp.Entity
                         : CollectionPropertySorter<TEntity>.ThenBy(orderSource, sortCondition.SortField, sortCondition.ListSortDirection);
                     count++;
                 }
+
                 source = orderSource;
             }
+
             return source != null
                 ? source.Skip((pageIndex - 1) * pageSize).Take(pageSize)
                 : Enumerable.Empty<TEntity>().AsQueryable();
@@ -280,6 +282,7 @@ namespace OSharp.Entity
             bool Func(TEntity m) => m.EndTime != null && m.EndTime.Value < now;
             return source.Where(Func);
         }
+
         /*
         /// <summary>
         /// 从指定<see cref="IQueryable{T}"/>数据集中查询未逻辑删除的子数据集，用于筛选实现了<see cref="IRecyclable"/>接口的数据集
@@ -317,6 +320,7 @@ namespace OSharp.Entity
             return source.Where(m => m.IsDeleted);
         }
         */
+
         /// <summary>
         /// 从指定<see cref="IQueryable{T}"/>数据集中查询未锁定的子数据集，用于筛选实现了<see cref="ILockable"/>接口的数据集
         /// </summary>

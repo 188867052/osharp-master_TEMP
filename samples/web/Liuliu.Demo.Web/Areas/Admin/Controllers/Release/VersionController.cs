@@ -1,4 +1,12 @@
-﻿using Liuliu.Demo.Common.Dtos;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using Liuliu.Demo.Common.Dtos;
+using Liuliu.Demo.Core.Release.Dtos;
+using Liuliu.Demo.Core.Release.Entities;
 using Liuliu.Demo.Identity;
 using Liuliu.Demo.Identity.Dtos;
 using Liuliu.Demo.Identity.Entities;
@@ -16,18 +24,9 @@ using OSharp.Core.Functions;
 using OSharp.Core.Modules;
 using OSharp.Data;
 using OSharp.Entity;
-using OSharp.Extensions;
 using OSharp.Filter;
-using OSharp.Identity;
 using OSharp.Mapping;
 using OSharp.Security;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-
 
 namespace Liuliu.Demo.Web.Areas.Admin.Controllers.Release
 {
@@ -51,12 +50,12 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers.Release
             IRepository<Versions, int> versionRepository,
             IFilterService filterService)
         {
-            _userManager = userManager;
-            _securityManager = securityManager;
-            _identityContract = identityContract;
-            _cacheService = cacheService;
+            this._userManager = userManager;
+            this._securityManager = securityManager;
+            this._identityContract = identityContract;
+            this._cacheService = cacheService;
             this.versionRepository = versionRepository;
-            _filterService = filterService;
+            this._filterService = filterService;
         }
 
         /// <summary>
@@ -71,18 +70,18 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers.Release
             Check.NotNull(request, nameof(request));
             IFunction function = this.GetExecuteFunction();
 
-            Func<Versions, bool> updateFunc = _filterService.GetDataFilterExpression<Versions>(null, DataAuthOperation.Update).Compile();
-            Func<Versions, bool> deleteFunc = _filterService.GetDataFilterExpression<Versions>(null, DataAuthOperation.Delete).Compile();
-            Expression<Func<Versions, bool>> predicate = _filterService.GetExpression<Versions>(request.FilterGroup);
-            var source = ((Repository<Versions, int>)versionRepository).Entities;
-            var page = _cacheService.ToPageCache(source, predicate, request.PageCondition, m => new
+            Func<Versions, bool> updateFunc = this._filterService.GetDataFilterExpression<Versions>(null, DataAuthOperation.Update).Compile();
+            Func<Versions, bool> deleteFunc = this._filterService.GetDataFilterExpression<Versions>(null, DataAuthOperation.Delete).Compile();
+            Expression<Func<Versions, bool>> predicate = this._filterService.GetExpression<Versions>(request.FilterGroup);
+            var source = ((Repository<Versions, int>)this.versionRepository).Entities;
+            var page = this._cacheService.ToPageCache(source, predicate, request.PageCondition, m => new
             {
                 D = m,
             }, function)
                 .ToPageResult(data => data.Select(m => new VersionOutputDto(m.D)
                 {
                     Updatable = updateFunc(m.D),
-                    Deletable = deleteFunc(m.D)
+                    Deletable = deleteFunc(m.D),
                 }).ToArray());
             return page.ToPageData();
         }
@@ -98,12 +97,13 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers.Release
         {
             Check.NotNull(group, nameof(group));
             IFunction function = this.GetExecuteFunction();
-            Expression<Func<User, bool>> exp = _filterService.GetExpression<User>(group);
-            ListNode[] nodes = _cacheService.ToCacheArray(_userManager.Users, exp, m => new ListNode()
+            Expression<Func<User, bool>> exp = this._filterService.GetExpression<User>(group);
+            Expression<Func<User, ListNode>> selector = m => new ListNode()
             {
                 Id = m.Id,
-                Name = m.NickName
-            }, function);
+                Name = m.NickName,
+            };
+            ListNode[] nodes = this._cacheService.ToCacheArray(this._userManager.Users, exp, selector, function);
             return nodes;
         }
 
@@ -124,13 +124,15 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers.Release
             foreach (var dto in dtos)
             {
                 Versions version = dto.MapTo<Versions>();
-                var count = await versionRepository.InsertAsync(version);
+                var count = await this.versionRepository.InsertAsync(version);
                 if (count == 0)
                 {
                     return new AjaxResult($"版本“{version.Name}”创建失败");
                 }
+
                 names.Add(version.Name);
             }
+
             return new AjaxResult($"版本“{names.ExpandAndToString()}”创建成功");
         }
 
@@ -150,9 +152,9 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers.Release
             List<string> names = new List<string>();
             foreach (var dto in dtos)
             {
-                var version = await versionRepository.GetAsync(dto.Id);
+                var version = await this.versionRepository.GetAsync(dto.Id);
                 var newVersion = dto.MapTo(version);
-                var count = await versionRepository.UpdateAsync(newVersion);
+                var count = await this.versionRepository.UpdateAsync(newVersion);
                 if (count == 0)
                 {
                     return new AjaxResult($"版本“{version.Name}”更新失败");
@@ -180,12 +182,13 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers.Release
             List<string> names = new List<string>();
             foreach (int id in ids)
             {
-                var version = await versionRepository.GetAsync(id);
-                var count = await versionRepository.DeleteAsync(id);
+                var version = await this.versionRepository.GetAsync(id);
+                var count = await this.versionRepository.DeleteAsync(id);
                 if (count == 0)
                 {
                     return new AjaxResult($"版本“{names.ExpandAndToString()}”删除失败");
                 }
+
                 names.Add(version.Name);
             }
 
@@ -205,7 +208,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers.Release
         [Description("设置角色")]
         public async Task<AjaxResult> SetRoles(UserSetRoleDto dto)
         {
-            OperationResult result = await _identityContract.SetUserRoles(dto.UserId, dto.RoleIds);
+            OperationResult result = await this._identityContract.SetUserRoles(dto.UserId, dto.RoleIds);
             return result.ToAjaxResult();
         }
 
@@ -222,7 +225,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers.Release
         [Description("设置模块")]
         public async Task<AjaxResult> SetModules(UserSetModuleDto dto)
         {
-            OperationResult result = await _securityManager.SetUserModules(dto.UserId, dto.ModuleIds);
+            OperationResult result = await this._securityManager.SetUserModules(dto.UserId, dto.ModuleIds);
             return result.ToAjaxResult();
         }
     }

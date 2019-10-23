@@ -9,7 +9,6 @@
 
 using OSharp.Dependency;
 
-
 namespace OSharp.Mapping
 {
     /// <summary>

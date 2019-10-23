@@ -9,7 +9,6 @@
 
 using System;
 
-
 namespace OSharp.Dependency
 {
     /// <summary>
@@ -17,5 +16,6 @@ namespace OSharp.Dependency
     /// </summary>
     [AttributeUsage(AttributeTargets.Interface)]
     public class MultipleDependencyAttribute : Attribute
-    { }
+    {
+    }
 }

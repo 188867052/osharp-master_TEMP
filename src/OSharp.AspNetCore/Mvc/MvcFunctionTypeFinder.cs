@@ -15,7 +15,6 @@ using OSharp.Core.Functions;
 using OSharp.Finders;
 using OSharp.Reflection;
 
-
 namespace OSharp.AspNetCore.Mvc
 {
     /// <summary>
@@ -30,7 +29,7 @@ namespace OSharp.AspNetCore.Mvc
         /// </summary>
         public MvcControllerTypeFinder(IAllAssemblyFinder allAssemblyFinder)
         {
-            _allAssemblyFinder = allAssemblyFinder;
+            this._allAssemblyFinder = allAssemblyFinder;
         }
 
         /// <summary>
@@ -39,7 +38,7 @@ namespace OSharp.AspNetCore.Mvc
         /// <returns></returns>
         protected override Type[] FindAllItems()
         {
-            Assembly[] assemblies = _allAssemblyFinder.FindAll(true);
+            Assembly[] assemblies = this._allAssemblyFinder.FindAll(true);
             return assemblies.SelectMany(assembly => assembly.GetTypes()).Where(type => type.IsController()).ToArray();
         }
     }

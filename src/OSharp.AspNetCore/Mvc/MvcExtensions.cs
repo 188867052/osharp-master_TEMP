@@ -22,7 +22,6 @@ using OSharp.Exceptions;
 using OSharp.Extensions;
 using OSharp.Security;
 
-
 namespace OSharp.AspNetCore.Mvc
 {
     /// <summary>
@@ -62,6 +61,7 @@ namespace OSharp.AspNetCore.Mvc
                     area = null;
                 }
             }
+
             return area;
         }
 
@@ -92,6 +92,7 @@ namespace OSharp.AspNetCore.Mvc
             {
                 return dict.Function;
             }
+
             string area = context.GetAreaName();
             string controller = context.GetControllerName();
             string action = context.GetActionName();
@@ -100,11 +101,13 @@ namespace OSharp.AspNetCore.Mvc
             {
                 throw new OsharpException("获取正在执行的功能时 IFunctionHandler 无法解析");
             }
+
             IFunction function = functionHandler.GetFunction(area, controller, action);
             if (function != null)
             {
                 dict.Function = function;
             }
+
             return function;
         }
 
@@ -134,11 +137,13 @@ namespace OSharp.AspNetCore.Mvc
             {
                 return null;
             }
+
             router.RouteAsync(routeContext).Wait();
             if (routeContext.Handler == null)
             {
                 return null;
             }
+
             RouteValueDictionary dict = routeContext.RouteData.Values;
             string areaName = dict.GetOrDefault("area")?.ToString();
             string controllerName = dict.GetOrDefault("controller")?.ToString();
@@ -157,6 +162,7 @@ namespace OSharp.AspNetCore.Mvc
             {
                 return false;
             }
+
             IFunctionAuthorization authorization = controller.HttpContext.RequestServices.GetService<IFunctionAuthorization>();
             return authorization.Authorize(function, controller.User).IsOk;
         }
@@ -173,6 +179,7 @@ namespace OSharp.AspNetCore.Mvc
             {
                 return false;
             }
+
             IFunctionAuthorization authorization = provider.GetService<IFunctionAuthorization>();
             return authorization.Authorize(function, controller.User).IsOk;
         }

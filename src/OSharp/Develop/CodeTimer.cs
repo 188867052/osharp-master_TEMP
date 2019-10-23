@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-
 namespace OSharp.Develop
 {
     /// <summary>
@@ -11,8 +10,6 @@ namespace OSharp.Develop
     /// </summary>
     public static class CodeTimer
     {
-        #region 私有方法
-
         /// <summary>
         /// 获取当前CPU循环次数
         /// </summary>
@@ -23,10 +20,6 @@ namespace OSharp.Develop
             NativeMethods.QueryThreadCycleTime(NativeMethods.GetCurrentThread(), ref cycleCount);
             return cycleCount;
         }
-
-        #endregion
-
-        #region 公共方法
 
         /// <summary>
         /// 计时器初始化 对计时器进行初始化操作，同时对后续操作进行预热，以避免初次操作带来的性能影响
@@ -69,6 +62,7 @@ namespace OSharp.Develop
             {
                 action();
             }
+
             ulong cpuCycles = GetCycleCount() - cycleCount;
             watch.Stop();
 
@@ -84,10 +78,7 @@ namespace OSharp.Develop
 
             Console.WriteLine();
         }
-
-        #endregion
     }
-
 
     internal static class NativeMethods
     {
@@ -97,7 +88,5 @@ namespace OSharp.Develop
 
         [DllImport("kernel32.dll")]
         internal static extern IntPtr GetCurrentThread();
-
     }
-
 }

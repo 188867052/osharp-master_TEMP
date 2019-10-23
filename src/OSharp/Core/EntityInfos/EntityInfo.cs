@@ -9,7 +9,6 @@
 
 using System.ComponentModel;
 
-
 namespace OSharp.Core.EntityInfos
 {
     /// <summary>
@@ -17,5 +16,6 @@ namespace OSharp.Core.EntityInfos
     /// </summary>
     [Description("实体信息类")]
     public class EntityInfo : EntityInfoBase
-    { }
+    {
+    }
 }

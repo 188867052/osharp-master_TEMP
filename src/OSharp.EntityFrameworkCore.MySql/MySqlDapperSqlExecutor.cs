@@ -11,7 +11,6 @@ using System.Data;
 
 using MySql.Data.MySqlClient;
 
-
 namespace OSharp.Entity.MySql
 {
     /// <summary>
@@ -26,7 +25,8 @@ namespace OSharp.Entity.MySql
         /// </summary>
         public MySqlDapperSqlExecutor(IUnitOfWorkManager unitOfWorkManager)
             : base(unitOfWorkManager)
-        { }
+        {
+        }
 
         /// <summary>
         /// 获取 数据库类型

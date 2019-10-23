@@ -12,7 +12,6 @@ using System.Collections.Generic;
 
 using Microsoft.Extensions.DependencyInjection;
 
-
 namespace OSharp.Core.Packs
 {
     /// <summary>

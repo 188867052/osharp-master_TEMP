@@ -7,11 +7,10 @@
 //  <last-date>2018-08-12 16:02</last-date>
 // -----------------------------------------------------------------------
 
+using System;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using OSharp.Core.Systems;
 using OSharp.Entity;
-using System;
-
 
 namespace Liuliu.Demo.EntityConfiguration.Systems
 {

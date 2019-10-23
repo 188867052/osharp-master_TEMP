@@ -1,18 +1,8 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="AbstractBuilder.cs" company="OSharp开源团队">
-//      Copyright (c) 2014 OSharp. All rights reserved.
-//  </copyright>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2014:07:04 17:42</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using OSharp.Properties;
-
 
 namespace OSharp.Extensions
 {
@@ -33,10 +23,12 @@ namespace OSharp.Extensions
             {
                 return;
             }
+
             if (string.IsNullOrEmpty(message))
             {
                 throw new ArgumentNullException("message");
             }
+
             TException exception = (TException)Activator.CreateInstance(typeof(TException), message);
             throw exception;
         }
@@ -53,6 +45,7 @@ namespace OSharp.Extensions
             {
                 throw new ArgumentNullException("assertionFunc");
             }
+
             Require<Exception>(assertionFunc(value), message);
         }
 
@@ -70,6 +63,7 @@ namespace OSharp.Extensions
             {
                 throw new ArgumentNullException("assertionFunc");
             }
+
             Require<TException>(assertionFunc(value), message);
         }
 

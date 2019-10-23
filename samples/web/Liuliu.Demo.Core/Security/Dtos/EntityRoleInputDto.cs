@@ -9,12 +9,12 @@
 
 using OSharp.Security;
 
-
 namespace Liuliu.Demo.Security.Dtos
 {
     /// <summary>
     /// 输入DTO：实体角色信息
     /// </summary>
     public class EntityRoleInputDto : EntityRoleInputDtoBase<int>
-    { }
+    {
+    }
 }

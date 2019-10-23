@@ -20,9 +20,7 @@ using Microsoft.AspNetCore.Identity;
 using OSharp.Data;
 using OSharp.Entity;
 using OSharp.EventBuses;
-using OSharp.Extensions;
 using OSharp.Identity.Events;
-
 
 namespace OSharp.Identity
 {
@@ -89,36 +87,26 @@ namespace OSharp.Identity
             IEventBus eventBus
         )
         {
-            _userRepository = userRepository;
-            _userLoginRepository = userLoginRepository;
-            _userClaimRepository = userClaimRepository;
-            _userTokenRepository = userTokenRepository;
-            _roleRepository = roleRepository;
-            _userRoleRepository = userRoleRepository;
-            _eventBus = eventBus;
+            this._userRepository = userRepository;
+            this._userLoginRepository = userLoginRepository;
+            this._userClaimRepository = userClaimRepository;
+            this._userTokenRepository = userTokenRepository;
+            this._roleRepository = roleRepository;
+            this._userRoleRepository = userRoleRepository;
+            this._eventBus = eventBus;
         }
-
-        #region Implementation of IQueryableUserStore<TUser>
 
         /// <summary>
         /// Returns an <see cref="T:System.Linq.IQueryable`1" /> collection of users.
         /// </summary>
         /// <value>An <see cref="T:System.Linq.IQueryable`1" /> collection of users.</value>
-        public IQueryable<TUser> Users => _userRepository.Query();
-
-        #endregion
-
-        #region Implementation of IDisposable
+        public IQueryable<TUser> Users => this._userRepository.Query();
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         public void Dispose()
         {
-            _disposed = true;
+            this._disposed = true;
         }
-
-        #endregion
-
-        #region Implementation of IUserStore<TUser>
 
         /// <summary>
         /// Gets the user identifier for the specified <paramref name="user" />.
@@ -129,10 +117,10 @@ namespace OSharp.Identity
         public Task<string> GetUserIdAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
-            return Task.FromResult(ConvertIdToString(user.Id));
+            return Task.FromResult(this.ConvertIdToString(user.Id));
         }
 
         /// <summary>
@@ -144,7 +132,7 @@ namespace OSharp.Identity
         public Task<string> GetUserNameAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             return Task.FromResult(user.UserName);
@@ -160,7 +148,7 @@ namespace OSharp.Identity
         public Task SetUserNameAsync(TUser user, string userName, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             user.UserName = userName;
@@ -176,7 +164,7 @@ namespace OSharp.Identity
         public Task<string> GetNormalizedUserNameAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             return Task.FromResult(user.NormalizedUserName);
@@ -192,7 +180,7 @@ namespace OSharp.Identity
         public Task SetNormalizedUserNameAsync(TUser user, string normalizedName, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             user.NormalizedUserName = normalizedName;
@@ -208,32 +196,32 @@ namespace OSharp.Identity
         public async Task<IdentityResult> CreateAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
-            await _userRepository.InsertAsync(user);
+            await this._userRepository.InsertAsync(user);
 
-            //系统的第一个用户，自动成为超级管理员
-            int count = _userRepository.QueryAsNoTracking().Count();
+            // 系统的第一个用户，自动成为超级管理员
+            int count = this._userRepository.QueryAsNoTracking().Count();
             if (count == 1)
             {
-                TRole adminRole = _roleRepository.QueryAsNoTracking().FirstOrDefault();
+                TRole adminRole = this._roleRepository.QueryAsNoTracking().FirstOrDefault();
                 if (adminRole != null)
                 {
                     TUserRole userRole = new TUserRole() { UserId = user.Id, RoleId = adminRole.Id };
-                    await _userRoleRepository.InsertAsync(userRole);
+                    await this._userRoleRepository.InsertAsync(userRole);
 
                     user.IsSystem = true;
-                    await _userRepository.UpdateAsync(user);
+                    await this._userRepository.UpdateAsync(user);
                 }
             }
 
-            //默认角色
-            TRole defaultRole = _roleRepository.QueryAsNoTracking().FirstOrDefault(m => m.IsDefault);
+            // 默认角色
+            TRole defaultRole = this._roleRepository.QueryAsNoTracking().FirstOrDefault(m => m.IsDefault);
             if (defaultRole != null)
             {
                 TUserRole userRole = new TUserRole() { UserId = user.Id, RoleId = defaultRole.Id };
-                await _userRoleRepository.InsertAsync(userRole);
+                await this._userRoleRepository.InsertAsync(userRole);
             }
 
             return IdentityResult.Success;
@@ -248,22 +236,24 @@ namespace OSharp.Identity
         public async Task<IdentityResult> UpdateAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             if (string.IsNullOrEmpty(user.Email))
             {
                 user.EmailConfirmed = false;
             }
+
             if (string.IsNullOrEmpty(user.PhoneNumber))
             {
                 user.PhoneNumberConfirmed = false;
             }
-            await _userRepository.UpdateAsync(user);
 
-            //移除用户在线缓存
+            await this._userRepository.UpdateAsync(user);
+
+            // 移除用户在线缓存
             OnlineUserCacheRemoveEventData eventData = new OnlineUserCacheRemoveEventData(){UserNames = new []{user.UserName}};
-            _eventBus.Publish(eventData);
+            this._eventBus.Publish(eventData);
 
             return IdentityResult.Success;
         }
@@ -277,14 +267,15 @@ namespace OSharp.Identity
         public async Task<IdentityResult> DeleteAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             if (user.IsSystem)
             {
                 return new IdentityResult().Failed($"用户“{user.UserName}”是系统用户，不能删除");
             }
-            await _userRepository.DeleteAsync(user);
+
+            await this._userRepository.DeleteAsync(user);
             return IdentityResult.Success;
         }
 
@@ -299,10 +290,10 @@ namespace OSharp.Identity
         public Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
 
-            TUserKey id = ConvertIdFromString(userId);
-            return Task.FromResult(_userRepository.Get(id));
+            TUserKey id = this.ConvertIdFromString(userId);
+            return Task.FromResult(this._userRepository.Get(id));
         }
 
         /// <summary>
@@ -316,14 +307,10 @@ namespace OSharp.Identity
         public Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
 
-            return Task.FromResult(_userRepository.Query().FirstOrDefault(m => m.NormalizedUserName == normalizedUserName));
+            return Task.FromResult(this._userRepository.Query().FirstOrDefault(m => m.NormalizedUserName == normalizedUserName));
         }
-
-        #endregion
-
-        #region Implementation of IUserLoginStore<TUser>
 
         /// <summary>
         /// Adds an external <see cref="T:Microsoft.AspNetCore.Identity.UserLoginInfo" /> to the specified <paramref name="user" />.
@@ -335,7 +322,7 @@ namespace OSharp.Identity
         public async Task AddLoginAsync(TUser user, UserLoginInfo login, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
             Check.NotNull(login, nameof(login));
 
@@ -344,9 +331,9 @@ namespace OSharp.Identity
                 UserId = user.Id,
                 LoginProvider = login.LoginProvider,
                 ProviderKey = login.ProviderKey,
-                ProviderDisplayName = login.ProviderDisplayName
+                ProviderDisplayName = login.ProviderDisplayName,
             };
-            await _userLoginRepository.InsertAsync(userLogin);
+            await this._userLoginRepository.InsertAsync(userLogin);
         }
 
         /// <summary>
@@ -361,12 +348,12 @@ namespace OSharp.Identity
         public async Task RemoveLoginAsync(TUser user, string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
             Check.NotNullOrEmpty(loginProvider, nameof(loginProvider));
             Check.NotNullOrEmpty(providerKey, nameof(providerKey));
 
-            await _userLoginRepository.DeleteBatchAsync(m => m.UserId.Equals(user.Id) && m.LoginProvider == loginProvider && m.ProviderKey == providerKey);
+            await this._userLoginRepository.DeleteBatchAsync(m => m.UserId.Equals(user.Id) && m.LoginProvider == loginProvider && m.ProviderKey == providerKey);
         }
 
         /// <summary>
@@ -380,10 +367,10 @@ namespace OSharp.Identity
         public Task<IList<UserLoginInfo>> GetLoginsAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
-            IList<UserLoginInfo> loginInfos = _userLoginRepository.QueryAsNoTracking(m => m.UserId.Equals(user.Id)).Select(m =>
+            IList<UserLoginInfo> loginInfos = this._userLoginRepository.QueryAsNoTracking(m => m.UserId.Equals(user.Id)).Select(m =>
                 new UserLoginInfo(m.LoginProvider, m.ProviderKey, m.ProviderDisplayName)).ToList();
             return Task.FromResult(loginInfos);
         }
@@ -400,23 +387,20 @@ namespace OSharp.Identity
         public Task<TUser> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNullOrEmpty(loginProvider, nameof(loginProvider));
             Check.NotNullOrEmpty(providerKey, nameof(providerKey));
 
-            TUserKey userId = _userLoginRepository.QueryAsNoTracking(m => m.LoginProvider == loginProvider && m.ProviderKey == providerKey)
+            TUserKey userId = this._userLoginRepository.QueryAsNoTracking(m => m.LoginProvider == loginProvider && m.ProviderKey == providerKey)
                 .Select(m => m.UserId).FirstOrDefault();
             if (Equals(userId, default(TUserKey)))
             {
                 return Task.FromResult(default(TUser));
             }
-            TUser user = _userRepository.Get(userId);
+
+            TUser user = this._userRepository.Get(userId);
             return Task.FromResult(user);
         }
-
-        #endregion
-
-        #region Implementation of IUserClaimStore<TUser>
 
         /// <summary>
         /// Gets a list of <see cref="T:System.Security.Claims.Claim" />s to be belonging to the specified <paramref name="user" /> as an asynchronous operation.
@@ -429,10 +413,10 @@ namespace OSharp.Identity
         public Task<IList<Claim>> GetClaimsAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
-            IList<Claim> claims = _userClaimRepository.QueryAsNoTracking(m => m.UserId.Equals(user.Id))
+            IList<Claim> claims = this._userClaimRepository.QueryAsNoTracking(m => m.UserId.Equals(user.Id))
                 .Select(m => new Claim(m.ClaimType, m.ClaimValue)).ToList();
             return Task.FromResult(claims);
         }
@@ -445,11 +429,11 @@ namespace OSharp.Identity
         public async Task AddClaimsAsync(TUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             TUserClaim[] userClaims = claims.Select(m => new TUserClaim() { UserId = user.Id, ClaimType = m.Type, ClaimValue = m.Value }).ToArray();
-            await _userClaimRepository.InsertAsync(userClaims);
+            await this._userClaimRepository.InsertAsync(userClaims);
         }
 
         /// <summary>
@@ -463,15 +447,16 @@ namespace OSharp.Identity
         public Task ReplaceClaimAsync(TUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
-            List<TUserClaim> userClaims = _userClaimRepository.Query(m => m.UserId.Equals(user.Id) && m.ClaimType == claim.Type && m.ClaimValue == claim.Value).ToList();
+            List<TUserClaim> userClaims = this._userClaimRepository.Query(m => m.UserId.Equals(user.Id) && m.ClaimType == claim.Type && m.ClaimValue == claim.Value).ToList();
             foreach (TUserClaim userClaim in userClaims)
             {
                 userClaim.ClaimType = newClaim.Type;
                 userClaim.ClaimValue = newClaim.Value;
             }
+
             return Task.CompletedTask;
         }
 
@@ -485,10 +470,10 @@ namespace OSharp.Identity
         public async Task RemoveClaimsAsync(TUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
-            await _userClaimRepository.DeleteBatchAsync(m =>
+            await this._userClaimRepository.DeleteBatchAsync(m =>
                 m.UserId.Equals(user.Id) && claims.Any(n => n.Type == m.ClaimType && n.Value == m.ClaimValue));
         }
 
@@ -504,18 +489,14 @@ namespace OSharp.Identity
         public Task<IList<TUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(claim, nameof(claim));
 
-            TUserKey[] userIds = _userClaimRepository.QueryAsNoTracking(m => m.ClaimType == claim.Type && m.ClaimValue == claim.Value)
+            TUserKey[] userIds = this._userClaimRepository.QueryAsNoTracking(m => m.ClaimType == claim.Type && m.ClaimValue == claim.Value)
                 .Select(m => m.UserId).ToArray();
-            IList<TUser> users = _userRepository.Query(m => userIds.Contains(m.Id)).ToList();
+            IList<TUser> users = this._userRepository.Query(m => userIds.Contains(m.Id)).ToList();
             return Task.FromResult(users);
         }
-
-        #endregion
-
-        #region Implementation of IUserPasswordStore<TUser>
 
         /// <summary>
         /// Sets the password hash for the specified <paramref name="user" />.
@@ -527,7 +508,7 @@ namespace OSharp.Identity
         public Task SetPasswordHashAsync(TUser user, string passwordHash, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             user.PasswordHash = passwordHash;
@@ -543,7 +524,7 @@ namespace OSharp.Identity
         public Task<string> GetPasswordHashAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             return Task.FromResult(user.PasswordHash);
@@ -561,15 +542,11 @@ namespace OSharp.Identity
         public Task<bool> HasPasswordAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             return Task.FromResult(!string.IsNullOrEmpty(user.PasswordHash));
         }
-
-        #endregion
-
-        #region Implementation of IUserSecurityStampStore<TUser>
 
         /// <summary>
         /// Sets the provided security <paramref name="stamp" /> for the specified <paramref name="user" />.
@@ -581,7 +558,7 @@ namespace OSharp.Identity
         public Task SetSecurityStampAsync(TUser user, string stamp, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             user.SecurityStamp = stamp;
@@ -598,15 +575,11 @@ namespace OSharp.Identity
         public Task<string> GetSecurityStampAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             return Task.FromResult(user.SecurityStamp);
         }
-
-        #endregion
-
-        #region Implementation of IUserEmailStore<TUser>
 
         /// <summary>
         /// Sets the <paramref name="email" /> address for a <paramref name="user" />.
@@ -618,7 +591,7 @@ namespace OSharp.Identity
         public Task SetEmailAsync(TUser user, string email, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
             Check.NotNull(email, nameof(email));
 
@@ -635,7 +608,7 @@ namespace OSharp.Identity
         public Task<string> GetEmailAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             return Task.FromResult(user.Email);
@@ -654,7 +627,7 @@ namespace OSharp.Identity
         public Task<bool> GetEmailConfirmedAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             return Task.FromResult(user.EmailConfirmed);
@@ -670,7 +643,7 @@ namespace OSharp.Identity
         public Task SetEmailConfirmedAsync(TUser user, bool confirmed, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             user.EmailConfirmed = true;
@@ -688,9 +661,9 @@ namespace OSharp.Identity
         public Task<TUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
 
-            TUser user = _userRepository.Query().FirstOrDefault(m => m.NormalizeEmail == normalizedEmail);
+            TUser user = this._userRepository.Query().FirstOrDefault(m => m.NormalizeEmail == normalizedEmail);
             return Task.FromResult(user);
         }
 
@@ -705,7 +678,7 @@ namespace OSharp.Identity
         public Task<string> GetNormalizedEmailAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             return Task.FromResult(user.NormalizedUserName);
@@ -721,16 +694,12 @@ namespace OSharp.Identity
         public Task SetNormalizedEmailAsync(TUser user, string normalizedEmail, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             user.NormalizeEmail = normalizedEmail;
             return Task.CompletedTask;
         }
-
-        #endregion
-
-        #region Implementation of IUserLockoutStore<TUser>
 
         /// <summary>
         /// Gets the last <see cref="T:System.DateTimeOffset" /> a user's last lockout expired, if any.
@@ -745,7 +714,7 @@ namespace OSharp.Identity
         public Task<DateTimeOffset?> GetLockoutEndDateAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             return Task.FromResult(user.LockoutEnd);
@@ -761,7 +730,7 @@ namespace OSharp.Identity
         public Task SetLockoutEndDateAsync(TUser user, DateTimeOffset? lockoutEnd, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             user.LockoutEnd = lockoutEnd;
@@ -777,7 +746,7 @@ namespace OSharp.Identity
         public Task<int> IncrementAccessFailedCountAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             user.AccessFailedCount++;
@@ -792,7 +761,7 @@ namespace OSharp.Identity
         public Task ResetAccessFailedCountAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             user.AccessFailedCount = 0;
@@ -808,7 +777,7 @@ namespace OSharp.Identity
         public Task<int> GetAccessFailedCountAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             return Task.FromResult(user.AccessFailedCount);
@@ -825,7 +794,7 @@ namespace OSharp.Identity
         public Task<bool> GetLockoutEnabledAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             return Task.FromResult(user.LockoutEnabled);
@@ -841,16 +810,12 @@ namespace OSharp.Identity
         public Task SetLockoutEnabledAsync(TUser user, bool enabled, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             user.LockoutEnabled = enabled;
             return Task.CompletedTask;
         }
-
-        #endregion
-
-        #region Implementation of IUserPhoneNumberStore<TUser>
 
         /// <summary>
         /// Sets the telephone number for the specified <paramref name="user" />.
@@ -862,7 +827,7 @@ namespace OSharp.Identity
         public Task SetPhoneNumberAsync(TUser user, string phoneNumber, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             user.PhoneNumber = phoneNumber;
@@ -878,7 +843,7 @@ namespace OSharp.Identity
         public Task<string> GetPhoneNumberAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             return Task.FromResult(user.PhoneNumber);
@@ -896,7 +861,7 @@ namespace OSharp.Identity
         public Task<bool> GetPhoneNumberConfirmedAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             return Task.FromResult(user.PhoneNumberConfirmed);
@@ -912,16 +877,12 @@ namespace OSharp.Identity
         public Task SetPhoneNumberConfirmedAsync(TUser user, bool confirmed, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             user.PhoneNumberConfirmed = confirmed;
             return Task.CompletedTask;
         }
-
-        #endregion
-
-        #region Implementation of IUserTwoFactorStore<TUser>
 
         /// <summary>
         /// Sets a flag indicating whether the specified <paramref name="user" /> has two factor authentication enabled or not,
@@ -934,7 +895,7 @@ namespace OSharp.Identity
         public Task SetTwoFactorEnabledAsync(TUser user, bool enabled, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             user.TwoFactorEnabled = enabled;
@@ -954,15 +915,11 @@ namespace OSharp.Identity
         public Task<bool> GetTwoFactorEnabledAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             return Task.FromResult(user.TwoFactorEnabled);
         }
-
-        #endregion
-
-        #region Implementation of IUserAuthenticationTokenStore<TUser>
 
         /// <summary>Sets the token value for a particular user.</summary>
         /// <param name="user">The user.</param>
@@ -974,19 +931,19 @@ namespace OSharp.Identity
         public async Task SetTokenAsync(TUser user, string loginProvider, string name, string value, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
-            TUserToken token = _userTokenRepository.Query(m => m.UserId.Equals(user.Id) && m.LoginProvider == loginProvider && m.Name == name, false).FirstOrDefault();
+            TUserToken token = this._userTokenRepository.Query(m => m.UserId.Equals(user.Id) && m.LoginProvider == loginProvider && m.Name == name, false).FirstOrDefault();
             if (token == null)
             {
                 token = new TUserToken() { UserId = user.Id, LoginProvider = loginProvider, Name = name, Value = value };
-                await _userTokenRepository.InsertAsync(token);
+                await this._userTokenRepository.InsertAsync(token);
             }
             else
             {
                 token.Value = value;
-                await _userTokenRepository.UpdateAsync(token);
+                await this._userTokenRepository.UpdateAsync(token);
             }
         }
 
@@ -999,10 +956,10 @@ namespace OSharp.Identity
         public async Task RemoveTokenAsync(TUser user, string loginProvider, string name, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
-            await _userTokenRepository.DeleteBatchAsync(m => m.UserId.Equals(user.Id) && m.LoginProvider == loginProvider && m.Name == name);
+            await this._userTokenRepository.DeleteBatchAsync(m => m.UserId.Equals(user.Id) && m.LoginProvider == loginProvider && m.Name == name);
         }
 
         /// <summary>Returns the token value.</summary>
@@ -1014,10 +971,10 @@ namespace OSharp.Identity
         public Task<string> GetTokenAsync(TUser user, string loginProvider, string name, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
-            string value = _userTokenRepository.QueryAsNoTracking(m => m.UserId.Equals(user.Id) && m.LoginProvider == loginProvider && m.Name == name)
+            string value = this._userTokenRepository.QueryAsNoTracking(m => m.UserId.Equals(user.Id) && m.LoginProvider == loginProvider && m.Name == name)
                 .Select(m => m.Value).FirstOrDefault();
             return Task.FromResult(value);
         }
@@ -1032,16 +989,12 @@ namespace OSharp.Identity
         public Task<string[]> GetTokensAsync(TUser user, string loginProvider, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
-            string[] values = _userTokenRepository.QueryAsNoTracking(m => m.UserId.Equals(user.Id) && m.LoginProvider == loginProvider)
+            string[] values = this._userTokenRepository.QueryAsNoTracking(m => m.UserId.Equals(user.Id) && m.LoginProvider == loginProvider)
                 .Select(m => m.Value).ToArray();
             return Task.FromResult(values);
         }
-
-        #endregion
-
-        #region Implementation of IUserAuthenticatorKeyStore<TUser>
 
         private const string InternalLoginProvider = "[AspNetUserStore]";
         private const string AuthenticatorKeyTokenName = "AuthenticatorKey";
@@ -1056,7 +1009,7 @@ namespace OSharp.Identity
         /// <returns>The <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous operation.</returns>
         public Task SetAuthenticatorKeyAsync(TUser user, string key, CancellationToken cancellationToken)
         {
-            return SetTokenAsync(user, InternalLoginProvider, AuthenticatorKeyTokenName, key, cancellationToken);
+            return this.SetTokenAsync(user, InternalLoginProvider, AuthenticatorKeyTokenName, key, cancellationToken);
         }
 
         /// <summary>
@@ -1067,12 +1020,8 @@ namespace OSharp.Identity
         /// <returns>The <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous operation, containing the security stamp for the specified <paramref name="user" />.</returns>
         public Task<string> GetAuthenticatorKeyAsync(TUser user, CancellationToken cancellationToken)
         {
-            return GetTokenAsync(user, InternalLoginProvider, AuthenticatorKeyTokenName, cancellationToken);
+            return this.GetTokenAsync(user, InternalLoginProvider, AuthenticatorKeyTokenName, cancellationToken);
         }
-
-        #endregion
-
-        #region Implementation of IUserTwoFactorRecoveryCodeStore<TUser>
 
         /// <summary>
         /// Updates the recovery codes for the user while invalidating any previous recovery codes.
@@ -1084,7 +1033,7 @@ namespace OSharp.Identity
         public Task ReplaceCodesAsync(TUser user, IEnumerable<string> recoveryCodes, CancellationToken cancellationToken)
         {
             string mergedCodes = string.Join(";", recoveryCodes);
-            return SetTokenAsync(user, InternalLoginProvider, RecoveryCodeTokenName, mergedCodes, cancellationToken);
+            return this.SetTokenAsync(user, InternalLoginProvider, RecoveryCodeTokenName, mergedCodes, cancellationToken);
         }
 
         /// <summary>
@@ -1098,18 +1047,19 @@ namespace OSharp.Identity
         public async Task<bool> RedeemCodeAsync(TUser user, string code, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
             Check.NotNullOrEmpty(code, nameof(code));
 
-            string mergedCodes = await GetTokenAsync(user, InternalLoginProvider, RecoveryCodeTokenName, cancellationToken) ?? String.Empty;
+            string mergedCodes = await this.GetTokenAsync(user, InternalLoginProvider, RecoveryCodeTokenName, cancellationToken) ?? String.Empty;
             string[] splitCodes = mergedCodes.Split(';');
             if (splitCodes.Contains(code))
             {
                 List<string> updatedCodes = new List<string>(splitCodes.Where(s => s != code));
-                await ReplaceCodesAsync(user, updatedCodes, cancellationToken);
+                await this.ReplaceCodesAsync(user, updatedCodes, cancellationToken);
                 return true;
             }
+
             return false;
         }
 
@@ -1122,20 +1072,17 @@ namespace OSharp.Identity
         public async Task<int> CountCodesAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
-            string mergedCodes = await GetTokenAsync(user, InternalLoginProvider, RecoveryCodeTokenName, cancellationToken);
+            string mergedCodes = await this.GetTokenAsync(user, InternalLoginProvider, RecoveryCodeTokenName, cancellationToken);
             if (mergedCodes.Length > 0)
             {
                 return mergedCodes.Split(';').Length;
             }
+
             return 0;
         }
-
-        #endregion
-
-        #region Implementation of IUserRoleStore<TUser>
 
         /// <summary>
         /// Add a the specified <paramref name="user" /> to the named role.
@@ -1147,17 +1094,18 @@ namespace OSharp.Identity
         public async Task AddToRoleAsync(TUser user, string normalizedRoleName, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
             Check.NotNullOrEmpty(normalizedRoleName, nameof(normalizedRoleName));
 
-            TRoleKey roleId = _roleRepository.QueryAsNoTracking(m => m.NormalizedName == normalizedRoleName).Select(m => m.Id).FirstOrDefault();
+            TRoleKey roleId = this._roleRepository.QueryAsNoTracking(m => m.NormalizedName == normalizedRoleName).Select(m => m.Id).FirstOrDefault();
             if (Equals(roleId, default(TRoleKey)))
             {
                 throw new InvalidOperationException($"名称为“{normalizedRoleName}”的角色信息不存在");
             }
+
             TUserRole userRole = new TUserRole() { RoleId = roleId, UserId = user.Id };
-            await _userRoleRepository.InsertAsync(userRole);
+            await this._userRoleRepository.InsertAsync(userRole);
         }
 
         /// <summary>
@@ -1170,20 +1118,22 @@ namespace OSharp.Identity
         public async Task RemoveFromRoleAsync(TUser user, string normalizedRoleName, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
             Check.NotNullOrEmpty(normalizedRoleName, nameof(normalizedRoleName));
 
-            TRole role = _roleRepository.QueryAsNoTracking().FirstOrDefault(m => m.NormalizedName == normalizedRoleName);
+            TRole role = this._roleRepository.QueryAsNoTracking().FirstOrDefault(m => m.NormalizedName == normalizedRoleName);
             if (role == null)
             {
                 throw new InvalidOperationException($"名称为“{normalizedRoleName}”的角色信息不存在");
             }
+
             if (user.IsSystem && role.IsSystem)
             {
                 throw new InvalidOperationException($"系统用户“{user.UserName}”的系统角色“{role.Name}”不能移除");
             }
-            await _userRoleRepository.DeleteBatchAsync(m => m.UserId.Equals(user.Id) && m.RoleId.Equals(role.Id));
+
+            await this._userRoleRepository.DeleteBatchAsync(m => m.UserId.Equals(user.Id) && m.RoleId.Equals(role.Id));
         }
 
         /// <summary>
@@ -1195,16 +1145,17 @@ namespace OSharp.Identity
         public Task<IList<string>> GetRolesAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
             IList<string> list = new List<string>();
-            List<TRoleKey> roleIds = _userRoleRepository.QueryAsNoTracking(m => m.UserId.Equals(user.Id)).Select(m => m.RoleId).ToList();
+            List<TRoleKey> roleIds = this._userRoleRepository.QueryAsNoTracking(m => m.UserId.Equals(user.Id)).Select(m => m.RoleId).ToList();
             if (roleIds.Count == 0)
             {
                 return Task.FromResult(list);
             }
-            list = _roleRepository.QueryAsNoTracking(m => roleIds.Contains(m.Id)).Select(m => m.Name).ToList();
+
+            list = this._roleRepository.QueryAsNoTracking(m => roleIds.Contains(m.Id)).Select(m => m.Name).ToList();
             return Task.FromResult(list);
         }
 
@@ -1221,15 +1172,16 @@ namespace OSharp.Identity
         public Task<bool> IsInRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
-            TRoleKey roleId = _roleRepository.QueryAsNoTracking(m => m.NormalizedName == roleName).Select(m => m.Id).FirstOrDefault();
+            TRoleKey roleId = this._roleRepository.QueryAsNoTracking(m => m.NormalizedName == roleName).Select(m => m.Id).FirstOrDefault();
             if (Equals(roleId, default(TRoleKey)))
             {
                 throw new InvalidOperationException($"名称为“{roleName}”的角色信息不存在");
             }
-            bool exist = _userRoleRepository.QueryAsNoTracking(m => m.UserId.Equals(user.Id) && m.RoleId.Equals(roleId)).Any();
+
+            bool exist = this._userRoleRepository.QueryAsNoTracking(m => m.UserId.Equals(user.Id) && m.RoleId.Equals(roleId)).Any();
             return Task.FromResult(exist);
         }
 
@@ -1244,22 +1196,19 @@ namespace OSharp.Identity
         public Task<IList<TUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNullOrEmpty(roleName, nameof(roleName));
 
-            TRoleKey roleId = _roleRepository.QueryAsNoTracking(m => m.NormalizedName == roleName).Select(m => m.Id).FirstOrDefault();
+            TRoleKey roleId = this._roleRepository.QueryAsNoTracking(m => m.NormalizedName == roleName).Select(m => m.Id).FirstOrDefault();
             if (Equals(roleId, default(TRoleKey)))
             {
                 throw new InvalidOperationException($"名称为“{roleName}”的角色信息不存在");
             }
-            List<TUserKey> userIds = _userRoleRepository.QueryAsNoTracking(m => m.RoleId.Equals(roleId)).Select(m => m.UserId).ToList();
-            IList<TUser> users = _userRepository.Query(m => userIds.Contains(m.Id)).ToList();
+
+            List<TUserKey> userIds = this._userRoleRepository.QueryAsNoTracking(m => m.RoleId.Equals(roleId)).Select(m => m.UserId).ToList();
+            IList<TUser> users = this._userRepository.Query(m => userIds.Contains(m.Id)).ToList();
             return Task.FromResult(users);
         }
-
-        #endregion
-
-        #region Other
 
         /// <summary>
         /// Converts the provided <paramref name="id"/> to a strongly typed key object.
@@ -1272,6 +1221,7 @@ namespace OSharp.Identity
             {
                 return default(TUserKey);
             }
+
             return (TUserKey)TypeDescriptor.GetConverter(typeof(TUserKey)).ConvertFromInvariantString(id);
         }
 
@@ -1286,6 +1236,7 @@ namespace OSharp.Identity
             {
                 return null;
             }
+
             return id.ToString();
         }
 
@@ -1294,12 +1245,10 @@ namespace OSharp.Identity
         /// </summary>
         protected void ThrowIfDisposed()
         {
-            if (_disposed)
+            if (this._disposed)
             {
-                throw new ObjectDisposedException(GetType().Name);
+                throw new ObjectDisposedException(this.GetType().Name);
             }
         }
-
-        #endregion
     }
 }

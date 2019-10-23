@@ -14,7 +14,6 @@ using System.Security.Claims;
 using OSharp.Collections;
 using OSharp.Dependency;
 
-
 namespace Liuliu.Demo.Common
 {
     /// <summary>
@@ -29,7 +28,7 @@ namespace Liuliu.Demo.Common
         /// </summary>
         public CommonService(IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
+            this._serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -39,7 +38,7 @@ namespace Liuliu.Demo.Common
         {
             List<object> list = new List<object>();
 
-            ClaimsPrincipal user = _serviceProvider.GetCurrentUser();
+            ClaimsPrincipal user = this._serviceProvider.GetCurrentUser();
             list.Add(user == null);
             list.Add(user?.GetType());
             list.Add(user?.Identity.Name);

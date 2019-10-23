@@ -9,7 +9,6 @@
 using System;
 using System.Text;
 
-
 namespace OSharp.Exceptions
 {
     /// <summary>
@@ -17,12 +16,6 @@ namespace OSharp.Exceptions
     /// </summary>
     public class ExceptionMessage
     {
-        #region 字段
-
-        #endregion
-
-        #region 构造函数
-
         /// <summary>
         /// 以自定义用户信息和异常对象实例化一个异常信息对象
         /// </summary>
@@ -31,10 +24,10 @@ namespace OSharp.Exceptions
         /// <param name="isHideStackTrace">是否隐藏异常堆栈信息</param>
         public ExceptionMessage(Exception e, string userMessage = null, bool isHideStackTrace = false)
         {
-            UserMessage = string.IsNullOrEmpty(userMessage) ? e.Message : userMessage;
+            this.UserMessage = string.IsNullOrEmpty(userMessage) ? e.Message : userMessage;
 
             StringBuilder sb = new StringBuilder();
-            ExMessage = string.Empty;
+            this.ExMessage = string.Empty;
             int count = 0;
             string appString = string.Empty;
             while (e != null)
@@ -43,7 +36,8 @@ namespace OSharp.Exceptions
                 {
                     appString += "    ";
                 }
-                ExMessage = e.Message;
+
+                this.ExMessage = e.Message;
                 sb.AppendLine(appString + "Message: " + e.Message);
                 sb.AppendLine(appString + "Type: " + e.GetType().FullName);
                 sb.AppendLine(appString + "Method: " + (e.TargetSite == null ? null : e.TargetSite.Name));
@@ -52,18 +46,19 @@ namespace OSharp.Exceptions
                 {
                     sb.AppendLine(appString + "StackTrace: " + e.StackTrace);
                 }
+
                 if (e.InnerException != null)
                 {
                     sb.AppendLine(appString + "InnerException: ");
                     count++;
                 }
+
                 e = e.InnerException;
             }
-            ErrorDetails = sb.ToString();
+
+            this.ErrorDetails = sb.ToString();
             sb.Clear();
         }
-
-        #region 属性
 
         /// <summary>
         /// 用户信息，用于报告给用户的异常消息
@@ -80,10 +75,6 @@ namespace OSharp.Exceptions
         /// </summary>
         public string ErrorDetails { get; private set; }
 
-        #endregion
-
-        #region 方法
-
         /// <summary>
         /// 返回表示当前 <see cref="T:System.Object"/> 的 <see cref="T:System.String"/>。
         /// </summary>
@@ -93,11 +84,7 @@ namespace OSharp.Exceptions
         /// <filterpriority>2</filterpriority>
         public override string ToString()
         {
-            return ErrorDetails;
+            return this.ErrorDetails;
         }
-
-        #endregion
-
-        #endregion
     }
 }

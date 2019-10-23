@@ -15,7 +15,6 @@ using OSharp.Data;
 using OSharp.Entity;
 using OSharp.Mapping;
 
-
 namespace Liuliu.Demo.Systems.Dtos
 {
     /// <summary>

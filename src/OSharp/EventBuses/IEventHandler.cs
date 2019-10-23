@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 using OSharp.Dependency;
 
-
 namespace OSharp.EventBuses
 {
     /// <summary>
@@ -43,7 +42,6 @@ namespace OSharp.EventBuses
         /// <returns></returns>
         Task HandleAsync(IEventData eventData, CancellationToken cancelToken = default(CancellationToken));
     }
-
 
     /// <summary>
     /// 定义泛型事件处理器

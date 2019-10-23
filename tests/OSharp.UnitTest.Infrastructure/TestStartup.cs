@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.AspNetCore;
 
-
 namespace OSharp.UnitTest.Infrastructure
 {
     public class TestStartup

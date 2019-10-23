@@ -27,7 +27,6 @@ using OSharp.Filter;
 using OSharp.Json;
 using OSharp.Reflection;
 
-
 namespace OSharp.Caching
 {
     /// <summary>
@@ -115,6 +114,7 @@ namespace OSharp.Caching
             {
                 return;
             }
+
             cache.Set(key, value, options);
         }
 
@@ -132,6 +132,7 @@ namespace OSharp.Caching
             {
                 return Task.FromResult(0);
             }
+
             return cache.SetAsync(key, value, options);
         }
 
@@ -145,6 +146,7 @@ namespace OSharp.Caching
             {
                 return default(TResult);
             }
+
             return json.FromJsonString<TResult>();
         }
 
@@ -158,6 +160,7 @@ namespace OSharp.Caching
             {
                 return default(TResult);
             }
+
             return json.FromJsonString<TResult>();
         }
 
@@ -171,11 +174,13 @@ namespace OSharp.Caching
             {
                 return result;
             }
+
             result = getFunc();
             if (Equals(result, default(TResult)))
             {
                 return default(TResult);
             }
+
             cache.Set(key, result, options);
             return result;
         }
@@ -190,11 +195,13 @@ namespace OSharp.Caching
             {
                 return result;
             }
+
             result = await getAsyncFunc();
             if (Equals(result, default(TResult)))
             {
                 return default(TResult);
             }
+
             await cache.SetAsync(key, result, options);
             return result;
         }
@@ -233,6 +240,7 @@ namespace OSharp.Caching
             {
                 return getFunc();
             }
+
             return cache.Get<TResult>(key, getFunc, options);
         }
 
@@ -246,6 +254,7 @@ namespace OSharp.Caching
             {
                 return getAsyncFunc();
             }
+
             return cache.GetAsync<TResult>(key, getAsyncFunc, options);
         }
 
@@ -483,6 +492,7 @@ namespace OSharp.Caching
             {
                 return source.ToList();
             }
+
             IDistributedCache cache = ServiceLocator.Instance.GetService<IDistributedCache>();
             string key = GetKey(source.Expression, keyParams);
             return cache.Get(key, source.ToList, function);
@@ -502,12 +512,11 @@ namespace OSharp.Caching
             {
                 return source.ToArray();
             }
+
             IDistributedCache cache = ServiceLocator.Instance.GetService<IDistributedCache>();
             string key = GetKey(source.Expression, keyParams);
             return cache.Get(key, source.ToArray, function);
         }
-
-        #region OutputDto
 
         /// <summary>
         /// 查询分页数据结果，如缓存存在，直接返回，否则从数据源查找分页结果，并存入缓存中再返回
@@ -697,8 +706,6 @@ namespace OSharp.Caching
             return cache.Get(key, () => source.ToOutput<TSource, TOutputDto>().ToArray(), function);
         }
 
-        #endregion
-
         /// <summary>
         /// 将<see cref="IFunction"/>的缓存配置转换为<see cref="DistributedCacheEntryOptions"/>
         /// </summary>
@@ -709,6 +716,7 @@ namespace OSharp.Caching
             {
                 return null;
             }
+
             DistributedCacheEntryOptions options = new DistributedCacheEntryOptions();
             if (!function.IsCacheSliding)
             {
@@ -718,6 +726,7 @@ namespace OSharp.Caching
             {
                 options.SetSlidingExpiration(TimeSpan.FromSeconds(function.CacheExpirationSeconds));
             }
+
             return options;
         }
 
@@ -754,8 +763,10 @@ namespace OSharp.Caching
                         : CollectionPropertySorter<TEntity>.ThenBy(orderSource, sortCondition.SortField, sortCondition.ListSortDirection);
                     count++;
                 }
+
                 source = orderSource;
             }
+
             int pageIndex = pageCondition.PageIndex, pageSize = pageCondition.PageSize;
             source = source != null
                 ? source.Skip((pageIndex - 1) * pageSize).Take(pageSize)
@@ -798,8 +809,10 @@ namespace OSharp.Caching
                         : CollectionPropertySorter<TEntity>.ThenBy(orderSource, sortCondition.SortField, sortCondition.ListSortDirection);
                     count++;
                 }
+
                 source = orderSource;
             }
+
             int pageIndex = pageCondition.PageIndex, pageSize = pageCondition.PageSize;
             source = source != null
                 ? source.Skip((pageIndex - 1) * pageSize).Take(pageSize)
@@ -834,6 +847,7 @@ namespace OSharp.Caching
             {
                 key = new StringCacheKeyGenerator().GetKey(keyParams);
             }
+
             return key.ToMd5Hash();
         }
     }

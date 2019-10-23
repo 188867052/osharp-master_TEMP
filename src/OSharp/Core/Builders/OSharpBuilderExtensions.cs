@@ -9,7 +9,6 @@
 
 using OSharp.Core.Packs;
 
-
 namespace OSharp.Core.Builders
 {
     /// <summary>

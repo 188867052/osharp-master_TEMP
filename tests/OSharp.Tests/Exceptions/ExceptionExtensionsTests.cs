@@ -1,12 +1,11 @@
 ﻿using System;
 using Xunit;
 
-
 namespace OSharp.Exceptions.Tests
 {
     public class ExceptionExtensionsTests
     {
-        [Fact()]
+        [Fact]
         public void FormatMessageTest()
         {
             Exception ex = null;
@@ -19,6 +18,7 @@ namespace OSharp.Exceptions.Tests
             {
                 ex = new OsharpException("服务器正忙，请稍候再尝试。", e);
             }
+
             Assert.True(ex != null);
             string msg = ex.FormatMessage();
             Assert.Contains("内部异常", msg);

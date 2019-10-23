@@ -14,8 +14,8 @@ namespace OSharp.Data
     /// </summary>
     /// <typeparam name="TResultType"></typeparam>
     public interface IOsharpResult<TResultType> : IOsharpResult<TResultType, object>
-    { }
-
+    {
+    }
 
     /// <summary>
     /// OSharp操作结果

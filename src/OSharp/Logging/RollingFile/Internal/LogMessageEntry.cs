@@ -9,8 +9,7 @@
 
 using System;
 
-
-//power by https://github.com/andrewlock/NetEscapades.Extensions.Logging
+// power by https://github.com/andrewlock/NetEscapades.Extensions.Logging
 namespace OSharp.Logging.RollingFile.Internal
 {
     /// <summary>

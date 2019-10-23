@@ -15,7 +15,6 @@ using Liuliu.Demo.Security.Entities;
 using OSharp.Core.Functions;
 using OSharp.Security;
 
-
 namespace Liuliu.Demo.Security
 {
     /// <summary>
@@ -28,6 +27,7 @@ namespace Liuliu.Demo.Security
         /// </summary>
         public FunctionAuthCache(IServiceProvider serviceProvider)
             : base(serviceProvider)
-        { }
+        {
+        }
     }
 }

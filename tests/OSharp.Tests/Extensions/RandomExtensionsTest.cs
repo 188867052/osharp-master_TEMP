@@ -1,14 +1,12 @@
-﻿using Xunit;
-using System;
+﻿using System;
 using System.Linq;
-
+using Xunit;
 
 namespace OSharp.Extensions.Tests
 {
-    
     public class RandomExtensionsTest
     {
-        [Fact()]
+        [Fact]
         public void NextBooleanTest()
         {
             Random rnd = new Random();
@@ -16,7 +14,7 @@ namespace OSharp.Extensions.Tests
             Assert.Contains(value, new[] { true, false });
         }
 
-        [Fact()]
+        [Fact]
         public void NextEnumTest()
         {
             Random rnd = new Random();
@@ -24,7 +22,7 @@ namespace OSharp.Extensions.Tests
             Assert.Contains(kind, new[] { UriKind.Absolute, UriKind.Relative, UriKind.RelativeOrAbsolute });
         }
 
-        [Fact()]
+        [Fact]
         public void NextBytesTest()
         {
             Random rnd = new Random();
@@ -35,7 +33,7 @@ namespace OSharp.Extensions.Tests
             Assert.True(bytes.Distinct().Count() > 5);
         }
 
-        [Fact()]
+        [Fact]
         public void NextItemTest()
         {
             Random rnd = new Random();
@@ -44,7 +42,7 @@ namespace OSharp.Extensions.Tests
             Assert.Contains(item, array);
         }
 
-        [Fact()]
+        [Fact]
         public void NextDateTimeTest()
         {
             Random rnd = new Random();
@@ -60,7 +58,7 @@ namespace OSharp.Extensions.Tests
             Assert.True(dt <= dtMax);
         }
 
-        [Fact()]
+        [Fact]
         public void GetRandomNumberStringTest()
         {
             Random rnd = new Random();
@@ -69,7 +67,7 @@ namespace OSharp.Extensions.Tests
             Assert.True(rndNum.Length == 10);
         }
 
-        [Fact()]
+        [Fact]
         public void GetRandomLetterStringTest()
         {
             Random rnd = new Random();
@@ -78,7 +76,7 @@ namespace OSharp.Extensions.Tests
             Assert.True(rndNum.Length == 10);
         }
 
-        [Fact()]
+        [Fact]
         public void GetRandomLetterAndNumberString()
         {
             Random rnd = new Random();

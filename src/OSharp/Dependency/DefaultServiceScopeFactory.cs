@@ -1,7 +1,5 @@
-﻿using System;
-
+﻿
 using Microsoft.Extensions.DependencyInjection;
-
 
 namespace OSharp.Dependency
 {
@@ -16,15 +14,13 @@ namespace OSharp.Dependency
         /// </summary>
         public DefaultServiceScopeFactory(IServiceScopeFactory serviceScopeFactory)
         {
-            ServiceScopeFactory = serviceScopeFactory;
+            this.ServiceScopeFactory = serviceScopeFactory;
         }
-        
+
         /// <summary>
         /// 获取 <see cref="IServiceScope"/>工厂
         /// </summary>
         protected IServiceScopeFactory ServiceScopeFactory { get; }
-
-        #region Implementation of IServiceScopeFactory
 
         /// <summary>
         /// Create an <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceScope" /> which
@@ -39,9 +35,7 @@ namespace OSharp.Dependency
         /// </returns>
         public IServiceScope CreateScope()
         {
-            return ServiceScopeFactory.CreateScope();
+            return this.ServiceScopeFactory.CreateScope();
         }
-
-        #endregion
     }
 }

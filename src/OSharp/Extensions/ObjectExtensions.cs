@@ -16,7 +16,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 using OSharp.Reflection;
 
-
 namespace OSharp.Extensions
 {
     /// <summary>
@@ -24,8 +23,6 @@ namespace OSharp.Extensions
     /// </summary>
     public static class ObjectExtensions
     {
-        #region 公共方法
-
         /// <summary>
         /// 把对象类型转换为指定类型
         /// </summary>
@@ -38,18 +35,22 @@ namespace OSharp.Extensions
             {
                 return null;
             }
+
             if (conversionType.IsNullableType())
             {
                 conversionType = conversionType.GetUnNullableType();
             }
+
             if (conversionType.IsEnum)
             {
                 return Enum.Parse(conversionType, value.ToString());
             }
+
             if (conversionType == typeof(Guid))
             {
                 return Guid.Parse(value.ToString());
             }
+
             return Convert.ChangeType(value, conversionType);
         }
 
@@ -65,10 +66,12 @@ namespace OSharp.Extensions
             {
                 return default(T);
             }
+
             if (value.GetType() == typeof(T))
             {
                 return (T)value;
             }
+
             object result = CastTo(value, typeof(T));
             return (T)result;
         }
@@ -152,6 +155,7 @@ namespace OSharp.Extensions
                     expando.Add(property.Name, val);
                 }
             }
+
             return (ExpandoObject)expando;
         }
 
@@ -164,10 +168,12 @@ namespace OSharp.Extensions
             {
                 return default(T);
             }
+
             if (typeof(T).HasAttribute<SerializableAttribute>())
             {
                 throw new NotSupportedException("当前对象未标记特性“{0}”，无法进行DeepClone操作".FormatWith(typeof(SerializableAttribute)));
             }
+
             BinaryFormatter formatter = new BinaryFormatter();
             using (MemoryStream ms = new MemoryStream())
             {
@@ -176,7 +182,5 @@ namespace OSharp.Extensions
                 return (T)formatter.Deserialize(ms);
             }
         }
-
-        #endregion
     }
 }

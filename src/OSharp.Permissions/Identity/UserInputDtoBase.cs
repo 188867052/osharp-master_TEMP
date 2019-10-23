@@ -1,17 +1,6 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="UserInputDtoBase.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2017 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2017-11-16 13:32</last-date>
-// -----------------------------------------------------------------------
-
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-
 using OSharp.Entity;
-
 
 namespace OSharp.Identity
 {
@@ -29,7 +18,8 @@ namespace OSharp.Identity
         /// <summary>
         /// 获取或设置 用户名
         /// </summary>
-        [Required, DisplayName("用户名")]
+        [Required]
+        [DisplayName("用户名")]
         [StringLength(30, MinimumLength = 3)]
         public string UserName { get; set; }
 
@@ -47,7 +37,8 @@ namespace OSharp.Identity
         /// <summary>
         /// 获取或设置 电子邮箱
         /// </summary>
-        [Required, DisplayName("电子邮箱")]
+        [Required]
+        [DisplayName("电子邮箱")]
         public string Email { get; set; }
 
         /// <summary>

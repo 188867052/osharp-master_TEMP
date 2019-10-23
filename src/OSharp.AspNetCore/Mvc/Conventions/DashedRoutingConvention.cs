@@ -14,7 +14,6 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
-
 namespace OSharp.AspNetCore.Mvc.Conventions
 {
     /// <summary>
@@ -33,9 +32,10 @@ namespace OSharp.AspNetCore.Mvc.Conventions
             {
                 return;
             }
+
             foreach (ActionModel action in controller.Actions)
             {
-                foreach (SelectorModel model in action.Selectors.Where(m=>m.AttributeRouteModel == null))
+                foreach (SelectorModel model in action.Selectors.Where(m => m.AttributeRouteModel == null))
                 {
                     List<string> parts = new List<string>();
                     foreach (var attribute in controller.Attributes)
@@ -51,13 +51,14 @@ namespace OSharp.AspNetCore.Mvc.Conventions
                     {
                         continue;
                     }
+
                     parts.Add(PascalToKebabCase(controller.ControllerName));
 
                     if (action.ActionName != "Index")
                     {
                         parts.Add(PascalToKebabCase(action.ActionName));
                     }
-                    
+
                     string template = string.Join("/", parts);
                     model.AttributeRouteModel = new AttributeRouteModel() { Template = template };
                 }
@@ -70,6 +71,7 @@ namespace OSharp.AspNetCore.Mvc.Conventions
             {
                 return value;
             }
+
             return Regex.Replace(value, "(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])", "-$1", RegexOptions.Compiled).Trim().ToLower();
         }
     }

@@ -11,14 +11,10 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 using OSharp.Core.Options;
-using OSharp.Dependency;
 using OSharp.Exceptions;
-
 
 namespace OSharp.Identity.JwtBearer
 {
@@ -38,6 +34,7 @@ namespace OSharp.Identity.JwtBearer
             {
                 throw new OsharpException("创建JwtToken时Secret为空");
             }
+
             SecurityKey key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secret));
             SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
             DateTime now = DateTime.UtcNow;
@@ -52,7 +49,7 @@ namespace OSharp.Identity.JwtBearer
                 SigningCredentials = credentials,
                 NotBefore = now,
                 IssuedAt = now,
-                Expires = expires
+                Expires = expires,
             };
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             SecurityToken token = tokenHandler.CreateToken(descriptor);

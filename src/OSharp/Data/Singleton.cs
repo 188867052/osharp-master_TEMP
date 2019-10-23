@@ -9,7 +9,6 @@
 using System;
 using System.Collections.Generic;
 
-
 namespace OSharp.Data
 {
     /// <summary>
@@ -25,7 +24,11 @@ namespace OSharp.Data
         /// </summary>
         public static T Instance
         {
-            get { return _instance; }
+            get
+            {
+                return _instance;
+            }
+
             set
             {
                 _instance = value;
@@ -33,7 +36,6 @@ namespace OSharp.Data
             }
         }
     }
-
 
     /// <summary>
     /// 提供一个字典容器，按类型装载所有<see cref="Singleton{T}"/>的单例实例

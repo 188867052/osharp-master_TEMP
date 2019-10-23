@@ -4,7 +4,6 @@ using Shouldly;
 
 using Xunit;
 
-
 namespace OSharp.Security.Tests
 {
     public class TransmissionEncryptorTests
@@ -14,20 +13,20 @@ namespace OSharp.Security.Tests
         {
             string source = "client send";
 
-            //客户端加密
-            Client client= new Client();
+            // 客户端加密
+            Client client = new Client();
             string enStr = client.Encrypt(source);
 
-            //传输数据。。。
-            //传输客户端公钥。。。
+            // 传输数据。。。
+            // 传输客户端公钥。。。
             string clientPublicKey = client.PublicKey;
-            
-            //服务端解密并校验
+
+            // 服务端解密并校验
             Server server = new Server(clientPublicKey);
             string deStr = server.Decrypt(enStr);
             deStr.ShouldBe(source);
 
-            //服务端回复给客户端
+            // 服务端回复给客户端
             source = "server reply";
             enStr = server.Encrypt(source);
             deStr = client.Decrypt(enStr);
@@ -40,7 +39,8 @@ namespace OSharp.Security.Tests
             string source = "admin";
             Client client = new Client();
             string enStr = client.Encrypt(source);
-            //搞个破坏
+
+            // 搞个破坏
             enStr += "A";
             Server server = new Server(client.PublicKey);
             Assert.Throws<FormatException>(() =>
@@ -68,24 +68,25 @@ namespace OSharp.Security.Tests
             public Client()
             {
                 RsaHelper rsa = new RsaHelper();
-                PublicKey = rsa.PublicKey;
-                _cryptor = new TransmissionEncryptor(rsa.PrivateKey, ServerPublicKey);
+                this.PublicKey = rsa.PublicKey;
+                this._cryptor = new TransmissionEncryptor(rsa.PrivateKey, ServerPublicKey);
             }
 
             public string PublicKey { get; }
 
             public string Encrypt(string data)
             {
-                return _cryptor.EncryptData(data);
+                return this._cryptor.EncryptData(data);
             }
 
             public string Decrypt(string data)
             {
-                data = _cryptor.DecryptAndVerifyData(data);
+                data = this._cryptor.DecryptAndVerifyData(data);
                 if (data == null)
                 {
                     throw new Exception("数据校验未通过");
                 }
+
                 return data;
             }
         }
@@ -101,25 +102,24 @@ namespace OSharp.Security.Tests
 
             public Server(string clientPublicKey)
             {
-                _cryptor = new TransmissionEncryptor(ServerPrivateKey, clientPublicKey);
+                this._cryptor = new TransmissionEncryptor(ServerPrivateKey, clientPublicKey);
             }
 
             public string Decrypt(string data)
             {
-                data = _cryptor.DecryptAndVerifyData(data);
+                data = this._cryptor.DecryptAndVerifyData(data);
                 if (data == null)
                 {
                     throw new Exception("数据校验未通过");
                 }
+
                 return data;
             }
 
             public string Encrypt(string data)
             {
-                return _cryptor.EncryptData(data);
+                return this._cryptor.EncryptData(data);
             }
         }
     }
-
-    
 }

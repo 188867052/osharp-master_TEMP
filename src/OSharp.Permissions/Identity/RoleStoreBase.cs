@@ -20,7 +20,6 @@ using Microsoft.AspNetCore.Identity;
 using OSharp.Data;
 using OSharp.Entity;
 
-
 namespace OSharp.Identity
 {
     /// <summary>
@@ -49,31 +48,21 @@ namespace OSharp.Identity
             IRepository<TRole, TRoleKey> roleRepository,
             IRepository<TRoleClaim, int> roleClaimRepository)
         {
-            _roleRepository = roleRepository;
-            _roleClaimRepository = roleClaimRepository;
+            this._roleRepository = roleRepository;
+            this._roleClaimRepository = roleClaimRepository;
         }
-
-        #region Implementation of IDisposable
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         public void Dispose()
         {
-            _disposed = true;
+            this._disposed = true;
         }
-
-        #endregion
-
-        #region Implementation of IQueryableRoleStore<TRole>
 
         /// <summary>
         /// Returns an <see cref="T:System.Linq.IQueryable`1" /> collection of roles.
         /// </summary>
         /// <value>An <see cref="T:System.Linq.IQueryable`1" /> collection of roles.</value>
-        public IQueryable<TRole> Roles => _roleRepository.QueryAsNoTracking();
-
-        #endregion
-
-        #region Implementation of IRoleStore<TRole>
+        public IQueryable<TRole> Roles => this._roleRepository.QueryAsNoTracking();
 
         /// <summary>
         /// Creates a new role in a store as an asynchronous operation.
@@ -84,18 +73,19 @@ namespace OSharp.Identity
         public async Task<IdentityResult> CreateAsync(TRole role, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(role, nameof(role));
 
             if (role.IsDefault)
             {
-                string defaultRole = _roleRepository.Query(m => m.IsDefault, false).Select(m => m.Name).FirstOrDefault();
+                string defaultRole = this._roleRepository.Query(m => m.IsDefault, false).Select(m => m.Name).FirstOrDefault();
                 if (defaultRole != null)
                 {
                     return new IdentityResult().Failed($"系统中已存在默认角色“{defaultRole}”，不能重复添加");
                 }
             }
-            await _roleRepository.InsertAsync(role);
+
+            await this._roleRepository.InsertAsync(role);
             return IdentityResult.Success;
         }
 
@@ -108,22 +98,24 @@ namespace OSharp.Identity
         public async Task<IdentityResult> UpdateAsync(TRole role, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(role, nameof(role));
 
             if (role.IsSystem)
             {
                 return new IdentityResult().Failed($"角色“{role.Name}”是系统角色，不能更新");
             }
+
             if (role.IsDefault)
             {
-                var defaultRole = _roleRepository.Query(m => m.IsDefault, false).Select(m => new { m.Id, m.Name }).FirstOrDefault();
+                var defaultRole = this._roleRepository.Query(m => m.IsDefault, false).Select(m => new { m.Id, m.Name }).FirstOrDefault();
                 if (defaultRole != null && !defaultRole.Id.Equals(role.Id))
                 {
                     return new IdentityResult().Failed($"系统中已存在默认角色“{defaultRole.Name}”，不能重复添加");
                 }
             }
-            await _roleRepository.UpdateAsync(role);
+
+            await this._roleRepository.UpdateAsync(role);
             return IdentityResult.Success;
         }
 
@@ -136,14 +128,15 @@ namespace OSharp.Identity
         public async Task<IdentityResult> DeleteAsync(TRole role, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(role, nameof(role));
 
             if (role.IsSystem)
             {
                 return new IdentityResult().Failed($"角色“{role.Name}”是系统角色，不能删除");
             }
-            await _roleRepository.DeleteAsync(role);
+
+            await this._roleRepository.DeleteAsync(role);
             return IdentityResult.Success;
         }
 
@@ -156,10 +149,10 @@ namespace OSharp.Identity
         public Task<string> GetRoleIdAsync(TRole role, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(role, nameof(role));
 
-            return Task.FromResult(ConvertIdToString(role.Id));
+            return Task.FromResult(this.ConvertIdToString(role.Id));
         }
 
         /// <summary>
@@ -171,7 +164,7 @@ namespace OSharp.Identity
         public Task<string> GetRoleNameAsync(TRole role, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(role, nameof(role));
 
             return Task.FromResult(role.Name);
@@ -187,7 +180,7 @@ namespace OSharp.Identity
         public Task SetRoleNameAsync(TRole role, string roleName, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(role, nameof(role));
 
             role.Name = roleName;
@@ -203,7 +196,7 @@ namespace OSharp.Identity
         public Task<string> GetNormalizedRoleNameAsync(TRole role, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(role, nameof(role));
 
             return Task.FromResult(role.NormalizedName);
@@ -219,7 +212,7 @@ namespace OSharp.Identity
         public Task SetNormalizedRoleNameAsync(TRole role, string normalizedName, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(role, nameof(role));
 
             role.NormalizedName = normalizedName;
@@ -235,10 +228,10 @@ namespace OSharp.Identity
         public Task<TRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
 
-            TRoleKey id = ConvertIdFromString(roleId);
-            return Task.FromResult(_roleRepository.Query().FirstOrDefault(m => m.Id.Equals(id)));
+            TRoleKey id = this.ConvertIdFromString(roleId);
+            return Task.FromResult(this._roleRepository.Query().FirstOrDefault(m => m.Id.Equals(id)));
         }
 
         /// <summary>
@@ -250,13 +243,9 @@ namespace OSharp.Identity
         public Task<TRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
-            return Task.FromResult(_roleRepository.Query().FirstOrDefault(m => m.NormalizedName == normalizedRoleName));
+            this.ThrowIfDisposed();
+            return Task.FromResult(this._roleRepository.Query().FirstOrDefault(m => m.NormalizedName == normalizedRoleName));
         }
-
-        #endregion
-
-        #region Implementation of IRoleClaimStore<TRole>
 
         /// <summary>
         ///  Gets a list of <see cref="T:System.Security.Claims.Claim" />s to be belonging to the specified <paramref name="role" /> as an asynchronous operation.
@@ -269,10 +258,10 @@ namespace OSharp.Identity
         public Task<IList<Claim>> GetClaimsAsync(TRole role, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(role, nameof(role));
 
-            IList<Claim> list = _roleClaimRepository.QueryAsNoTracking(m => m.RoleId.Equals(role.Id)).Select(n => new Claim(n.ClaimType, n.ClaimValue)).ToList();
+            IList<Claim> list = this._roleClaimRepository.QueryAsNoTracking(m => m.RoleId.Equals(role.Id)).Select(n => new Claim(n.ClaimType, n.ClaimValue)).ToList();
             return Task.FromResult(list);
         }
 
@@ -286,12 +275,12 @@ namespace OSharp.Identity
         public async Task AddClaimAsync(TRole role, Claim claim, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(role, nameof(role));
             Check.NotNull(claim, nameof(claim));
 
             TRoleClaim roleClaim = new TRoleClaim() { RoleId = role.Id, ClaimType = claim.Type, ClaimValue = claim.Value };
-            await _roleClaimRepository.InsertAsync(roleClaim);
+            await this._roleClaimRepository.InsertAsync(roleClaim);
         }
 
         /// <summary>
@@ -304,14 +293,12 @@ namespace OSharp.Identity
         public Task RemoveClaimAsync(TRole role, Claim claim, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.ThrowIfCancellationRequested();
-            ThrowIfDisposed();
+            this.ThrowIfDisposed();
             Check.NotNull(role, nameof(role));
             Check.NotNull(claim, nameof(claim));
 
-            return _roleClaimRepository.DeleteBatchAsync(m => m.RoleId.Equals(role.Id) && m.ClaimValue == claim.Type && m.ClaimValue == claim.Value);
+            return this._roleClaimRepository.DeleteBatchAsync(m => m.RoleId.Equals(role.Id) && m.ClaimValue == claim.Type && m.ClaimValue == claim.Value);
         }
-
-        #endregion
 
         /// <summary>
         /// Converts the provided <paramref name="id"/> to a strongly typed key object.
@@ -324,6 +311,7 @@ namespace OSharp.Identity
             {
                 return default(TRoleKey);
             }
+
             return (TRoleKey)TypeDescriptor.GetConverter(typeof(TRoleKey)).ConvertFromInvariantString(id);
         }
 
@@ -338,6 +326,7 @@ namespace OSharp.Identity
             {
                 return null;
             }
+
             return id.ToString();
         }
 
@@ -346,9 +335,9 @@ namespace OSharp.Identity
         /// </summary>
         protected void ThrowIfDisposed()
         {
-            if (_disposed)
+            if (this._disposed)
             {
-                throw new ObjectDisposedException(GetType().Name);
+                throw new ObjectDisposedException(this.GetType().Name);
             }
         }
     }

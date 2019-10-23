@@ -20,10 +20,11 @@ namespace OSharp.UnitTest.Infrastructure
                     Id = i + 1,
                     Name = "Name" + (i + 1),
                     AddDate = rnd.NextDateTime(dt.AddDays(-7), dt.AddDays(7)),
-                    IsDeleted = rnd.NextBoolean()
+                    IsDeleted = rnd.NextBoolean(),
                 });
             }
-            Entities = entities;
+
+            this.Entities = entities;
         }
     }
 }

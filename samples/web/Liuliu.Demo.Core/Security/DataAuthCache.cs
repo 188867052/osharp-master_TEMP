@@ -15,7 +15,6 @@ using Liuliu.Demo.Security.Entities;
 using OSharp.Core.EntityInfos;
 using OSharp.Security;
 
-
 namespace Liuliu.Demo.Security
 {
     /// <summary>
@@ -28,6 +27,7 @@ namespace Liuliu.Demo.Security
         /// </summary>
         public DataAuthCache(IServiceProvider serviceProvider)
             : base(serviceProvider)
-        { }
+        {
+        }
     }
 }

@@ -13,10 +13,7 @@ using Liuliu.Demo.Security.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-using OSharp.Core.Functions;
 using OSharp.Entity;
-
 
 namespace Liuliu.Demo.EntityConfiguration.Security
 {
@@ -33,8 +30,8 @@ namespace Liuliu.Demo.EntityConfiguration.Security
         {
             builder.HasIndex(m => new { m.ModuleId, m.FunctionId }).HasName("ModuleFunctionIndex").IsUnique();
 
-            builder.HasOne<Module>(mf => mf.Module).WithMany().HasForeignKey(m => m.ModuleId);
-            builder.HasOne<Function>(mf => mf.Function).WithMany().HasForeignKey(m => m.FunctionId);
+            builder.HasOne(mf => mf.Module).WithMany().HasForeignKey(m => m.ModuleId);
+            builder.HasOne(mf => mf.Function).WithMany().HasForeignKey(m => m.FunctionId);
         }
     }
 }

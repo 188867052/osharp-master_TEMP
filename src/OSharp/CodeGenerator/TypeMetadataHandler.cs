@@ -13,7 +13,6 @@ using System.Linq;
 using OSharp.Entity;
 using OSharp.Reflection;
 
-
 namespace OSharp.CodeGenerator
 {
     /// <summary>
@@ -32,9 +31,9 @@ namespace OSharp.CodeGenerator
             IInputDtoTypeFinder inputDtoTypeFinder,
             IOutputDtoTypeFinder outputDtoTypeFinder)
         {
-            _entityTypeFinder = entityTypeFinder;
-            _inputDtoTypeFinder = inputDtoTypeFinder;
-            _outputDtoTypeFinder = outputDtoTypeFinder;
+            this._entityTypeFinder = entityTypeFinder;
+            this._inputDtoTypeFinder = inputDtoTypeFinder;
+            this._outputDtoTypeFinder = outputDtoTypeFinder;
         }
 
         /// <summary>
@@ -43,7 +42,7 @@ namespace OSharp.CodeGenerator
         /// <returns>元数据集合</returns>
         public TypeMetadata[] GetEntityTypeMetadatas()
         {
-            Type[] entityTypes = _entityTypeFinder.Find(m => !m.HasAttribute<IgnoreGenTypeAttribute>());
+            Type[] entityTypes = this._entityTypeFinder.Find(m => !m.HasAttribute<IgnoreGenTypeAttribute>());
             return entityTypes.OrderBy(m => m.FullName).Select(m => new TypeMetadata(m)).ToArray();
         }
 
@@ -53,7 +52,7 @@ namespace OSharp.CodeGenerator
         /// <returns>元数据集合</returns>
         public TypeMetadata[] GetInputDtoMetadatas()
         {
-            Type[] inputDtoTypes = _inputDtoTypeFinder.Find(m => !m.HasAttribute<IgnoreGenTypeAttribute>());
+            Type[] inputDtoTypes = this._inputDtoTypeFinder.Find(m => !m.HasAttribute<IgnoreGenTypeAttribute>());
             return inputDtoTypes.OrderBy(m => m.FullName).Select(m => new TypeMetadata(m)).ToArray();
         }
 
@@ -63,7 +62,7 @@ namespace OSharp.CodeGenerator
         /// <returns>元数据集合</returns>
         public TypeMetadata[] GetOutputDtoMetadata()
         {
-            Type[] outDtoTypes = _outputDtoTypeFinder.Find(m => !m.HasAttribute<IgnoreGenTypeAttribute>());
+            Type[] outDtoTypes = this._outputDtoTypeFinder.Find(m => !m.HasAttribute<IgnoreGenTypeAttribute>());
             return outDtoTypes.OrderBy(m => m.FullName).Select(m => new TypeMetadata(m)).ToArray();
         }
 
@@ -78,6 +77,7 @@ namespace OSharp.CodeGenerator
             {
                 return null;
             }
+
             return new TypeMetadata(type);
         }
     }

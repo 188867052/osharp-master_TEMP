@@ -14,8 +14,6 @@ using System.Threading.Tasks;
 
 using OSharp.Data;
 using OSharp.Filter;
-using OSharp.Security;
-
 
 namespace OSharp.Security
 {
@@ -24,8 +22,6 @@ namespace OSharp.Security
     /// </summary>
     public interface IEntityRoleStore<TEntityRole, in TEntityRoleInputDto, in TRoleKey>
     {
-        #region 实体角色信息业务
-
         /// <summary>
         /// 获取 实体角色信息查询数据集
         /// </summary>
@@ -68,8 +64,5 @@ namespace OSharp.Security
         /// <param name="ids">要删除的实体角色信息编号</param>
         /// <returns>业务操作结果</returns>
         Task<OperationResult> DeleteEntityRoles(params Guid[] ids);
-
-        #endregion
-
     }
 }

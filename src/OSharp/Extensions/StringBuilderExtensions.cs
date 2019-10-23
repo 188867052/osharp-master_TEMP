@@ -9,7 +9,6 @@
 using System;
 using System.Text;
 
-
 namespace OSharp.Extensions
 {
     /// <summary>
@@ -42,6 +41,7 @@ namespace OSharp.Extensions
             {
                 sb.Remove(0, 1);
             }
+
             return sb;
         }
 
@@ -56,6 +56,7 @@ namespace OSharp.Extensions
             cs.CheckNotNull("chars");
             return sb.TrimStart(new string(cs));
         }
+
         /// <summary>
         /// 去除<see cref="StringBuilder"/>开头的指定的<seealso cref="string"/>
         /// </summary>
@@ -72,11 +73,12 @@ namespace OSharp.Extensions
             while (sb.SubString(0, str.Length).Equals(str))
             {
                 sb.Remove(0, str.Length);
-                if (str.Length>sb.Length)
+                if (str.Length > sb.Length)
                 {
                     break;
                 }
             }
+
             return sb;
         }
 
@@ -105,6 +107,7 @@ namespace OSharp.Extensions
             {
                 sb.Remove(sb.Length - 1, 1);
             }
+
             return sb;
         }
 
@@ -133,14 +136,15 @@ namespace OSharp.Extensions
                 || sb.Length == 0
                 || str.Length > sb.Length)
                 return sb;
-            while (sb.SubString(sb.Length-str.Length, str.Length).Equals(str))
+            while (sb.SubString(sb.Length - str.Length, str.Length).Equals(str))
             {
-                sb.Remove(sb.Length-str.Length, str.Length);
-                if (sb.Length<str.Length)
+                sb.Remove(sb.Length - str.Length, str.Length);
+                if (sb.Length < str.Length)
                 {
                     break;
                 }
             }
+
             return sb;
         }
 
@@ -175,6 +179,7 @@ namespace OSharp.Extensions
             {
                 cs[i] = sb[start + i];
             }
+
             return new string(cs);
         }
     }

@@ -9,7 +9,6 @@
 
 using System.Threading.Tasks;
 
-
 namespace OSharp.AspNetCore.SignalR
 {
     /// <summary>

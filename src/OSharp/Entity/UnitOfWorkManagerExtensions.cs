@@ -14,9 +14,7 @@ using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.Core.Options;
-using OSharp.Dependency;
 using OSharp.Exceptions;
-
 
 namespace OSharp.Entity
 {
@@ -43,6 +41,7 @@ namespace OSharp.Entity
             {
                 throw new OsharpException($"类型“{entityType}”不是实体类型");
             }
+
             IUnitOfWork unitOfWork = unitOfWorkManager.GetUnitOfWork(entityType);
             return unitOfWork?.GetDbContext(entityType);
         }
@@ -55,7 +54,7 @@ namespace OSharp.Entity
             Type entityType = typeof(TEntity);
             return unitOfWorkManager.GetDbContextResolveOptions(entityType);
         }
-        
+
         /// <summary>
         /// 获取指定实体类型的数据上下文选项
         /// </summary>
@@ -67,6 +66,7 @@ namespace OSharp.Entity
             {
                 throw new OsharpException($"无法找到数据上下文“{dbContextType}”的配置信息");
             }
+
             return dbContextOptions;
         }
 

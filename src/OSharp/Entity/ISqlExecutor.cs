@@ -11,7 +11,6 @@ using System.Collections.Generic;
 
 using OSharp.Dependency;
 
-
 namespace OSharp.Entity
 {
     /// <summary>

@@ -9,7 +9,6 @@
 
 using System;
 
-
 namespace OSharp.Core.Packs
 {
     /// <summary>
@@ -22,7 +21,7 @@ namespace OSharp.Core.Packs
         /// </summary>
         public DependsOnPacksAttribute(params Type[] dependedPackTypes)
         {
-            DependedPackTypes = dependedPackTypes;
+            this.DependedPackTypes = dependedPackTypes;
         }
 
         /// <summary>

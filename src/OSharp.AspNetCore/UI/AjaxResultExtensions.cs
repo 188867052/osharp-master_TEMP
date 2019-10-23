@@ -12,7 +12,6 @@ using System;
 using OSharp.Data;
 using OSharp.Extensions;
 
-
 namespace OSharp.AspNetCore.UI
 {
     /// <summary>
@@ -59,6 +58,7 @@ namespace OSharp.AspNetCore.UI
                     data = dataFunc(resultData);
                 }
             }
+
             return new AjaxResult(content, type, data);
         }
 

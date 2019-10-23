@@ -13,7 +13,6 @@ using System.Linq;
 
 using OSharp.Extensions;
 
-
 namespace OSharp.Net
 {
     /// <summary>
@@ -35,7 +34,7 @@ namespace OSharp.Net
             { "Mac", "Mac" },
             { "Unix", "UNIX" },
             { "Linux", "Linux" },
-            { "SunOS", "SunOS" }
+            { "SunOS", "SunOS" },
         };
         private static readonly IDictionary<string, string> BrowserDict = new Dictionary<string, string>()
         {
@@ -57,7 +56,7 @@ namespace OSharp.Net
             { "The world", "世界之窗浏览器" },
             { "Maxthon", "遨游浏览器" },
             { "Chrome", "谷歌Chrome浏览器" },
-            { "Safari", "Safari内核浏览器" }
+            { "Safari", "Safari内核浏览器" },
         };
         private readonly string _userAgent;
 
@@ -66,7 +65,7 @@ namespace OSharp.Net
         /// </summary>
         public UserAgent(string userAgent)
         {
-            _userAgent = userAgent;
+            this._userAgent = userAgent;
         }
 
         /// <summary>
@@ -75,7 +74,7 @@ namespace OSharp.Net
         /// <returns></returns>
         public string GetSystem()
         {
-            string agent = _userAgent;
+            string agent = this._userAgent;
             string[] tokens = { "Windows", "Android", "iPhone" };
             foreach (string token in tokens)
             {
@@ -84,11 +83,13 @@ namespace OSharp.Net
                 {
                     return SystemDict[system];
                 }
+
                 if (system.Contains(token))
                 {
                     return system;
                 }
             }
+
             return SystemDict.FirstOrDefault(m => agent.IndexOf(m.Key, StringComparison.OrdinalIgnoreCase) > -1).Value ?? "未知系统";
         }
 
@@ -100,8 +101,10 @@ namespace OSharp.Net
                 {
                     return agent.Match($@"{token}\sOS\s(\d*_)*\d*(?=\s)");
                 }
+
                 return agent.Match($"{token}.*(?=;)");
             }
+
             return token;
         }
 
@@ -111,7 +114,7 @@ namespace OSharp.Net
         /// <returns></returns>
         public string GetBrowser()
         {
-            return BrowserDict.FirstOrDefault(m => _userAgent.IndexOf(m.Key, StringComparison.OrdinalIgnoreCase) > -1).Value ?? "未知浏览器";
+            return BrowserDict.FirstOrDefault(m => this._userAgent.IndexOf(m.Key, StringComparison.OrdinalIgnoreCase) > -1).Value ?? "未知浏览器";
         }
     }
 }

@@ -7,12 +7,6 @@
 //  <last-date>2018-07-26 12:15</last-date>
 // -----------------------------------------------------------------------
 
-using Microsoft.AspNetCore.SignalR;
-using OSharp.AspNetCore.SignalR;
-using System;
-using System.ComponentModel;
-
-
 namespace Liuliu.Demo.Web.Startups
 {
 #if NETCOREAPP2_2

@@ -16,14 +16,12 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.Core.Options;
 using OSharp.Dependency;
 using OSharp.Exceptions;
-
 
 namespace OSharp.Entity
 {
@@ -44,7 +42,7 @@ namespace OSharp.Entity
         /// </summary>
         public UnitOfWork(IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
+            this._serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -61,7 +59,7 @@ namespace OSharp.Entity
         public virtual IDbContext GetDbContext<TEntity, TKey>() where TEntity : IEntity<TKey>
         {
             Type entityType = typeof(TEntity);
-            return GetDbContext(entityType);
+            return this.GetDbContext(entityType);
         }
 
         /// <summary>
@@ -76,29 +74,29 @@ namespace OSharp.Entity
                 throw new OsharpException($"类型“{entityType}”不是实体类型");
             }
 
-            IEntityManager manager = _serviceProvider.GetService<IEntityManager>();
+            IEntityManager manager = this._serviceProvider.GetService<IEntityManager>();
             Type dbContextType = manager.GetDbContextTypeForEntity(entityType);
 
-            //已存在上下文对象，直接返回
-            DbContextBase dbContext = _dbContexts.FirstOrDefault(m => m.GetType() == dbContextType);
+            // 已存在上下文对象，直接返回
+            DbContextBase dbContext = this._dbContexts.FirstOrDefault(m => m.GetType() == dbContextType);
             if (dbContext != null)
             {
                 return dbContext;
             }
 
-            dbContext = (DbContextBase)_serviceProvider.GetService(dbContextType);
+            dbContext = (DbContextBase)this._serviceProvider.GetService(dbContextType);
             if (!dbContext.ExistsRelationalDatabase())
             {
                 throw new OsharpException($"数据上下文“{dbContext.GetType().FullName}”的数据库不存在，请通过 Migration 功能进行数据迁移创建数据库。");
             }
 
-            _dbContextOptions = _serviceProvider.GetOSharpOptions().GetDbContextOptions(dbContextType);
-            ScopedDictionary scopedDictionary = _serviceProvider.GetService<ScopedDictionary>();
-            _connection = dbContext.Database.GetDbConnection();
-            scopedDictionary.TryAdd($"DnConnection_{_dbContextOptions.ConnectionString}", _connection);
+            this._dbContextOptions = this._serviceProvider.GetOSharpOptions().GetDbContextOptions(dbContextType);
+            ScopedDictionary scopedDictionary = this._serviceProvider.GetService<ScopedDictionary>();
+            this._connection = dbContext.Database.GetDbConnection();
+            scopedDictionary.TryAdd($"DnConnection_{this._dbContextOptions.ConnectionString}", this._connection);
 
             dbContext.UnitOfWork = this;
-            _dbContexts.Add(dbContext);
+            this._dbContexts.Add(dbContext);
 
             return dbContext;
         }
@@ -108,29 +106,31 @@ namespace OSharp.Entity
         /// </summary>
         public virtual void BeginOrUseTransaction()
         {
-            if (_dbContexts.Count == 0)
+            if (this._dbContexts.Count == 0)
             {
                 return;
             }
-            if (_transaction?.Connection == null)
+
+            if (this._transaction?.Connection == null)
             {
-                if (_connection.State != ConnectionState.Open)
+                if (this._connection.State != ConnectionState.Open)
                 {
-                    _connection.Open();
+                    this._connection.Open();
                 }
 
-                _transaction = _connection.BeginTransaction();
+                this._transaction = this._connection.BeginTransaction();
             }
 
-            foreach (DbContextBase context in _dbContexts)
+            foreach (DbContextBase context in this._dbContexts)
             {
-                if (context.Database.CurrentTransaction != null && context.Database.CurrentTransaction.GetDbTransaction() == _transaction)
+                if (context.Database.CurrentTransaction != null && context.Database.CurrentTransaction.GetDbTransaction() == this._transaction)
                 {
                     continue;
                 }
+
                 if (context.IsRelationalTransaction())
                 {
-                    context.Database.UseTransaction(_transaction);
+                    context.Database.UseTransaction(this._transaction);
                 }
                 else
                 {
@@ -138,7 +138,7 @@ namespace OSharp.Entity
                 }
             }
 
-            HasCommitted = false;
+            this.HasCommitted = false;
         }
 
         /// <summary>
@@ -148,29 +148,31 @@ namespace OSharp.Entity
         /// <returns></returns>
         public virtual async Task BeginOrUseTransactionAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (_dbContexts.Count == 0)
+            if (this._dbContexts.Count == 0)
             {
                 return;
             }
-            if (_transaction?.Connection == null)
+
+            if (this._transaction?.Connection == null)
             {
-                if (_connection.State != ConnectionState.Open)
+                if (this._connection.State != ConnectionState.Open)
                 {
-                    await _connection.OpenAsync(cancellationToken);
+                    await this._connection.OpenAsync(cancellationToken);
                 }
 
-                _transaction = _connection.BeginTransaction();
+                this._transaction = this._connection.BeginTransaction();
             }
 
-            foreach (DbContextBase context in _dbContexts)
+            foreach (DbContextBase context in this._dbContexts)
             {
-                if (context.Database.CurrentTransaction != null && context.Database.CurrentTransaction.GetDbTransaction() == _transaction)
+                if (context.Database.CurrentTransaction != null && context.Database.CurrentTransaction.GetDbTransaction() == this._transaction)
                 {
                     continue;
                 }
+
                 if (context.IsRelationalTransaction())
                 {
-                    context.Database.UseTransaction(_transaction);
+                    context.Database.UseTransaction(this._transaction);
                 }
                 else
                 {
@@ -178,7 +180,7 @@ namespace OSharp.Entity
                 }
             }
 
-            HasCommitted = false;
+            this.HasCommitted = false;
         }
 
         /// <summary>
@@ -186,25 +188,26 @@ namespace OSharp.Entity
         /// </summary>
         public virtual void Commit()
         {
-            if (HasCommitted || _dbContexts.Count == 0 || _transaction == null)
+            if (this.HasCommitted || this._dbContexts.Count == 0 || this._transaction == null)
             {
                 return;
             }
 
-            _transaction.Commit();
-            foreach (DbContextBase context in _dbContexts)
+            this._transaction.Commit();
+            foreach (DbContextBase context in this._dbContexts)
             {
                 if (context.IsRelationalTransaction())
                 {
                     context.Database.CurrentTransaction.Dispose();
-                    //关系型数据库共享事务
+
+                    // 关系型数据库共享事务
                     continue;
                 }
 
                 context.Database.CommitTransaction();
             }
 
-            HasCommitted = true;
+            this.HasCommitted = true;
         }
 
         /// <summary>
@@ -212,25 +215,29 @@ namespace OSharp.Entity
         /// </summary>
         public virtual void Rollback()
         {
-            if (_transaction?.Connection != null)
+            if (this._transaction?.Connection != null)
             {
-                _transaction.Rollback();
+                this._transaction.Rollback();
             }
-            foreach (var context in _dbContexts)
+
+            foreach (var context in this._dbContexts)
             {
                 if (context.IsRelationalTransaction())
                 {
                     CleanChanges(context);
                     if (context.Database.CurrentTransaction != null)
                     {
-                        //context.Database.CurrentTransaction.Rollback();
+                        // context.Database.CurrentTransaction.Rollback();
                         context.Database.CurrentTransaction.Dispose();
                     }
+
                     continue;
                 }
+
                 context.Database.RollbackTransaction();
             }
-            HasCommitted = true;
+
+            this.HasCommitted = true;
         }
 
         private static void CleanChanges(DbContext context)
@@ -245,17 +252,18 @@ namespace OSharp.Entity
         /// <summary>释放对象.</summary>
         public void Dispose()
         {
-            if (_disposed)
+            if (this._disposed)
             {
                 return;
             }
-            _transaction?.Dispose();
-            foreach (DbContextBase context in _dbContexts)
+
+            this._transaction?.Dispose();
+            foreach (DbContextBase context in this._dbContexts)
             {
                 context.Dispose();
             }
 
-            _disposed = true;
+            this._disposed = true;
         }
     }
 }

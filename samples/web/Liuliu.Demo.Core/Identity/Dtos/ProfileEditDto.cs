@@ -7,11 +7,10 @@
 //  <last-date>2019-03-24 13:05</last-date>
 // -----------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
 using Liuliu.Demo.Identity.Entities;
 using OSharp.Entity;
 using OSharp.Mapping;
-using System.ComponentModel.DataAnnotations;
-
 
 namespace Liuliu.Demo.Identity.Dtos
 {

@@ -1,24 +1,13 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="KeyValue.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2018 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2018-08-12 16:00</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 using OSharp.Core.Data;
 using OSharp.Entity;
 using OSharp.Exceptions;
 using OSharp.Extensions;
 using OSharp.Json;
 using OSharp.Reflection;
-
 
 namespace OSharp.Core.Systems
 {
@@ -32,15 +21,16 @@ namespace OSharp.Core.Systems
         /// 初始化一个<see cref="KeyValue"/>类型的新实例
         /// </summary>
         public KeyValue()
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="KeyValue"/>类型的新实例
         /// </summary>
         public KeyValue(string key, object value)
         {
-            Key = key;
-            Value = value;
+            this.Key = key;
+            this.Value = value;
         }
 
         /// <summary>
@@ -71,21 +61,23 @@ namespace OSharp.Core.Systems
         {
             get
             {
-                if (ValueJson == null || ValueType == null)
+                if (this.ValueJson == null || this.ValueType == null)
                 {
                     return null;
                 }
-                Type type = Type.GetType(ValueType);
+
+                Type type = Type.GetType(this.ValueType);
                 if (type == null)
                 {
-                    throw new OsharpException($"获取Key为“{Key}”的字典值时类型“{ValueType}”无法获取");
+                    throw new OsharpException($"获取Key为“{this.Key}”的字典值时类型“{this.ValueType}”无法获取");
                 }
-                return ValueJson.FromJsonString(type);
+
+                return this.ValueJson.FromJsonString(type);
             }
             set
             {
-                ValueType = value?.GetType().GetFullNameWithModule();
-                ValueJson = value?.ToJsonString();
+                this.ValueType = value?.GetType().GetFullNameWithModule();
+                this.ValueJson = value?.ToJsonString();
             }
         }
 
@@ -100,22 +92,24 @@ namespace OSharp.Core.Systems
         /// </summary>
         public T GetValue<T>()
         {
-            object value = Value;
+            object value = this.Value;
             if (Equals(value, default(T)))
             {
                 return default(T);
             }
+
             if (value is T)
             {
                 return (T)value;
             }
+
             try
             {
                 return value.CastTo<T>();
             }
             catch (Exception)
             {
-                throw new OsharpException($"获取强类型字典值时传入类型“{typeof(T)}”与实际数据类型“{ValueType}”不匹配");
+                throw new OsharpException($"获取强类型字典值时传入类型“{typeof(T)}”与实际数据类型“{this.ValueType}”不匹配");
             }
         }
     }

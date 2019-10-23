@@ -11,7 +11,6 @@ using System.Text;
 
 using OSharp.Extensions;
 
-
 namespace OSharp.Security
 {
     /// <summary>
@@ -29,6 +28,7 @@ namespace OSharp.Security
             {
                 encoding = Encoding.UTF8;
             }
+
             byte[] bytes = encoding.GetBytes(value);
             return GetMd5(bytes);
         }
@@ -46,6 +46,7 @@ namespace OSharp.Security
             {
                 sb.AppendFormat("{0:x2}", b);
             }
+
             return sb.ToString();
         }
 
@@ -62,11 +63,13 @@ namespace OSharp.Security
             {
                 encoding = Encoding.UTF8;
             }
+
             byte[] bytes = hash.ComputeHash(encoding.GetBytes(value));
             foreach (byte b in bytes)
             {
                 sb.AppendFormat("{0:x2}", b);
             }
+
             return sb.ToString();
         }
 
@@ -83,11 +86,13 @@ namespace OSharp.Security
             {
                 encoding = Encoding.UTF8;
             }
+
             byte[] bytes = hash.ComputeHash(encoding.GetBytes(value));
             foreach (byte b in bytes)
             {
                 sb.AppendFormat("{0:x2}", b);
             }
+
             return sb.ToString();
         }
 
@@ -104,11 +109,13 @@ namespace OSharp.Security
             {
                 encoding = Encoding.UTF8;
             }
+
             byte[] bytes = hash.ComputeHash(encoding.GetBytes(value));
             foreach (byte b in bytes)
             {
                 sb.AppendFormat("{0:x2}", b);
             }
+
             return sb.ToString();
         }
     }

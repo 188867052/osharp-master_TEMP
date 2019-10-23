@@ -9,7 +9,6 @@
 
 using Microsoft.AspNetCore.Identity;
 
-
 namespace OSharp.Identity.OAuth2
 {
     /// <summary>
@@ -22,7 +21,8 @@ namespace OSharp.Identity.OAuth2
         /// </summary>
         public UserLoginInfoEx()
             : base(null, null, null)
-        { }
+        {
+        }
 
         /// <summary>
         /// Creates a new instance of <see cref="T:Microsoft.AspNetCore.Identity.UserLoginInfo" />
@@ -32,7 +32,8 @@ namespace OSharp.Identity.OAuth2
         /// <param name="displayName">The display name for this user provided by the login provider.</param>
         public UserLoginInfoEx(string loginProvider, string providerKey, string displayName)
             : base(loginProvider, providerKey, displayName)
-        { }
+        {
+        }
 
         /// <summary>
         /// 获取或设置 头像URL

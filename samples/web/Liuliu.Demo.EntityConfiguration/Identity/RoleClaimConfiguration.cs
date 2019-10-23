@@ -13,7 +13,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using OSharp.Entity;
 
-
 namespace Liuliu.Demo.EntityConfiguration.Identity
 {
     public class RoleClaimConfiguration : EntityTypeConfigurationBase<RoleClaim, int>

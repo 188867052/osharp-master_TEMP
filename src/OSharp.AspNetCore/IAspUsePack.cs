@@ -7,15 +7,12 @@
 //  <last-date>2018-08-10 0:31</last-date>
 // -----------------------------------------------------------------------
 
-using System;
-
 using Microsoft.AspNetCore.Builder;
-
 
 namespace OSharp.AspNetCore
 {
     /// <summary>
-    /// 定义AspNetCore环境下的应用模块服务 
+    /// 定义AspNetCore环境下的应用模块服务
     /// </summary>
     public interface IAspUsePack
     {

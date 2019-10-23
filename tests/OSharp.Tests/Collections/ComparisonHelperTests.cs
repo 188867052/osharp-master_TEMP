@@ -1,14 +1,12 @@
-﻿using Xunit;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-
+using Xunit;
 
 namespace OSharp.Collections.Tests
 {
     public class ComparisonHelperTests
     {
-        [Fact()]
+        [Fact]
         public void CreateComparerTest()
         {
             List<int> list2 = new List<int>();
@@ -16,11 +14,13 @@ namespace OSharp.Collections.Tests
             {
                 list2.Add(i);
             }
+
             List<int> list1 = new List<int>();
             for (int i = 50; i < 150; i++)
             {
                 list1.Add(i);
             }
+
             IComparer<int> comparer = ComparisonHelper<int>.CreateComparer(m => m);
             List<int> list3 = list1.Union(list2).ToList();
             Assert.NotEqual(0, list3[0]);

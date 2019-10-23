@@ -11,7 +11,6 @@ using System;
 using OSharp.Dependency;
 using OSharp.Finders;
 
-
 namespace OSharp.Reflection
 {
     /// <summary>
@@ -19,5 +18,6 @@ namespace OSharp.Reflection
     /// </summary>
     [IgnoreDependency]
     public interface ITypeFinder : IFinder<Type>
-    { }
+    {
+    }
 }

@@ -21,7 +21,6 @@ using OSharp.Core.Functions;
 using OSharp.Exceptions;
 using OSharp.Reflection;
 
-
 namespace OSharp.AspNetCore.Mvc
 {
     /// <summary>
@@ -35,8 +34,8 @@ namespace OSharp.AspNetCore.Mvc
         public MvcFunctionHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
-            FunctionTypeFinder = serviceProvider.GetService<IFunctionTypeFinder>();
-            MethodInfoFinder = new MvcMethodInfoFinder();
+            this.FunctionTypeFinder = serviceProvider.GetService<IFunctionTypeFinder>();
+            this.MethodInfoFinder = new MvcMethodInfoFinder();
         }
 
         /// <summary>
@@ -60,6 +59,7 @@ namespace OSharp.AspNetCore.Mvc
             {
                 throw new OsharpException($"类型“{controllerType.FullName}”不是MVC控制器类型");
             }
+
             FunctionAccessType accessType = controllerType.HasAttribute<LoggedInAttribute>() || controllerType.HasAttribute<AuthorizeAttribute>()
                 ? FunctionAccessType.LoggedIn
                 : controllerType.HasAttribute<RoleLimitAttribute>()
@@ -71,7 +71,7 @@ namespace OSharp.AspNetCore.Mvc
                 Area = GetArea(controllerType),
                 Controller = controllerType.Name.Replace("ControllerBase", string.Empty).Replace("Controller", string.Empty),
                 IsController = true,
-                AccessType = accessType
+                AccessType = accessType,
             };
             return function;
         }
@@ -99,7 +99,7 @@ namespace OSharp.AspNetCore.Mvc
                 Action = method.Name,
                 AccessType = accessType,
                 IsController = false,
-                IsAjax = method.HasAttribute<AjaxOnlyAttribute>()
+                IsAjax = method.HasAttribute<AjaxOnlyAttribute>(),
             };
             return function;
         }

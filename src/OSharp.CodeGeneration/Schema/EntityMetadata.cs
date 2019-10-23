@@ -7,13 +7,9 @@
 //  <last-date>2018-08-06 12:25</last-date>
 // -----------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using OSharp.Collections;
-using OSharp.Exceptions;
-
 
 namespace OSharp.CodeGeneration.Schema
 {
@@ -49,10 +45,10 @@ namespace OSharp.CodeGeneration.Schema
         /// </summary>
         public ModuleMetadata Module
         {
-            get => _module;
+            get => this._module;
             set
             {
-                _module = value;
+                this._module = value;
                 value.Entities.AddIfNotExist(this);
             }
         }

@@ -11,7 +11,6 @@ using System;
 
 using Microsoft.EntityFrameworkCore;
 
-
 namespace OSharp.Entity
 {
     /// <summary>
@@ -24,6 +23,7 @@ namespace OSharp.Entity
         /// </summary>
         public DefaultDbContext(DbContextOptions<DefaultDbContext> options, IEntityManager entityManager, IServiceProvider serviceProvider)
             : base(options, entityManager, serviceProvider)
-        { }
+        {
+        }
     }
 }

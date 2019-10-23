@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using OSharp.Core.Options;
 using OSharp.Core.Packs;
 
-
 namespace OSharp.Core.Builders
 {
     /// <summary>

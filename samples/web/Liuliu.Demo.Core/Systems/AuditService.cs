@@ -16,7 +16,6 @@ using Liuliu.Demo.Systems.Entities;
 using OSharp.Data;
 using OSharp.Entity;
 
-
 namespace Liuliu.Demo.Systems
 {
     /// <summary>
@@ -35,17 +34,15 @@ namespace Liuliu.Demo.Systems
             IRepository<AuditEntity, Guid> entityRepository,
             IRepository<AuditProperty, Guid> propertyRepository)
         {
-            _operationRepository = operationRepository;
-            _entityRepository = entityRepository;
-            _propertyRepository = propertyRepository;
+            this._operationRepository = operationRepository;
+            this._entityRepository = entityRepository;
+            this._propertyRepository = propertyRepository;
         }
-
-        #region Implementation of IAuditContract
 
         /// <summary>
         /// 获取 操作审计信息查询数据集
         /// </summary>
-        public IQueryable<AuditOperation> AuditOperations => _operationRepository.QueryAsNoTracking();
+        public IQueryable<AuditOperation> AuditOperations => this._operationRepository.QueryAsNoTracking();
 
         /// <summary>
         /// 删除操作审计信息信息
@@ -54,18 +51,18 @@ namespace Liuliu.Demo.Systems
         /// <returns>业务操作结果</returns>
         public Task<OperationResult> DeleteAuditOperations(params Guid[] ids)
         {
-            return _operationRepository.DeleteAsync(ids);
+            return this._operationRepository.DeleteAsync(ids);
         }
 
         /// <summary>
         /// 获取 数据审计信息查询数据集
         /// </summary>
-        public IQueryable<AuditEntity> AuditEntities => _entityRepository.QueryAsNoTracking();
+        public IQueryable<AuditEntity> AuditEntities => this._entityRepository.QueryAsNoTracking();
 
         /// <summary>
         /// 获取 数据审计信息查询数据集
         /// </summary>
-        public IQueryable<AuditProperty> AuditProperties => _propertyRepository.QueryAsNoTracking();
+        public IQueryable<AuditProperty> AuditProperties => this._propertyRepository.QueryAsNoTracking();
 
         /// <summary>
         /// 删除数据审计信息信息
@@ -74,9 +71,7 @@ namespace Liuliu.Demo.Systems
         /// <returns>业务操作结果</returns>
         public Task<OperationResult> DeleteAuditEntities(params Guid[] ids)
         {
-            return _entityRepository.DeleteAsync(ids);
+            return this._entityRepository.DeleteAsync(ids);
         }
-
-        #endregion
     }
 }

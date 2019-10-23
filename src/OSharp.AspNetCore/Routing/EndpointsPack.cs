@@ -12,7 +12,6 @@ using System.ComponentModel;
 
 using Microsoft.AspNetCore.Routing;
 
-
 namespace OSharp.AspNetCore.Routing
 {
     /// <summary>

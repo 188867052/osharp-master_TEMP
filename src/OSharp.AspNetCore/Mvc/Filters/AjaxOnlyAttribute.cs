@@ -12,7 +12,6 @@ using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-
 namespace OSharp.AspNetCore.Mvc.Filters
 {
     /// <summary>
@@ -28,7 +27,7 @@ namespace OSharp.AspNetCore.Mvc.Filters
             {
                 context.Result = new ContentResult()
                 {
-                    Content = "当前功能只支持使用Ajax的方式来调用。"
+                    Content = "当前功能只支持使用Ajax的方式来调用。",
                 };
             }
         }

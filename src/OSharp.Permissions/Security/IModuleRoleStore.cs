@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 
 using OSharp.Data;
 
-
 namespace OSharp.Security
 {
     /// <summary>
@@ -22,8 +21,6 @@ namespace OSharp.Security
     /// </summary>
     public interface IModuleRoleStore<TModuleRole, in TRoleKey, TModuleKey>
     {
-        #region 模块角色信息业务
-
         /// <summary>
         /// 获取 模块角色信息查询数据集
         /// </summary>
@@ -51,7 +48,5 @@ namespace OSharp.Security
         /// <param name="roleId">角色编号</param>
         /// <returns>模块编号集合</returns>
         TModuleKey[] GetRoleModuleIds(TRoleKey roleId);
-
-        #endregion
     }
 }

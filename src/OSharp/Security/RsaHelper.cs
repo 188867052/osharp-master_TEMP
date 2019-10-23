@@ -14,7 +14,6 @@ using System.Xml;
 
 using OSharp.Extensions;
 
-
 namespace OSharp.Security
 {
     /// <summary>
@@ -28,8 +27,8 @@ namespace OSharp.Security
         public RsaHelper()
         {
             RSA rsa = RSA.Create();
-            PublicKey = rsa.ToXmlString2(false);
-            PrivateKey = rsa.ToXmlString2(true);
+            this.PublicKey = rsa.ToXmlString2(false);
+            this.PrivateKey = rsa.ToXmlString2(true);
         }
 
         /// <summary>
@@ -41,8 +40,6 @@ namespace OSharp.Security
         /// 获取 私钥
         /// </summary>
         public string PrivateKey { get; }
-        
-        #region 实例方法
 
         /// <summary>
         /// 加密字节数组
@@ -50,7 +47,7 @@ namespace OSharp.Security
         public byte[] Encrypt(byte[] source)
         {
             source.CheckNotNull("source");
-            return Encrypt(source, PublicKey);
+            return Encrypt(source, this.PublicKey);
         }
 
         /// <summary>
@@ -59,7 +56,7 @@ namespace OSharp.Security
         public byte[] Decrypt(byte[] source)
         {
             source.CheckNotNull("source");
-            return Decrypt(source, PrivateKey);
+            return Decrypt(source, this.PrivateKey);
         }
 
         /// <summary>
@@ -71,7 +68,7 @@ namespace OSharp.Security
         {
             source.CheckNotNull("source");
 
-            return SignData(source, PrivateKey);
+            return SignData(source, this.PrivateKey);
         }
 
         /// <summary>
@@ -85,7 +82,7 @@ namespace OSharp.Security
             source.CheckNotNull("source");
             signData.CheckNotNull("signData");
 
-            return VerifyData(source, signData, PublicKey);
+            return VerifyData(source, signData, this.PublicKey);
         }
 
         /// <summary>
@@ -94,7 +91,7 @@ namespace OSharp.Security
         public string Encrypt(string source)
         {
             source.CheckNotNull("source");
-            return Encrypt(source, PublicKey);
+            return Encrypt(source, this.PublicKey);
         }
 
         /// <summary>
@@ -103,7 +100,7 @@ namespace OSharp.Security
         public string Decrypt(string source)
         {
             source.CheckNotNullOrEmpty("source");
-            return Decrypt(source, PrivateKey);
+            return Decrypt(source, this.PrivateKey);
         }
 
         /// <summary>
@@ -115,7 +112,7 @@ namespace OSharp.Security
         {
             source.CheckNotNull("source");
 
-            return SignData(source, PrivateKey);
+            return SignData(source, this.PrivateKey);
         }
 
         /// <summary>
@@ -129,12 +126,8 @@ namespace OSharp.Security
             source.CheckNotNull("source");
             signData.CheckNotNullOrEmpty("signData");
 
-            return VerifyData(source, signData, PublicKey);
+            return VerifyData(source, signData, this.PublicKey);
         }
-
-        #endregion
-
-        #region 静态方法
 
         /// <summary>
         /// 使用指定公钥加密字节数组
@@ -252,24 +245,21 @@ namespace OSharp.Security
             byte[] signBytes = Convert.FromBase64String(signData);
             return VerifyData(sourceBytes, signBytes, publicKey);
         }
-
-        #endregion
     }
-
 
     internal static class RSAKeyExtensions
     {
-        //#region JSON
-        //internal static void FromJsonString(this RSA rsa, string jsonString)
-        //{
+        // #region JSON
+        // internal static void FromJsonString(this RSA rsa, string jsonString)
+        // {
         //    jsonString.CheckNotNullOrEmpty("jsonString" );
         //    try
         //    {
         //        var paramsJson = JsonConvert.DeserializeObject<RSAParametersJson>(jsonString);
 
-        //        RSAParameters parameters = new RSAParameters();
+        // RSAParameters parameters = new RSAParameters();
 
-        //        parameters.Modulus = paramsJson.Modulus != null ? Convert.FromBase64String(paramsJson.Modulus) : null;
+        // parameters.Modulus = paramsJson.Modulus != null ? Convert.FromBase64String(paramsJson.Modulus) : null;
         //        parameters.Exponent = paramsJson.Exponent != null ? Convert.FromBase64String(paramsJson.Exponent) : null;
         //        parameters.P = paramsJson.P != null ? Convert.FromBase64String(paramsJson.P) : null;
         //        parameters.Q = paramsJson.Q != null ? Convert.FromBase64String(paramsJson.Q) : null;
@@ -283,13 +273,13 @@ namespace OSharp.Security
         //    {
         //        throw new Exception("Invalid JSON RSA key.");
         //    }
-        //}
+        // }
 
-        //internal static string ToJsonString(this RSA rsa, bool includePrivateParameters)
-        //{
+        // internal static string ToJsonString(this RSA rsa, bool includePrivateParameters)
+        // {
         //    RSAParameters parameters = rsa.ExportParameters(includePrivateParameters);
 
-        //    var parasJson = new RSAParametersJson()
+        // var parasJson = new RSAParametersJson()
         //    {
         //        Modulus = parameters.Modulus != null ? Convert.ToBase64String(parameters.Modulus) : null,
         //        Exponent = parameters.Exponent != null ? Convert.ToBase64String(parameters.Exponent) : null,
@@ -301,11 +291,9 @@ namespace OSharp.Security
         //        D = parameters.D != null ? Convert.ToBase64String(parameters.D) : null
         //    };
 
-        //    return JsonConvert.SerializeObject(parasJson);
-        //}
-        //#endregion
-
-        #region XML
+        // return JsonConvert.SerializeObject(parasJson);
+        // }
+        // #endregion
 
         public static void FromXmlString2(this RSA rsa, string xmlString)
         {
@@ -353,7 +341,5 @@ namespace OSharp.Security
                   parameters.InverseQ != null ? Convert.ToBase64String(parameters.InverseQ) : null,
                   parameters.D != null ? Convert.ToBase64String(parameters.D) : null);
         }
-
-        #endregion
     }
 }

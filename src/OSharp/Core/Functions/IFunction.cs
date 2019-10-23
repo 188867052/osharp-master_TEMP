@@ -11,7 +11,6 @@ using System;
 
 using OSharp.Entity;
 
-
 namespace OSharp.Core.Functions
 {
     /// <summary>

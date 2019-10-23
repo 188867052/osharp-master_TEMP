@@ -1,16 +1,5 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="OSharpResult.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2015 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2015-08-03 18:29</last-date>
-// -----------------------------------------------------------------------
-
-using System;
-
+﻿using System;
 using OSharp.Extensions;
-
 
 namespace OSharp.Data
 {
@@ -25,30 +14,33 @@ namespace OSharp.Data
         /// </summary>
         protected OsharpResult()
             : this(default(TResultType))
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="OsharpResult{TResultType}"/>类型的新实例
         /// </summary>
         protected OsharpResult(TResultType type)
             : this(type, null, null)
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="OsharpResult{TResultType}"/>类型的新实例
         /// </summary>
         protected OsharpResult(TResultType type, string message)
             : this(type, message, null)
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="OsharpResult{TResultType}"/>类型的新实例
         /// </summary>
         protected OsharpResult(TResultType type, string message, object data)
             : base(type, message, data)
-        { }
+        {
+        }
     }
-
 
     /// <summary>
     /// OSharp结果基类
@@ -67,21 +59,24 @@ namespace OSharp.Data
         /// </summary>
         protected OsharpResult()
             : this(default(TResultType))
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="OsharpResult{TResultType,TData}"/>类型的新实例
         /// </summary>
         protected OsharpResult(TResultType type)
             : this(type, null, default(TData))
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="OsharpResult{TResultType,TData}"/>类型的新实例
         /// </summary>
         protected OsharpResult(TResultType type, string message)
             : this(type, message, default(TData))
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="OsharpResult{TResultType,TData}"/>类型的新实例
@@ -92,9 +87,10 @@ namespace OSharp.Data
             {
                 message = (type as Enum)?.ToDescription();
             }
-            ResultType = type;
-            _message = message;
-            Data = data;
+
+            this.ResultType = type;
+            this._message = message;
+            this.Data = data;
         }
 
         /// <summary>
@@ -107,8 +103,8 @@ namespace OSharp.Data
         /// </summary>
         public virtual string Message
         {
-            get { return _message; }
-            set { _message = value; }
+            get { return this._message; }
+            set { this._message = value; }
         }
 
         /// <summary>

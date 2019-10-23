@@ -12,7 +12,6 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
-
 namespace OSharp.Net
 {
     /// <summary>
@@ -33,16 +32,17 @@ namespace OSharp.Net
         {
             using (FileStream fs = new FileStream(dataPath, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                _data = new byte[fs.Length];
-                fs.Read(_data, 0, _data.Length);
+                this._data = new byte[fs.Length];
+                fs.Read(this._data, 0, this._data.Length);
             }
-            byte[] buffer = new byte[8];
-            Array.Copy(_data, 0, buffer, 0, 8);
-            _firstStartIpOffset = ((buffer[0] + (buffer[1] * 0x100)) + ((buffer[2] * 0x100) * 0x100)) + (((buffer[3] * 0x100) * 0x100) * 0x100);
-            long lastStartIpOffset = ((buffer[4] + (buffer[5] * 0x100)) + ((buffer[6] * 0x100) * 0x100)) + (((buffer[7] * 0x100) * 0x100) * 0x100);
-            Count = Convert.ToInt64((lastStartIpOffset - _firstStartIpOffset) / 7.0);
 
-            if (Count <= 1L)
+            byte[] buffer = new byte[8];
+            Array.Copy(this._data, 0, buffer, 0, 8);
+            this._firstStartIpOffset = ((buffer[0] + (buffer[1] * 0x100)) + ((buffer[2] * 0x100) * 0x100)) + (((buffer[3] * 0x100) * 0x100) * 0x100);
+            long lastStartIpOffset = ((buffer[4] + (buffer[5] * 0x100)) + ((buffer[6] * 0x100) * 0x100)) + (((buffer[7] * 0x100) * 0x100) * 0x100);
+            this.Count = Convert.ToInt64((lastStartIpOffset - this._firstStartIpOffset) / 7.0);
+
+            if (this.Count <= 1L)
             {
                 throw new ArgumentException("IP信息数据文件异常。");
             }
@@ -70,6 +70,7 @@ namespace OSharp.Net
             {
                 throw new ArgumentException("IP格式错误");
             }
+
             string[] nums = ip.Split(separator);
             long num1 = ((long.Parse(nums[0]) * 0x100L) * 0x100L) * 0x100L;
             long num2 = (long.Parse(nums[1]) * 0x100L) * 0x100L;
@@ -90,21 +91,25 @@ namespace OSharp.Net
             {
                 num1 += 0x100L;
             }
+
             long num2 = (ipInt & 0xff0000L) >> 0x10;
             if (num2 < 0L)
             {
                 num2 += 0x100L;
             }
+
             long num3 = (ipInt & 0xff00L) >> 8;
             if (num3 < 0L)
             {
                 num3 += 0x100L;
             }
+
             long num4 = ipInt & 0xffL;
             if (num4 < 0L)
             {
                 num4 += 0x100L;
             }
+
             string ip = string.Concat(new[]
             {
                 num1.ToString(CultureInfo.InvariantCulture),
@@ -113,13 +118,14 @@ namespace OSharp.Net
                 ".",
                 num3.ToString(CultureInfo.InvariantCulture),
                 ".",
-                num4.ToString(CultureInfo.InvariantCulture)
+                num4.ToString(CultureInfo.InvariantCulture),
             });
 
             if (!Regex.Match(ip).Success)
             {
                 throw new ArgumentException("IP格式错误");
             }
+
             return ip;
         }
 
@@ -135,10 +141,12 @@ namespace OSharp.Net
             {
                 ip = "127.0.0.1";
             }
+
             if (!Regex.Match(ip).Success)
             {
                 throw new ArgumentException("IP格式错误");
             }
+
             IpLocation ipLocation = new IpLocation { Ip = ip };
             long intIp = IpToInt(ip);
             if ((intIp >= IpToInt("127.0.0.1") && (intIp <= IpToInt("127.255.255.255"))))
@@ -156,7 +164,8 @@ namespace OSharp.Net
                     ipLocation.Local = "";
                 }
             }
-            long right = Count;
+
+            long right = this.Count;
             long left = 0L;
             long startIp;
             long endIpOff;
@@ -164,12 +173,13 @@ namespace OSharp.Net
             while (left < (right - 1L))
             {
                 long middle = (right + left) / 2L;
-                startIp = GetStartIp(middle, out endIpOff);
+                startIp = this.GetStartIp(middle, out endIpOff);
                 if (intIp == startIp)
                 {
                     left = middle;
                     break;
                 }
+
                 if (intIp > startIp)
                 {
                     left = middle;
@@ -179,12 +189,13 @@ namespace OSharp.Net
                     right = middle;
                 }
             }
-            startIp = GetStartIp(left, out endIpOff);
-            long endIp = GetEndIp(endIpOff, out countryFlag);
+
+            startIp = this.GetStartIp(left, out endIpOff);
+            long endIp = this.GetEndIp(endIpOff, out countryFlag);
             if ((startIp <= intIp) && (endIp >= intIp))
             {
                 string local;
-                ipLocation.Country = GetCountry(endIpOff, countryFlag, out local);
+                ipLocation.Country = this.GetCountry(endIpOff, countryFlag, out local);
                 ipLocation.Local = local.Replace("（我们一定要解放台湾！！！）", "");
             }
             else
@@ -192,6 +203,7 @@ namespace OSharp.Net
                 ipLocation.Country = "未知";
                 ipLocation.Local = "";
             }
+
             return ipLocation;
         }
 
@@ -200,15 +212,15 @@ namespace OSharp.Net
         /// </summary>
         public string Query2(string ip)
         {
-            IpLocation result = Query(ip);
+            IpLocation result = this.Query(ip);
             return (result.Country + result.Local).Replace("CZ88.NET", "");
         }
 
         private long GetStartIp(long left, out long endIpOff)
         {
-            long leftOffset = _firstStartIpOffset + (left * 7L);
+            long leftOffset = this._firstStartIpOffset + (left * 7L);
             byte[] buffer = new byte[7];
-            Array.Copy(_data, leftOffset, buffer, 0, 7);
+            Array.Copy(this._data, leftOffset, buffer, 0, 7);
             endIpOff = (Convert.ToInt64(buffer[4].ToString(CultureInfo.InvariantCulture)) +
                 (Convert.ToInt64(buffer[5].ToString(CultureInfo.InvariantCulture)) * 0x100L)) +
                 ((Convert.ToInt64(buffer[6].ToString(CultureInfo.InvariantCulture)) * 0x100L) * 0x100L);
@@ -221,7 +233,7 @@ namespace OSharp.Net
         private long GetEndIp(long endIpOff, out int countryFlag)
         {
             byte[] buffer = new byte[5];
-            Array.Copy(_data, endIpOff, buffer, 0, 5);
+            Array.Copy(this._data, endIpOff, buffer, 0, 5);
             countryFlag = buffer[4];
             return ((Convert.ToInt64(buffer[0].ToString(CultureInfo.InvariantCulture)) +
                 (Convert.ToInt64(buffer[1].ToString(CultureInfo.InvariantCulture)) * 0x100L)) +
@@ -244,15 +256,16 @@ namespace OSharp.Net
             {
                 case 1:
                 case 2:
-                    country = GetFlagStr(ref offset, ref countryFlag, ref endIpOff);
+                    country = this.GetFlagStr(ref offset, ref countryFlag, ref endIpOff);
                     offset = endIpOff + 8L;
-                    local = (1 == countryFlag) ? "" : GetFlagStr(ref offset, ref countryFlag, ref endIpOff);
+                    local = (1 == countryFlag) ? "" : this.GetFlagStr(ref offset, ref countryFlag, ref endIpOff);
                     break;
                 default:
-                    country = GetFlagStr(ref offset, ref countryFlag, ref endIpOff);
-                    local = GetFlagStr(ref offset, ref countryFlag, ref endIpOff);
+                    country = this.GetFlagStr(ref offset, ref countryFlag, ref endIpOff);
+                    local = this.GetFlagStr(ref offset, ref countryFlag, ref endIpOff);
                     break;
             }
+
             return country;
         }
 
@@ -262,28 +275,33 @@ namespace OSharp.Net
 
             while (true)
             {
-                //用于向前累加偏移量
+                // 用于向前累加偏移量
                 long forwardOffset = offset;
-                int flag = _data[forwardOffset++];
-                //没有重定向
+                int flag = this._data[forwardOffset++];
+
+                // 没有重定向
                 if (flag != 1 && flag != 2)
                 {
                     break;
                 }
-                Array.Copy(_data, forwardOffset, buffer, 0, 3);
+
+                Array.Copy(this._data, forwardOffset, buffer, 0, 3);
                 if (flag == 2)
                 {
                     countryFlag = 2;
                     endIpOff = offset - 4L;
                 }
+
                 offset = (Convert.ToInt64(buffer[0].ToString()) + (Convert.ToInt64(buffer[1].ToString()) * 0x100L)) +
                     ((Convert.ToInt64(buffer[2].ToString()) * 0x100L) * 0x100L);
             }
+
             if (offset < 12L)
             {
                 return "";
             }
-            return GetStr(ref offset);
+
+            return this.GetStr(ref offset);
         }
 
         private string GetStr(ref long offset)
@@ -293,20 +311,22 @@ namespace OSharp.Net
             Encoding encoding = Encoding.GetEncoding("GB2312");
             while (true)
             {
-                byte lowByte = _data[offset++];
+                byte lowByte = this._data[offset++];
                 if (lowByte == 0)
                 {
                     return stringBuilder.ToString();
                 }
+
                 if (lowByte > 0x7f)
                 {
-                    byte highByte = _data[offset++];
+                    byte highByte = this._data[offset++];
                     bytes[0] = lowByte;
                     bytes[1] = highByte;
                     if (highByte == 0)
                     {
                         return stringBuilder.ToString();
                     }
+
                     stringBuilder.Append(encoding.GetString(bytes));
                 }
                 else

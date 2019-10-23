@@ -13,13 +13,11 @@ using Microsoft.AspNetCore.Identity;
 
 using OSharp.Collections;
 using OSharp.Data;
-using OSharp.Extensions;
-
 
 namespace OSharp.Identity
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public static class IdentityExtensions
     {

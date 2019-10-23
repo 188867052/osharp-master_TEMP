@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 using OSharp.Extensions;
 
-
 namespace OSharp.Threading.Asyncs
 {
     /// <summary>
@@ -30,7 +29,7 @@ namespace OSharp.Threading.Asyncs
         public AsyncSemaphore(int initialCount)
         {
             initialCount.CheckGreaterThan("initialCount", 0);
-            _currentCount = initialCount;
+            this._currentCount = initialCount;
         }
 
         /// <summary>
@@ -38,15 +37,16 @@ namespace OSharp.Threading.Asyncs
         /// </summary>
         public Task WaitAsync()
         {
-            lock (_waiters)
+            lock (this._waiters)
             {
-                if (_currentCount > 0)
+                if (this._currentCount > 0)
                 {
-                    --_currentCount;
+                    --this._currentCount;
                     return Completed;
                 }
+
                 var waiter = new TaskCompletionSource<bool>();
-                _waiters.Enqueue(waiter);
+                this._waiters.Enqueue(waiter);
                 return waiter.Task;
             }
         }
@@ -57,17 +57,18 @@ namespace OSharp.Threading.Asyncs
         public void Release()
         {
             TaskCompletionSource<bool> toRelease = null;
-            lock (_waiters)
+            lock (this._waiters)
             {
-                if (_waiters.Count > 0)
+                if (this._waiters.Count > 0)
                 {
-                    toRelease = _waiters.Dequeue();
+                    toRelease = this._waiters.Dequeue();
                 }
                 else
                 {
-                    ++_currentCount;
+                    ++this._currentCount;
                 }
             }
+
             if (toRelease != null)
             {
                 toRelease.SetResult(true);

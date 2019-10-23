@@ -16,7 +16,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using OSharp.Core.Packs;
 using OSharp.Dependency;
 
-
 namespace OSharp.EventBuses
 {
     /// <summary>
@@ -44,7 +43,8 @@ namespace OSharp.EventBuses
         {
             IEventHandlerTypeFinder handlerTypeFinder =
                 services.GetOrAddTypeFinder<IEventHandlerTypeFinder>(assemblyFinder => new EventHandlerTypeFinder(assemblyFinder));
-            //向服务窗口注册所有事件处理器类型
+
+            // 向服务窗口注册所有事件处理器类型
             Type[] eventHandlerTypes = handlerTypeFinder.FindAll();
             foreach (Type handlerType in eventHandlerTypes)
             {
@@ -62,7 +62,7 @@ namespace OSharp.EventBuses
         {
             IEventBusBuilder builder = provider.GetService<IEventBusBuilder>();
             builder.Build();
-            IsEnabled = true;
+            this.IsEnabled = true;
         }
     }
 }

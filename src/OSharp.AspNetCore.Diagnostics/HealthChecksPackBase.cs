@@ -1,30 +1,16 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="HealthChecksPackBase.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2019 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2019-10-05 19:21</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Linq;
-using System.Net.Mime;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-
 using Newtonsoft.Json;
-
 using OSharp.Core.Options;
 using OSharp.Core.Packs;
 using OSharp.Entity;
 using OSharp.Extensions;
-
 
 namespace OSharp.AspNetCore.Diagnostics
 {
@@ -60,7 +46,7 @@ namespace OSharp.AspNetCore.Diagnostics
             }
 
             IHealthChecksBuilder builder = services.AddHealthChecks();
-            BuildHealthChecks(builder, configuration);
+            this.BuildHealthChecks(builder, configuration);
             return services;
         }
 
@@ -79,7 +65,7 @@ namespace OSharp.AspNetCore.Diagnostics
             }
 
             string url = configuration["OSharp:HealthChecks:Url"] ?? "/health";
-            HealthCheckOptions options = GetHealthCheckOptions(provider);
+            HealthCheckOptions options = this.GetHealthCheckOptions(provider);
             if (options != null)
             {
                 app.UseHealthChecks(url, options);
@@ -89,7 +75,7 @@ namespace OSharp.AspNetCore.Diagnostics
                 app.UseHealthChecks(url);
             }
 
-            IsEnabled = true;
+            this.IsEnabled = true;
         }
 
         /// <summary>
@@ -100,16 +86,17 @@ namespace OSharp.AspNetCore.Diagnostics
         /// <returns></returns>
         protected virtual IHealthChecksBuilder BuildHealthChecks(IHealthChecksBuilder builder, IConfiguration configuration)
         {
-            //system
+            // system
             long providerMemory = configuration["OSharp:HealthChecks:PrivateMemory"].CastTo(1000_000_000L);
             long virtualMemorySize = configuration["OSharp:HealthChecks:VirtualMemorySize"].CastTo(1000_000_000L);
             long workingSet = configuration["OSharp:HealthChecks:WorkingSet"].CastTo(1000_000_000L);
-            builder.AddPrivateMemoryHealthCheck(providerMemory); //最大私有内存
-            builder.AddVirtualMemorySizeHealthCheck(virtualMemorySize); //最大虚拟内存
-            builder.AddWorkingSetHealthCheck(workingSet); //最大工作内存
+            builder.AddPrivateMemoryHealthCheck(providerMemory); // 最大私有内存
+            builder.AddVirtualMemorySizeHealthCheck(virtualMemorySize); // 最大虚拟内存
+            builder.AddWorkingSetHealthCheck(workingSet); // 最大工作内存
 
             OsharpOptions options = configuration.GetOsharpOptions();
-            //数据库
+
+            // 数据库
             foreach (var pair in options.DbContexts.OrderBy(m => m.Value.DatabaseType))
             {
                 string connectionString = pair.Value.ConnectionString;
@@ -135,7 +122,7 @@ namespace OSharp.AspNetCore.Diagnostics
                 }
             }
 
-            //SMTP
+            // SMTP
             if (options.MailSender != null)
             {
                 var smtp = options.MailSender;
@@ -146,14 +133,14 @@ namespace OSharp.AspNetCore.Diagnostics
                 });
             }
 
-            //Redis
+            // Redis
             if (options.Redis != null && options.Redis.Enabled)
             {
                 var redis = options.Redis;
                 builder.AddRedis(redis.Configuration);
             }
 
-            //Hangfire
+            // Hangfire
             if (configuration["OSharp:Hangfire:Enabled"].CastTo(false))
             {
                 builder.AddHangfire(hangfireOptions =>
@@ -178,11 +165,11 @@ namespace OSharp.AspNetCore.Diagnostics
                         new
                         {
                             status = report.Status.ToString(),
-                            errors = report.Entries.Select(e => new { key = e.Key, value = Enum.GetName(typeof(HealthStatus), e.Value.Status), e.Value.Description })
+                            errors = report.Entries.Select(e => new { key = e.Key, value = Enum.GetName(typeof(HealthStatus), e.Value.Status), e.Value.Description }),
                         });
                     context.Response.ContentType = "application/json";
                     await context.Response.WriteAsync(result);
-                }
+                },
             };
         }
     }

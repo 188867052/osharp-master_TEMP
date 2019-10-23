@@ -14,7 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.Dependency;
 
-
 namespace OSharp.AspNetCore
 {
     /// <summary>
@@ -28,8 +27,8 @@ namespace OSharp.AspNetCore
         /// </summary>
         public HttpContextServiceScopeFactory(IServiceScopeFactory serviceScopeFactory, IHttpContextAccessor httpContextAccessor)
         {
-            ServiceScopeFactory = serviceScopeFactory;
-            HttpContextAccessor = httpContextAccessor;
+            this.ServiceScopeFactory = serviceScopeFactory;
+            this.HttpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
@@ -42,25 +41,22 @@ namespace OSharp.AspNetCore
         /// </summary>
         protected IHttpContextAccessor HttpContextAccessor { get; }
 
-        #region Implementation of IServiceScopeFactory
-
         /// <summary>
         /// 创建依赖注入服务的作用域，如果当前操作处于HttpRequest作用域中，直接使用HttpRequest的作用域，否则创建新的作用域
         /// </summary>
         /// <returns></returns>
         public virtual IServiceScope CreateScope()
         {
-            HttpContext httpContext = HttpContextAccessor?.HttpContext;
-            //不在HttpRequest作用域中
+            HttpContext httpContext = this.HttpContextAccessor?.HttpContext;
+
+            // 不在HttpRequest作用域中
             if (httpContext == null)
             {
-                return ServiceScopeFactory.CreateScope();
+                return this.ServiceScopeFactory.CreateScope();
             }
 
             return new NonDisposedHttpContextServiceScope(httpContext.RequestServices);
         }
-
-        #endregion
 
         /// <summary>
         /// 当前HttpRequest的<see cref="IServiceScope"/>的包装，保持HttpContext.RequestServices的可传递性，并且不释放
@@ -72,7 +68,7 @@ namespace OSharp.AspNetCore
             /// </summary>
             public NonDisposedHttpContextServiceScope(IServiceProvider serviceProvider)
             {
-                ServiceProvider = serviceProvider;
+                this.ServiceProvider = serviceProvider;
             }
 
             /// <summary>
@@ -82,7 +78,8 @@ namespace OSharp.AspNetCore
 
             /// <summary>因为是HttpContext的，啥也不做，避免在using使用时被释放</summary>
             public void Dispose()
-            { }
+            {
+            }
         }
     }
 }

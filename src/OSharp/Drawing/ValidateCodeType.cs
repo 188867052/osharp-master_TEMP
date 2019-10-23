@@ -27,6 +27,6 @@ namespace OSharp.Drawing
         /// <summary>
         /// 汉字
         /// </summary>
-        Hanzi
+        Hanzi,
     }
 }

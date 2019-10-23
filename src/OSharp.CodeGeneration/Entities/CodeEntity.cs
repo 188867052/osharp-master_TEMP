@@ -13,7 +13,6 @@ using System.ComponentModel;
 
 using OSharp.Entity;
 
-
 namespace OSharp.CodeGeneration.Entities
 {
     /// <summary>

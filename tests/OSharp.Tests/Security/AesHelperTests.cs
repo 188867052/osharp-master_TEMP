@@ -9,7 +9,6 @@ using Shouldly;
 
 using Xunit;
 
-
 namespace OSharp.Security.Tests
 {
     public class AesHelperTests
@@ -27,22 +26,22 @@ namespace OSharp.Security.Tests
             AesHelper aes = new AesHelper();
             string source = "admin";
 
-            //byte[]
+            // byte[]
             byte[] sourceBytes = source.ToBytes();
             byte[] enBytes = aes.Encrypt(sourceBytes);
             aes.Decrypt(enBytes).ShouldBe(sourceBytes);
 
-            //string
+            // string
             string enstr = aes.Encrypt(source);
             aes.Decrypt(enstr).ShouldBe(source);
 
             aes = new AesHelper(true);
 
-            //byte[]
+            // byte[]
             enBytes = aes.Encrypt(sourceBytes);
             aes.Decrypt(enBytes).ShouldBe(sourceBytes);
 
-            //string
+            // string
             enstr = aes.Encrypt(source);
             aes.Decrypt(enstr).ShouldBe(source);
         }
@@ -68,6 +67,7 @@ namespace OSharp.Security.Tests
             {
                 list.Add(aes.Encrypt(source));
             }
+
             list.Distinct().Count().ShouldBe(1);
             list.Clear();
 
@@ -76,6 +76,7 @@ namespace OSharp.Security.Tests
             {
                 list.Add(aes.Encrypt(source));
             }
+
             list.Distinct().Count().ShouldBe(list.Count);
         }
     }

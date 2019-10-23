@@ -23,7 +23,6 @@ using OSharp.Data;
 using OSharp.Identity;
 using OSharp.Identity.Events;
 
-
 namespace Liuliu.Demo.Identity
 {
     public partial class IdentityService
@@ -33,7 +32,7 @@ namespace Liuliu.Demo.Identity
         /// </summary>
         public IQueryable<UserRole> UserRoles
         {
-            get { return _userRoleRepository.QueryAsNoTracking(); }
+            get { return this._userRoleRepository.QueryAsNoTracking(); }
         }
 
         /// <summary>
@@ -44,7 +43,7 @@ namespace Liuliu.Demo.Identity
         /// <returns>用户角色信息是否存在</returns>
         public Task<bool> CheckUserRoleExists(Expression<Func<UserRole, bool>> predicate, Guid id = default(Guid))
         {
-            return _userRoleRepository.CheckExistsAsync(predicate, id);
+            return this._userRoleRepository.CheckExistsAsync(predicate, id);
         }
 
         /// <summary>
@@ -57,18 +56,19 @@ namespace Liuliu.Demo.Identity
             Check.Validate<UserRoleInputDto,Guid>(dtos, nameof(dtos));
 
             List<string> userNames = new List<string>();
-            OperationResult result = await _userRoleRepository.UpdateAsync(dtos,
+            OperationResult result = await this._userRoleRepository.UpdateAsync(dtos,
                 (dto, entity) =>
                 {
-                    string userName = _userRoleRepository.QueryAsNoTracking(m => m.UserId == entity.UserId).Select(m => m.User.UserName).FirstOrDefault();
+                    string userName = this._userRoleRepository.QueryAsNoTracking(m => m.UserId == entity.UserId).Select(m => m.User.UserName).FirstOrDefault();
                     userNames.AddIfNotNull(userName);
                     return Task.FromResult(0);
                 });
             if (result.Succeeded && userNames.Count > 0)
             {
                 OnlineUserCacheRemoveEventData eventData = new OnlineUserCacheRemoveEventData() { UserNames = userNames.ToArray() };
-                _eventBus.Publish(eventData);
+                this._eventBus.Publish(eventData);
             }
+
             return result;
         }
 
@@ -80,17 +80,17 @@ namespace Liuliu.Demo.Identity
         public async Task<OperationResult> DeleteUserRoles(Guid[] ids)
         {
             List<string>userNames = new List<string>();
-            OperationResult result = await _userRoleRepository.DeleteAsync(ids,
+            OperationResult result = await this._userRoleRepository.DeleteAsync(ids,
                 (entity) =>
                 {
-                    string userName = _userRoleRepository.QueryAsNoTracking(m => m.UserId == entity.UserId).Select(m => m.User.UserName).FirstOrDefault();
+                    string userName = this._userRoleRepository.QueryAsNoTracking(m => m.UserId == entity.UserId).Select(m => m.User.UserName).FirstOrDefault();
                     userNames.AddIfNotNull(userName);
                     return Task.FromResult(0);
                 });
             if (result.Succeeded && userNames.Count > 0)
             {
                 OnlineUserCacheRemoveEventData eventData = new OnlineUserCacheRemoveEventData(){UserNames = userNames.ToArray()};
-                _eventBus.Publish(eventData);
+                this._eventBus.Publish(eventData);
             }
 
             return result;
@@ -104,13 +104,14 @@ namespace Liuliu.Demo.Identity
         /// <returns>业务操作结果</returns>
         public async Task<OperationResult> SetUserRoles(int userId, int[] roleIds)
         {
-            User user = await _userManager.FindByIdAsync(userId.ToString());
+            User user = await this._userManager.FindByIdAsync(userId.ToString());
             if (user == null)
             {
                 return new OperationResult(OperationResultType.QueryNull, $"编号为“{userId}”的用户不存在");
             }
-            IList<string> roleNames = _roleManager.Roles.Where(m => roleIds.Contains(m.Id)).Select(m => m.Name).ToList();
-            IList<string> existRoleNames = await _userManager.GetRolesAsync(user);
+
+            IList<string> roleNames = this._roleManager.Roles.Where(m => roleIds.Contains(m.Id)).Select(m => m.Name).ToList();
+            IList<string> existRoleNames = await this._userManager.GetRolesAsync(user);
             string[] addRoleNames = roleNames.Except(existRoleNames).ToArray();
             string[] removeRoleNames = existRoleNames.Except(roleNames).ToArray();
 
@@ -121,34 +122,39 @@ namespace Liuliu.Demo.Identity
 
             try
             {
-                IdentityResult result = await _userManager.AddToRolesAsync(user, addRoleNames);
+                IdentityResult result = await this._userManager.AddToRolesAsync(user, addRoleNames);
                 if (!result.Succeeded)
                 {
                     return result.ToOperationResult();
                 }
-                result = await _userManager.RemoveFromRolesAsync(user, removeRoleNames);
-                if (!result.Succeeded)
-                {
-                    return result.ToOperationResult();
-                }
-                await _userManager.UpdateSecurityStampAsync(user);
 
-                //更新用户缓存使角色生效
+                result = await this._userManager.RemoveFromRolesAsync(user, removeRoleNames);
+                if (!result.Succeeded)
+                {
+                    return result.ToOperationResult();
+                }
+
+                await this._userManager.UpdateSecurityStampAsync(user);
+
+                // 更新用户缓存使角色生效
                 OnlineUserCacheRemoveEventData eventData = new OnlineUserCacheRemoveEventData() { UserNames = new[] { user.UserName } };
-                _eventBus.Publish(eventData);
+                this._eventBus.Publish(eventData);
             }
             catch (InvalidOperationException ex)
             {
                 return new OperationResult(OperationResultType.Error, ex.Message);
             }
+
             if (addRoleNames.Length > 0 && removeRoleNames.Length == 0)
             {
                 return new OperationResult(OperationResultType.Success, $"用户“{user.UserName}”添加角色“{addRoleNames.ExpandAndToString()}”操作成功");
             }
+
             if (addRoleNames.Length == 0 && removeRoleNames.Length > 0)
             {
                 return new OperationResult(OperationResultType.Success, $"用户“{user.UserName}”移除角色“{removeRoleNames.ExpandAndToString()}”操作成功");
             }
+
             return new OperationResult(OperationResultType.Success,
                 $"用户“{user.UserName}”添加角色“{addRoleNames.ExpandAndToString()}”，移除角色“{removeRoleNames.ExpandAndToString()}”操作成功");
         }

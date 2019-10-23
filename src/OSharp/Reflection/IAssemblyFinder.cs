@@ -12,8 +12,6 @@ using System.Reflection;
 using OSharp.Dependency;
 using OSharp.Finders;
 
-
-
 namespace OSharp.Reflection
 {
     /// <summary>
@@ -21,5 +19,6 @@ namespace OSharp.Reflection
     /// </summary>
     [IgnoreDependency]
     public interface IAssemblyFinder : IFinder<Assembly>
-    { }
+    {
+    }
 }

@@ -13,7 +13,6 @@ using System.Reflection;
 
 using OSharp.Reflection;
 
-
 namespace OSharp.CodeGenerator
 {
     /// <summary>
@@ -25,7 +24,8 @@ namespace OSharp.CodeGenerator
         /// 初始化一个<see cref="TypeMetadata"/>类型的新实例
         /// </summary>
         public TypeMetadata()
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="TypeMetadata"/>类型的新实例
@@ -37,10 +37,10 @@ namespace OSharp.CodeGenerator
                 return;
             }
 
-            Name = type.Name;
-            FullName = type.FullName;
-            Namespace = type.Namespace;
-            Display = type.GetDescription().Replace("信息", "");
+            this.Name = type.Name;
+            this.FullName = type.FullName;
+            this.Namespace = type.Namespace;
+            this.Display = type.GetDescription().Replace("信息", "");
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             foreach (PropertyInfo property in properties)
             {
@@ -48,15 +48,18 @@ namespace OSharp.CodeGenerator
                 {
                     continue;
                 }
+
                 if (property.GetMethod.IsVirtual && !property.GetMethod.IsFinal)
                 {
                     continue;
                 }
-                if (PropertyMetadatas == null)
+
+                if (this.PropertyMetadatas == null)
                 {
-                    PropertyMetadatas = new List<PropertyMetadata>();
+                    this.PropertyMetadatas = new List<PropertyMetadata>();
                 }
-                PropertyMetadatas.Add(new PropertyMetadata(property));
+
+                this.PropertyMetadatas.Add(new PropertyMetadata(property));
             }
         }
 

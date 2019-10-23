@@ -12,13 +12,11 @@ using OSharp.Json;
 
 using Xunit;
 
-
 namespace OSharp.Extensions.Tests
 {
-
     public class ObjectExtensionsTests
     {
-        [Fact()]
+        [Fact]
         public void CastToTest()
         {
             Assert.Equal(null, ((object)null).CastTo<object>());
@@ -35,7 +33,7 @@ namespace OSharp.Extensions.Tests
             Assert.Throws<FormatException>(() => "abc".CastTo<int>());
         }
 
-        [Fact()]
+        [Fact]
         public void IsBetweenTest()
         {
             const int num = 5;
@@ -53,7 +51,7 @@ namespace OSharp.Extensions.Tests
             Assert.False(num.IsBetween(5, 5, false, false));
         }
 
-        [Fact()]
+        [Fact]
         public void ToDynamicTest()
         {
             var obj1 = new { Name = "GMF" };
@@ -63,7 +61,7 @@ namespace OSharp.Extensions.Tests
             Assert.True(obj2.ToDynamic().Value.IsLocked);
         }
 
-        [Fact()]
+        [Fact]
         public void ToJsonStringTest()
         {
             Assert.Equal("null", ((object)null).ToJsonString());

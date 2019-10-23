@@ -9,7 +9,6 @@
 
 using OSharp.EventBuses;
 
-
 namespace Liuliu.Demo.Identity.Events
 {
     /// <summary>

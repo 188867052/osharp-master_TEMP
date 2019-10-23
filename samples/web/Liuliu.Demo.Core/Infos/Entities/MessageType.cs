@@ -27,6 +27,6 @@ namespace Liuliu.Demo.Infos.Entities
         /// <summary>
         ///   私人消息，用于个人对个人的消息类型表示
         /// </summary>
-        Private = 2
+        Private = 2,
     }
 }

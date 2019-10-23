@@ -12,7 +12,6 @@ using System.Threading;
 
 using OSharp.Extensions;
 
-
 namespace OSharp.Utility.Reflection
 {
     /// <summary>
@@ -39,11 +38,12 @@ namespace OSharp.Utility.Reflection
                 }
                 catch (AbandonedMutexException)
                 {
-                    //当其他进程已上锁且没有正常释放互斥锁时(譬如进程忽然关闭或退出)，则会抛出AbandonedMutexException异常
+                    // 当其他进程已上锁且没有正常释放互斥锁时(譬如进程忽然关闭或退出)，则会抛出AbandonedMutexException异常
                     if (recursive)
                     {
                         throw;
                     }
+
                     MutexLock(key, action, true, process);
                 }
                 finally
@@ -55,9 +55,9 @@ namespace OSharp.Utility.Reflection
 
         /// <summary>
         /// 操作系统级的同步键
-        /// (如果将 name 指定为 null 或空字符串，则创建一个局部互斥体。 
-        /// 如果名称以前缀“Global\”开头，则 mutex 在所有终端服务器会话中均为可见。 
-        /// 如果名称以前缀“Local\”开头，则 mutex 仅在创建它的终端服务器会话中可见。 
+        /// (如果将 name 指定为 null 或空字符串，则创建一个局部互斥体。
+        /// 如果名称以前缀“Global\”开头，则 mutex 在所有终端服务器会话中均为可见。
+        /// 如果名称以前缀“Local\”开头，则 mutex 仅在创建它的终端服务器会话中可见。
         /// 如果创建已命名 mutex 时不指定前缀，则它将采用前缀“Local\”。)
         /// </summary>
         /// <param name="key">同步键的字符串，null时表示局部互斥体</param>
@@ -69,6 +69,7 @@ namespace OSharp.Utility.Reflection
             {
                 return null;
             }
+
             key = key.ToBase64String();
             return process ? $@"Global\{key}" : $@"Local\{key}";
         }

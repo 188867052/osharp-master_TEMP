@@ -13,7 +13,6 @@ using System.Security.Claims;
 
 using OSharp.Entity;
 
-
 namespace OSharp.Identity
 {
     /// <summary>
@@ -47,7 +46,7 @@ namespace OSharp.Identity
         /// <returns></returns>
         public virtual Claim ToClaim()
         {
-            return new Claim(ClaimType, ClaimValue);
+            return new Claim(this.ClaimType, this.ClaimValue);
         }
 
         /// <summary>
@@ -56,8 +55,8 @@ namespace OSharp.Identity
         /// <param name="other">声明对象</param>
         public virtual void InitializeFromClaim(Claim other)
         {
-            ClaimType = other?.Type;
-            ClaimValue = other?.Value;
+            this.ClaimType = other?.Type;
+            this.ClaimValue = other?.Value;
         }
     }
 }

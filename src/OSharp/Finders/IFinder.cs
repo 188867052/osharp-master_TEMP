@@ -11,7 +11,6 @@ using System;
 
 using OSharp.Dependency;
 
-
 namespace OSharp.Finders
 {
     /// <summary>

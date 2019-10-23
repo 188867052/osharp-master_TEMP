@@ -20,7 +20,6 @@ using OSharp.Dependency;
 using OSharp.Entity;
 using OSharp.Reflection;
 
-
 namespace OSharp.Core.EntityInfos
 {
     /// <summary>
@@ -41,9 +40,9 @@ namespace OSharp.Core.EntityInfos
         /// </summary>
         protected EntityInfoHandlerBase(IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
-            _entityTypeFinder = serviceProvider.GetService<IEntityTypeFinder>();
-            _logger = serviceProvider.GetLogger<TEntityInfoHandler>();
+            this._serviceProvider = serviceProvider;
+            this._entityTypeFinder = serviceProvider.GetService<IEntityTypeFinder>();
+            this._logger = serviceProvider.GetLogger<TEntityInfoHandler>();
         }
 
         /// <summary>
@@ -51,25 +50,26 @@ namespace OSharp.Core.EntityInfos
         /// </summary>
         public void Initialize()
         {
-            Type[] entityTypes = _entityTypeFinder.FindAll(true);
-            _logger.LogInformation($"数据实体处理器开始初始化，共找到 {entityTypes.Length} 个实体类");
+            Type[] entityTypes = this._entityTypeFinder.FindAll(true);
+            this._logger.LogInformation($"数据实体处理器开始初始化，共找到 {entityTypes.Length} 个实体类");
             foreach (Type entityType in entityTypes)
             {
-                if (_entityInfos.Exists(m => m.TypeName == entityType.FullName))
+                if (this._entityInfos.Exists(m => m.TypeName == entityType.FullName))
                 {
                     continue;
                 }
+
                 TEntityInfo entityInfo = new TEntityInfo();
                 entityInfo.FromType(entityType);
-                _entityInfos.Add(entityInfo);
+                this._entityInfos.Add(entityInfo);
             }
 
-            _serviceProvider.ExecuteScopedWork(provider =>
+            this._serviceProvider.ExecuteScopedWork(provider =>
             {
-                SyncToDatabase(provider, _entityInfos);
+                this.SyncToDatabase(provider, this._entityInfos);
             });
 
-            RefreshCache();
+            this.RefreshCache();
         }
 
         /// <summary>
@@ -80,22 +80,25 @@ namespace OSharp.Core.EntityInfos
         public IEntityInfo GetEntityInfo(Type type)
         {
             Check.NotNull(type, nameof(type));
-            if (_entityInfos.Count == 0)
+            if (this._entityInfos.Count == 0)
             {
-                RefreshCache();
+                this.RefreshCache();
             }
+
             string typeName = type.GetFullNameWithModule();
-            IEntityInfo entityInfo = _entityInfos.FirstOrDefault(m => m.TypeName == typeName);
+            IEntityInfo entityInfo = this._entityInfos.FirstOrDefault(m => m.TypeName == typeName);
             if (entityInfo != null)
             {
                 return entityInfo;
             }
+
             if (type.BaseType == null)
             {
                 return null;
             }
+
             typeName = type.BaseType.GetFullNameWithModule();
-            return _entityInfos.FirstOrDefault(m => m.TypeName == typeName);
+            return this._entityInfos.FirstOrDefault(m => m.TypeName == typeName);
         }
 
         /// <summary>
@@ -107,7 +110,7 @@ namespace OSharp.Core.EntityInfos
         public IEntityInfo GetEntityInfo<TEntity, TKey>() where TEntity : IEntity<TKey> where TKey : IEquatable<TKey>
         {
             Type type = typeof(TEntity);
-            return GetEntityInfo(type);
+            return this.GetEntityInfo(type);
         }
 
         /// <summary>
@@ -115,10 +118,10 @@ namespace OSharp.Core.EntityInfos
         /// </summary>
         public void RefreshCache()
         {
-            _serviceProvider.ExecuteScopedWork(provider =>
+            this._serviceProvider.ExecuteScopedWork(provider =>
             {
-                _entityInfos.Clear();
-                _entityInfos.AddRange(GetFromDatabase(provider));
+                this._entityInfos.Clear();
+                this._entityInfos.AddRange(this.GetFromDatabase(provider));
             });
         }
 
@@ -130,31 +133,32 @@ namespace OSharp.Core.EntityInfos
             IRepository<TEntityInfo, Guid> repository = scopedProvider.GetService<IRepository<TEntityInfo, Guid>>();
             if (repository == null)
             {
-                _logger.LogWarning("初始化实体数据时，IRepository<,>的服务未找到，请初始化 EntityFrameworkCoreModule 模块");
+                this._logger.LogWarning("初始化实体数据时，IRepository<,>的服务未找到，请初始化 EntityFrameworkCoreModule 模块");
                 return;
             }
 
-            //检查指定实体的Hash值，决定是否需要进行数据库同步
-            if (!entityInfos.CheckSyncByHash(scopedProvider, _logger))
+            // 检查指定实体的Hash值，决定是否需要进行数据库同步
+            if (!entityInfos.CheckSyncByHash(scopedProvider, this._logger))
             {
-                _logger.LogInformation("同步实体数据时，数据签名与上次相同，取消同步");
+                this._logger.LogInformation("同步实体数据时，数据签名与上次相同，取消同步");
                 return;
             }
 
             TEntityInfo[] dbItems = repository.Query(null, false).ToArray();
 
-            //删除的实体信息
+            // 删除的实体信息
             TEntityInfo[] removeItems = dbItems.Except(entityInfos, EqualityHelper<TEntityInfo>.CreateComparer(m => m.TypeName)).ToArray();
             int removeCount = removeItems.Length;
-            //todo：由于外键关联不能物理删除的实体，需要实现逻辑删除
+
+            // todo：由于外键关联不能物理删除的实体，需要实现逻辑删除
             repository.Delete(removeItems);
 
-            //处理新增的实体信息
+            // 处理新增的实体信息
             TEntityInfo[] addItems = entityInfos.Except(dbItems, EqualityHelper<TEntityInfo>.CreateComparer(m => m.TypeName)).ToArray();
             int addCount = addItems.Length;
             repository.Insert(addItems);
 
-            //处理更新的实体信息
+            // 处理更新的实体信息
             int updateCount = 0;
             foreach (TEntityInfo item in dbItems.Except(removeItems))
             {
@@ -164,22 +168,26 @@ namespace OSharp.Core.EntityInfos
                 {
                     continue;
                 }
+
                 if (item.Name != entityInfo.Name)
                 {
                     item.Name = entityInfo.Name;
                     isUpdate = true;
                 }
+
                 if (item.PropertyJson != entityInfo.PropertyJson)
                 {
                     item.PropertyJson = entityInfo.PropertyJson;
                     isUpdate = true;
                 }
+
                 if (isUpdate)
                 {
                     repository.Update(item);
                     updateCount++;
                 }
             }
+
             repository.UnitOfWork.Commit();
             if (removeCount + addCount + updateCount > 0)
             {
@@ -187,19 +195,22 @@ namespace OSharp.Core.EntityInfos
                 if (addCount > 0)
                 {
                     msg += $"，添加实体信息 {addCount} 个";
-                    _logger.LogInformation($"新增{addItems.Length}个数据实体：{addItems.Select(m => m.TypeName).ExpandAndToString()}");
+                    this._logger.LogInformation($"新增{addItems.Length}个数据实体：{addItems.Select(m => m.TypeName).ExpandAndToString()}");
                 }
+
                 if (removeCount > 0)
                 {
                     msg += $"，删除实体信息 {removeCount} 个";
-                    _logger.LogInformation($"删除{removeItems.Length}个数据实体：{removeItems.Select(m => m.TypeName).ExpandAndToString()}");
+                    this._logger.LogInformation($"删除{removeItems.Length}个数据实体：{removeItems.Select(m => m.TypeName).ExpandAndToString()}");
                 }
+
                 if (updateCount > 0)
                 {
                     msg += $"，更新实体信息 {updateCount} 个";
-                    _logger.LogInformation($"更新{updateCount}个数据实体");
+                    this._logger.LogInformation($"更新{updateCount}个数据实体");
                 }
-                _logger.LogInformation(msg);
+
+                this._logger.LogInformation(msg);
             }
         }
 
@@ -214,6 +225,7 @@ namespace OSharp.Core.EntityInfos
             {
                 return new TEntityInfo[0];
             }
+
             return repository.QueryAsNoTracking(null, false).ToArray();
         }
     }

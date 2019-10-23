@@ -14,7 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.Dependency;
 
-
 namespace OSharp.Entity.MySql
 {
     /// <summary>
@@ -41,6 +40,7 @@ namespace OSharp.Entity.MySql
             {
                 return builder.UseMySql(connectionString);
             }
+
             return builder.UseMySql(existingConnection);
         }
     }

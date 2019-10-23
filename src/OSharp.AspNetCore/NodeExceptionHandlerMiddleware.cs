@@ -17,7 +17,6 @@ using OSharp.AspNetCore.UI;
 using OSharp.Data;
 using OSharp.Json;
 
-
 namespace OSharp.AspNetCore
 {
     /// <summary>
@@ -35,8 +34,8 @@ namespace OSharp.AspNetCore
         {
             Check.NotNull(next, nameof(next));
 
-            _next = next;
-            _logger = loggerFactory.CreateLogger<NodeExceptionHandlerMiddleware>();
+            this._next = next;
+            this._logger = loggerFactory.CreateLogger<NodeExceptionHandlerMiddleware>();
         }
 
         /// <summary>
@@ -48,23 +47,25 @@ namespace OSharp.AspNetCore
         {
             try
             {
-                await _next(context);
+                await this._next(context);
             }
             catch (Exception ex)
             {
-                _logger.LogError(new EventId(), ex, ex.Message);
+                this._logger.LogError(new EventId(), ex, ex.Message);
                 if (context.Request.IsAjaxRequest() || context.Request.IsJsonContextType())
                 {
                     if (context.Response.HasStarted)
                     {
                         return;
                     }
+
                     context.Response.StatusCode = 500;
                     context.Response.Clear();
                     context.Response.ContentType = "application/json; charset=utf-8";
                     await context.Response.WriteAsync(new AjaxResult(ex.Message, AjaxResultType.Error).ToJsonString());
                     return;
                 }
+
                 throw;
             }
         }

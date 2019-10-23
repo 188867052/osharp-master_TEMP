@@ -9,7 +9,6 @@
 using System;
 using System.Collections.Generic;
 
-
 namespace OSharp.Collections
 {
     /// <summary>
@@ -36,7 +35,7 @@ namespace OSharp.Collections
         {
             return new CommonComparer<TV>(keySelector, comparer);
         }
-        
+
         private class CommonComparer<TV> : IComparer<T>
         {
             private readonly IComparer<TV> _comparer;
@@ -44,20 +43,19 @@ namespace OSharp.Collections
 
             public CommonComparer(Func<T, TV> keySelector, IComparer<TV> comparer)
             {
-                _keySelector = keySelector;
-                _comparer = comparer;
+                this._keySelector = keySelector;
+                this._comparer = comparer;
             }
 
             public CommonComparer(Func<T, TV> keySelector)
                 : this(keySelector, Comparer<TV>.Default)
-            { }
-            
+            {
+            }
+
             public int Compare(T x, T y)
             {
-                return _comparer.Compare(_keySelector(x), _keySelector(y));
+                return this._comparer.Compare(this._keySelector(x), this._keySelector(y));
             }
-            
         }
-        
     }
 }

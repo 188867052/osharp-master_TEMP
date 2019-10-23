@@ -11,7 +11,6 @@ using System.Security.Claims;
 
 using Microsoft.AspNetCore.SignalR;
 
-
 namespace OSharp.AspNetCore.SignalR
 {
     /// <summary>

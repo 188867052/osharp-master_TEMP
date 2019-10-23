@@ -8,24 +8,17 @@
 // -----------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Security.Claims;
 
 using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.Data;
 using OSharp.Dependency;
-using OSharp.Exceptions;
-using OSharp.Extensions;
 using OSharp.Linq;
-using OSharp.Properties;
 using OSharp.Reflection;
 using OSharp.Security;
 using OSharp.Security.Claims;
-
 
 namespace OSharp.Filter
 {
@@ -41,10 +34,8 @@ namespace OSharp.Filter
         /// </summary>
         public FilterService(IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
+            this._serviceProvider = serviceProvider;
         }
-
-        #region Implementation of IFilterService
 
         /// <summary>
         /// 获取指定查询条件组的查询表达式
@@ -55,7 +46,6 @@ namespace OSharp.Filter
         public virtual Expression<Func<T, bool>> GetExpression<T>(FilterGroup group)
         {
             return FilterHelper.GetExpression<T>(group);
-
         }
 
         /// <summary>
@@ -82,16 +72,17 @@ namespace OSharp.Filter
             Expression<Func<T, bool>> exp = m => true;
             if (group != null)
             {
-                exp = GetExpression<T>(group);
+                exp = this.GetExpression<T>(group);
             }
-            //从缓存中查找当前用户的角色与实体T的过滤条件
-            ClaimsPrincipal user = _serviceProvider.GetCurrentUser();
+
+            // 从缓存中查找当前用户的角色与实体T的过滤条件
+            ClaimsPrincipal user = this._serviceProvider.GetCurrentUser();
             if (user == null)
             {
                 return exp;
             }
 
-            IDataAuthCache dataAuthCache = _serviceProvider.GetService<IDataAuthCache>();
+            IDataAuthCache dataAuthCache = this._serviceProvider.GetService<IDataAuthCache>();
             if (dataAuthCache == null)
             {
                 return exp;
@@ -99,11 +90,12 @@ namespace OSharp.Filter
 
             // 要判断数据权限功能,先要排除没有执行当前功能权限的角色,判断剩余角色的数据权限
             string[] roleNames = user.Identity.GetRoles();
-            ScopedDictionary scopedDict = _serviceProvider.GetService<ScopedDictionary>();
+            ScopedDictionary scopedDict = this._serviceProvider.GetService<ScopedDictionary>();
             if (scopedDict?.Function != null)
             {
                 roleNames = scopedDict.DataAuthValidRoleNames;
             }
+
             string typeName = typeof(T).GetFullNameWithModule();
             Expression<Func<T, bool>> subExp = null;
             foreach (string roleName in roleNames)
@@ -113,14 +105,17 @@ namespace OSharp.Filter
                 {
                     continue;
                 }
-                subExp = subExp == null ? GetExpression<T>(subGroup) : subExp.Or(GetExpression<T>(subGroup));
+
+                subExp = subExp == null ? this.GetExpression<T>(subGroup) : subExp.Or(this.GetExpression<T>(subGroup));
             }
+
             if (subExp != null)
             {
                 if (group == null)
                 {
                     return subExp;
                 }
+
                 exp = subExp.And(exp);
             }
 
@@ -137,7 +132,5 @@ namespace OSharp.Filter
         {
             return FilterHelper.CheckFilterGroup(group, type);
         }
-
-        #endregion
     }
 }

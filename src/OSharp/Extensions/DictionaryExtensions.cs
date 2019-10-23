@@ -10,7 +10,6 @@
 using System;
 using System.Collections.Generic;
 
-
 namespace OSharp.Extensions
 {
     /// <summary>
@@ -46,6 +45,7 @@ namespace OSharp.Extensions
             {
                 return value;
             }
+
             return dictionary[key] = addFunc();
         }
     }

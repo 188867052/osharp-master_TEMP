@@ -13,8 +13,6 @@ using System.ComponentModel;
 using OSharp.Data;
 using OSharp.Entity;
 using OSharp.Filter;
-using OSharp.Security;
-
 
 namespace OSharp.Security
 {
@@ -29,24 +27,26 @@ namespace OSharp.Security
         /// </summary>
         protected EntityRoleInputDtoBase()
         {
-            FilterGroup = new FilterGroup();
+            this.FilterGroup = new FilterGroup();
         }
 
         private Guid _id;
+
         /// <summary>
         /// 获取或设置 主键，唯一标识
         /// </summary>
         [DisplayName("编号")]
         public Guid Id
         {
-            get { return _id; }
+            get { return this._id; }
             set
             {
                 if (value == Guid.Empty)
                 {
                     value = CombGuid.NewGuid();
                 }
-                _id = value;
+
+                this._id = value;
             }
         }
 

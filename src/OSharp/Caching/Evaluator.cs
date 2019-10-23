@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-
 namespace OSharp.Caching
 {
 	/// <summary>
@@ -34,15 +33,15 @@ namespace OSharp.Caching
 
 			internal SubtreeEvaluator(HashSet<Expression> candidates)
 			{
-				_candidates = candidates;
+				this._candidates = candidates;
 			}
 
 			internal Expression Eval(Expression exp)
 			{
-				return Visit(exp);
+				return this.Visit(exp);
 			}
 
-            // Solves the projection problem, https://github.com/loresoft/EntityFramework.Extended/issues/19 
+            // Solves the projection problem, https://github.com/loresoft/EntityFramework.Extended/issues/19
             // and https://github.com/osjoberg/LinqCache/issues/3, thank you @agnauck and @geriadejes.
             protected override Expression VisitMemberInit(MemberInitExpression node)
             {
@@ -60,10 +59,12 @@ namespace OSharp.Caching
 				{
 					return null;
 				}
-				if (_candidates.Contains(exp))
+
+				if (this._candidates.Contains(exp))
 				{
 					return Evaluate(exp);
 				}
+
 				return base.Visit(exp);
 			}
 
@@ -73,11 +74,11 @@ namespace OSharp.Caching
 				{
 					return e;
 				}
+
 				var lambda = Expression.Lambda(e);
 				var fn = lambda.Compile();
 				return Expression.Constant(fn.DynamicInvoke(null), e.Type);
 			}
-
 		}
 
 		/// <summary>
@@ -92,36 +93,38 @@ namespace OSharp.Caching
 
 			internal Nominator(Func<Expression, bool> fnCanBeEvaluated)
 			{
-				_fnCanBeEvaluated = fnCanBeEvaluated;
+				this._fnCanBeEvaluated = fnCanBeEvaluated;
 			}
 
 			internal HashSet<Expression> Nominate(Expression expression)
 			{
-				_candidates = new HashSet<Expression>();
-				Visit(expression);
-				return _candidates;
+				this._candidates = new HashSet<Expression>();
+				this.Visit(expression);
+				return this._candidates;
 			}
 
 			public override Expression Visit(Expression expression)
 			{
 				if (expression != null)
 				{
-					var saveCannotBeEvaluated = _cannotBeEvaluated;
-					_cannotBeEvaluated = false;
+					var saveCannotBeEvaluated = this._cannotBeEvaluated;
+					this._cannotBeEvaluated = false;
 					base.Visit(expression);
-					if (!_cannotBeEvaluated)
+					if (!this._cannotBeEvaluated)
 					{
-						if (_fnCanBeEvaluated(expression))
+						if (this._fnCanBeEvaluated(expression))
 						{
-							_candidates.Add(expression);
+							this._candidates.Add(expression);
 						}
 						else
 						{
-							_cannotBeEvaluated = true;
+							this._cannotBeEvaluated = true;
 						}
 					}
-					_cannotBeEvaluated |= saveCannotBeEvaluated;
+
+					this._cannotBeEvaluated |= saveCannotBeEvaluated;
 				}
+
 				return expression;
 			}
 		}

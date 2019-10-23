@@ -10,7 +10,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-
 namespace OSharp.Threading.Asyncs
 {
     /// <summary>
@@ -25,14 +24,18 @@ namespace OSharp.Threading.Asyncs
         /// </summary>
         public Task WaitAsync()
         {
-            return _tcs.Task;
+            return this._tcs.Task;
         }
 
         public void Set()
         {
-            var tcs = _tcs;
-            Task.Factory.StartNew(s => ((TaskCompletionSource<bool>)s).TrySetResult(true),
-                tcs, CancellationToken.None, TaskCreationOptions.PreferFairness, TaskScheduler.Default);
+            var tcs = this._tcs;
+            Task.Factory.StartNew(
+                s => ((TaskCompletionSource<bool>)s).TrySetResult(true),
+                tcs,
+                CancellationToken.None,
+                TaskCreationOptions.PreferFairness,
+                TaskScheduler.Default);
             tcs.Task.Wait();
         }
 
@@ -40,8 +43,8 @@ namespace OSharp.Threading.Asyncs
         {
             while (true)
             {
-                var tcs = _tcs;
-                if (tcs.Task.IsCompleted || Interlocked.CompareExchange(ref _tcs, new TaskCompletionSource<bool>(), tcs) == tcs)
+                var tcs = this._tcs;
+                if (tcs.Task.IsCompleted || Interlocked.CompareExchange(ref this._tcs, new TaskCompletionSource<bool>(), tcs) == tcs)
                 {
                     return;
                 }

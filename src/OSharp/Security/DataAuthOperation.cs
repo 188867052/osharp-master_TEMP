@@ -9,7 +9,6 @@
 
 using System.ComponentModel;
 
-
 namespace OSharp.Security
 {
     /// <summary>
@@ -33,6 +32,6 @@ namespace OSharp.Security
         /// 删除
         /// </summary>
         [Description("删除")]
-        Delete
+        Delete,
     }
 }

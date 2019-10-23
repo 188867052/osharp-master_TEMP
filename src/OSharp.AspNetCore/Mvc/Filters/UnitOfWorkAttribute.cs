@@ -16,7 +16,6 @@ using Microsoft.Extensions.DependencyInjection;
 using OSharp.Dependency;
 using OSharp.Entity;
 
-
 namespace OSharp.AspNetCore.Mvc.Filters
 {
     /// <summary>
@@ -31,6 +30,7 @@ namespace OSharp.AspNetCore.Mvc.Filters
         /// </summary>
         public UnitOfWorkAttribute()
             : base(typeof(UnitOfWorkFilterImpl))
-        { }
+        {
+        }
     }
 }

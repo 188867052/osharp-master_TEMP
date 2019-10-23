@@ -7,18 +7,13 @@
 //  <last-date>2019-06-02 5:37</last-date>
 // -----------------------------------------------------------------------
 
-using System;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Identity;
-
-using OSharp.Data;
 using OSharp.Exceptions;
 using OSharp.Extensions;
-using OSharp.Identity.Events;
 using OSharp.Identity.JwtBearer;
 using OSharp.Json;
-
 
 namespace OSharp.Identity
 {
@@ -38,6 +33,7 @@ namespace OSharp.Identity
             {
                 throw new OsharpException($"编号为“{userId}”的用户信息不存在");
             }
+
             return await userManager.GetRefreshToken(user, clientId);
         }
 
@@ -54,6 +50,7 @@ namespace OSharp.Identity
             {
                 return null;
             }
+
             return json.FromJsonString<RefreshToken>();
         }
 
@@ -68,6 +65,7 @@ namespace OSharp.Identity
             {
                 return new IdentityResult().Failed($"编号为“{userId}”的用户信息不存在");
             }
+
             return await userManager.SetRefreshToken(user, token);
         }
 
@@ -94,6 +92,7 @@ namespace OSharp.Identity
             {
                 return new IdentityResult().Failed($"编号为“{userId}”的用户信息不存在");
             }
+
             return await RemoveRefreshToken(userManager, user, clientId);
         }
 

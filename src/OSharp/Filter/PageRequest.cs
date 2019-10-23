@@ -9,7 +9,6 @@
 
 using OSharp.Data;
 
-
 namespace OSharp.Filter
 {
     /// <summary>
@@ -22,8 +21,8 @@ namespace OSharp.Filter
         /// </summary>
         public PageRequest()
         {
-            PageCondition = new PageCondition(1, 20);
-            FilterGroup = new FilterGroup();
+            this.PageCondition = new PageCondition(1, 20);
+            this.FilterGroup = new FilterGroup();
         }
 
         /// <summary>
@@ -42,9 +41,9 @@ namespace OSharp.Filter
         public void AddDefaultSortCondition(params SortCondition[] sortConditions)
         {
             Check.NotNullOrEmpty(sortConditions, nameof(sortConditions));
-            if (PageCondition.SortConditions.Length == 0)
+            if (this.PageCondition.SortConditions.Length == 0)
             {
-                PageCondition.SortConditions = sortConditions;
+                this.PageCondition.SortConditions = sortConditions;
             }
         }
     }

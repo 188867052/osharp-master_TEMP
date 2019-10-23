@@ -27,10 +27,8 @@ using OSharp.AspNetCore.UI;
 using OSharp.Core.Modules;
 using OSharp.Data;
 using OSharp.Entity;
-using OSharp.Extensions;
 using OSharp.Filter;
 using OSharp.Security;
-
 
 namespace Liuliu.Demo.Web.Areas.Admin.Controllers
 {
@@ -44,8 +42,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         public RoleEntityController(SecurityManager securityManager,
             IFilterService filterService)
         {
-            _securityManager = securityManager;
-            _filterService = filterService;
+            this._securityManager = securityManager;
+            this._filterService = filterService;
         }
 
         /// <summary>
@@ -59,20 +57,21 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         [Description("读取")]
         public PageData<EntityRoleOutputDto> Read(PageRequest request)
         {
-            Expression<Func<EntityRole, bool>> predicate = _filterService.GetExpression<EntityRole>(request.FilterGroup);
+            Expression<Func<EntityRole, bool>> predicate = this._filterService.GetExpression<EntityRole>(request.FilterGroup);
             if (request.PageCondition.SortConditions.Length == 0)
             {
                 request.PageCondition.SortConditions = new[]
                 {
                     new SortCondition("RoleId"),
                     new SortCondition("EntityId"),
-                    new SortCondition("Operation")
+                    new SortCondition("Operation"),
                 };
             }
-            RoleManager<Role> roleManager = HttpContext.RequestServices.GetService<RoleManager<Role>>();
-            Func<EntityRole, bool> updateFunc = _filterService.GetDataFilterExpression<EntityRole>(null, DataAuthOperation.Update).Compile();
-            Func<EntityRole, bool> deleteFunc = _filterService.GetDataFilterExpression<EntityRole>(null, DataAuthOperation.Delete).Compile();
-            var page = _securityManager.EntityRoles.ToPage(predicate,
+
+            RoleManager<Role> roleManager = this.HttpContext.RequestServices.GetService<RoleManager<Role>>();
+            Func<EntityRole, bool> updateFunc = this._filterService.GetDataFilterExpression<EntityRole>(null, DataAuthOperation.Update).Compile();
+            Func<EntityRole, bool> deleteFunc = this._filterService.GetDataFilterExpression<EntityRole>(null, DataAuthOperation.Delete).Compile();
+            var page = this._securityManager.EntityRoles.ToPage(predicate,
                 request.PageCondition,
                 m => new
                 {
@@ -86,7 +85,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
                     EntityName = m.EntityName,
                     EntityType = m.EntityType,
                     Updatable = updateFunc(m.D),
-                    Deletable = deleteFunc(m.D)
+                    Deletable = deleteFunc(m.D),
                 }).ToArray());
             return page.ToPageData();
         }
@@ -106,8 +105,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         public async Task<AjaxResult> Create(params EntityRoleInputDto[] dtos)
         {
             Check.NotNull(dtos, nameof(dtos));
-            
-            OperationResult result = await _securityManager.CreateEntityRoles(dtos);
+
+            OperationResult result = await this._securityManager.CreateEntityRoles(dtos);
             return result.ToAjaxResult();
         }
 
@@ -126,7 +125,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         public async Task<AjaxResult> Update(params EntityRoleInputDto[] dtos)
         {
             Check.NotNull(dtos, nameof(dtos));
-            OperationResult result = await _securityManager.UpdateEntityRoles(dtos);
+            OperationResult result = await this._securityManager.UpdateEntityRoles(dtos);
             return result.ToAjaxResult();
         }
 
@@ -143,8 +142,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         public async Task<AjaxResult> Delete(params Guid[] ids)
         {
             Check.NotNull(ids, nameof(ids));
-            
-            OperationResult result = await _securityManager.DeleteEntityRoles(ids);
+
+            OperationResult result = await this._securityManager.DeleteEntityRoles(ids);
             return result.ToAjaxResult();
         }
     }

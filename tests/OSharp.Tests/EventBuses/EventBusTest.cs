@@ -7,10 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.AspNetCore;
 using OSharp.Core.Builders;
-using OSharp.Core.Packs;
 using OSharp.Dependency;
 using OSharp.EventBuses;
-using OSharp.UnitTest;
 using OSharp.UnitTest.Infrastructure;
 
 using Shouldly;
@@ -31,7 +29,8 @@ namespace OSharp.Tests.IEventBuses
             bus.Subscribe<HelloEventData, HelloEventHandler>();
             HelloEventData data = new HelloEventData("hello world");
             bus.Publish(data);
-            //Thread.Sleep(50);
+
+            // Thread.Sleep(50);
             data.List.ShouldContain(data.Message);
             data.List.Clear();
             bus.UnsubscribeAll<HelloEventData>();
@@ -39,7 +38,8 @@ namespace OSharp.Tests.IEventBuses
             Action<HelloEventData> action = m => m.List.Add(m.Message);
             bus.Subscribe<HelloEventData>(action);
             bus.Publish(data);
-            //Thread.Sleep(50);
+
+            // Thread.Sleep(50);
             data.List.ShouldContain(data.Message);
             data.List.Clear();
             bus.Unsubscribe(action);
@@ -47,7 +47,8 @@ namespace OSharp.Tests.IEventBuses
             IEventHandler<HelloEventData> handler = new HelloEventHandler();
             bus.Subscribe<HelloEventData>(handler);
             bus.Publish(typeof(HelloEventData), (IEventData)data);
-            //Thread.Sleep(50);
+
+            // Thread.Sleep(50);
             data.List.ShouldContain(data.Message);
             data.List.Clear();
             bus.Unsubscribe(handler);
@@ -75,15 +76,14 @@ namespace OSharp.Tests.IEventBuses
             /// </summary>
             public HelloEventData(string message)
             {
-                List = new List<string>();
-                Message = message;
+                this.List = new List<string>();
+                this.Message = message;
             }
 
             public string Message { get; }
 
             public ICollection<string> List { get; }
         }
-
 
         private class HelloEventHandler : EventHandlerBase<HelloEventData>
         {
@@ -104,10 +104,9 @@ namespace OSharp.Tests.IEventBuses
             /// <returns>是否成功</returns>
             public override Task HandleAsync(HelloEventData eventData, CancellationToken cancelToken = default(CancellationToken))
             {
-                return Task.Run(() => Handle(eventData), cancelToken);
+                return Task.Run(() => this.Handle(eventData), cancelToken);
             }
         }
-
 
         public class EventBusStartup : TestStartup
         {
@@ -121,7 +120,5 @@ namespace OSharp.Tests.IEventBuses
                 });
             }
         }
-
     }
-
 }

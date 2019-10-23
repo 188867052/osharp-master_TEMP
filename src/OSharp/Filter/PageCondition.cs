@@ -9,7 +9,6 @@
 
 using OSharp.Extensions;
 
-
 namespace OSharp.Filter
 {
     /// <summary>
@@ -22,7 +21,8 @@ namespace OSharp.Filter
         /// </summary>
         public PageCondition()
             : this(1, 20)
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个 指定页索引与页大小的分页查询条件信息类 的新实例
@@ -33,9 +33,9 @@ namespace OSharp.Filter
         {
             pageIndex.CheckGreaterThan("pageIndex", 0);
             pageSize.CheckGreaterThan("pageSize", 0);
-            PageIndex = pageIndex;
-            PageSize = pageSize;
-            SortConditions = new SortCondition[] { };
+            this.PageIndex = pageIndex;
+            this.PageSize = pageSize;
+            this.SortConditions = new SortCondition[] { };
         }
 
         /// <summary>

@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using OSharp.Core.Packs;
 using OSharp.Core.Systems;
 
-
 namespace OSharp.Systems
 {
     /// <summary>

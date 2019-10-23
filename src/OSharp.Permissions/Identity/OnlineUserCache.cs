@@ -8,17 +8,12 @@
 // -----------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.Caching;
 using OSharp.Dependency;
-
 
 namespace OSharp.Identity
 {
@@ -43,8 +38,8 @@ namespace OSharp.Identity
         /// </summary>
         public OnlineUserCache(IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
-            _cache = serviceProvider.GetService<IDistributedCache>();
+            this._serviceProvider = serviceProvider;
+            this._cache = serviceProvider.GetService<IDistributedCache>();
         }
 
         /// <summary>
@@ -58,10 +53,10 @@ namespace OSharp.Identity
 
             DistributedCacheEntryOptions options = new DistributedCacheEntryOptions();
             options.SetSlidingExpiration(TimeSpan.FromMinutes(30));
-            return _cache.Get<OnlineUser>(key,
+            return this._cache.Get<OnlineUser>(key,
                 () =>
                 {
-                    return _serviceProvider.ExecuteScopedWork<OnlineUser>(provider =>
+                    return this._serviceProvider.ExecuteScopedWork<OnlineUser>(provider =>
                     {
                         IOnlineUserProvider onlineUserProvider = provider.GetService<IOnlineUserProvider>();
                         return onlineUserProvider.GetOrCreate(userName).Result;
@@ -81,10 +76,10 @@ namespace OSharp.Identity
 
             DistributedCacheEntryOptions options = new DistributedCacheEntryOptions();
             options.SetSlidingExpiration(TimeSpan.FromMinutes(30));
-            return await _cache.GetAsync<OnlineUser>(key,
+            return await this._cache.GetAsync<OnlineUser>(key,
                 () =>
                 {
-                    return _serviceProvider.ExecuteScopedWorkAsync<OnlineUser>(async provider =>
+                    return this._serviceProvider.ExecuteScopedWorkAsync<OnlineUser>(async provider =>
                     {
                         IOnlineUserProvider onlineUserProvider = provider.GetService<IOnlineUserProvider>();
                         return await onlineUserProvider.GetOrCreate(userName);
@@ -102,7 +97,7 @@ namespace OSharp.Identity
             foreach (string userName in userNames)
             {
                 string key = $"Identity_OnlineUser_{userName}";
-                _cache.Remove(key);
+                this._cache.Remove(key);
             }
         }
     }

@@ -46,7 +46,7 @@ namespace OSharp.Entity.Sqlite
 
             return services;
         }
-        
+
         /// <summary>
         /// 应用模块服务
         /// </summary>

@@ -19,7 +19,6 @@ using OSharp.Data;
 using OSharp.Dependency;
 using OSharp.Reflection;
 
-
 namespace OSharp.EventBuses.Internal
 {
     /// <summary>
@@ -35,7 +34,7 @@ namespace OSharp.EventBuses.Internal
         /// </summary>
         public InMemoryEventStore()
         {
-            _handlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
+            this._handlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
         }
 
         /// <summary>
@@ -46,7 +45,7 @@ namespace OSharp.EventBuses.Internal
         public void Add<TEventData, TEventHandler>() where TEventData : IEventData where TEventHandler : IEventHandler, new()
         {
             IEventHandlerFactory factory = new TransientEventHandlerFactory<TEventHandler>();
-            Add(typeof(TEventData), factory);
+            this.Add(typeof(TEventData), factory);
         }
 
         /// <summary>
@@ -60,7 +59,7 @@ namespace OSharp.EventBuses.Internal
             Check.NotNull(eventHandler, nameof(eventHandler));
 
             IEventHandlerFactory factory = new SingletonEventHandlerFactory(eventHandler);
-            Add(eventType, factory);
+            this.Add(eventType, factory);
         }
 
         /// <summary>
@@ -73,7 +72,7 @@ namespace OSharp.EventBuses.Internal
             Check.NotNull(eventType, nameof(eventType));
             Check.NotNull(factory, nameof(factory));
 
-            GetOrCreateHandlerFactories(eventType).Locking(factories => factories.AddIfNotExist(factory));
+            this.GetOrCreateHandlerFactories(eventType).Locking(factories => factories.AddIfNotExist(factory));
         }
 
         /// <summary>
@@ -85,7 +84,7 @@ namespace OSharp.EventBuses.Internal
         {
             Check.NotNull(action, nameof(action));
 
-            GetOrCreateHandlerFactories(typeof(TEventData)).Locking(factories =>
+            this.GetOrCreateHandlerFactories(typeof(TEventData)).Locking(factories =>
             {
                 factories.RemoveAll(factory =>
                 {
@@ -93,10 +92,12 @@ namespace OSharp.EventBuses.Internal
                     {
                         return false;
                     }
+
                     if (!(singletonFactory.HandlerInstance is ActionEventHandler<TEventData> handler))
                     {
                         return false;
                     }
+
                     return handler.Action == action;
                 });
             });
@@ -109,7 +110,7 @@ namespace OSharp.EventBuses.Internal
         /// <param name="eventHandler">处理器实例</param>
         public void Remove(Type eventType, IEventHandler eventHandler)
         {
-            GetOrCreateHandlerFactories(eventType).Locking(factories =>
+            this.GetOrCreateHandlerFactories(eventType).Locking(factories =>
             {
                 factories.RemoveAll(factory => (factory as SingletonEventHandlerFactory)?.HandlerInstance == eventHandler);
             });
@@ -121,7 +122,7 @@ namespace OSharp.EventBuses.Internal
         /// <param name="eventType">事件源类型</param>
         public void RemoveAll(Type eventType)
         {
-            GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
+            this.GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
         }
 
         /// <summary>
@@ -130,13 +131,13 @@ namespace OSharp.EventBuses.Internal
         /// <returns></returns>
         public IDictionary<Type, IEventHandlerFactory[]> GetHandlers(Type eventType)
         {
-            return _handlerFactories.Where(item => item.Key == eventType || item.Key.IsAssignableFrom(eventType))
+            return this._handlerFactories.Where(item => item.Key == eventType || item.Key.IsAssignableFrom(eventType))
                 .ToDictionary(item => item.Key, item => item.Value.ToArray());
         }
 
         private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)
         {
-            return _handlerFactories.GetOrAdd(eventType, type => new List<IEventHandlerFactory>());
+            return this._handlerFactories.GetOrAdd(eventType, type => new List<IEventHandlerFactory>());
         }
     }
 }

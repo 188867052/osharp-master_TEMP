@@ -7,10 +7,9 @@
 //  <last-date>2017-09-05 12:02</last-date>
 // -----------------------------------------------------------------------
 
-using OSharp.Entity;
 using System;
 using System.ComponentModel;
-
+using OSharp.Entity;
 
 namespace OSharp.Identity
 {

@@ -9,7 +9,6 @@
 
 using System;
 
-
 namespace OSharp.Timing
 {
     /// <summary>
@@ -23,15 +22,16 @@ namespace OSharp.Timing
         /// </summary>
         public DateTimeRange()
             : this(DateTime.MinValue, DateTime.MaxValue)
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="DateTimeRange"/>类型的新实例
         /// </summary>
         public DateTimeRange(DateTime startTime, DateTime endTime)
         {
-            StartTime = startTime;
-            EndTime = endTime;
+            this.StartTime = startTime;
+            this.EndTime = endTime;
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace OSharp.Timing
                     DayOfWeek.Wednesday,
                     DayOfWeek.Thursday,
                     DayOfWeek.Friday,
-                    DayOfWeek.Saturday
+                    DayOfWeek.Saturday,
                 };
                 int index = Array.IndexOf(weeks, now.DayOfWeek);
                 return new DateTimeRange(now.Date.AddDays(-index - 7), now.Date.AddDays(-index).AddMilliseconds(-1));
@@ -119,7 +119,7 @@ namespace OSharp.Timing
                     DayOfWeek.Wednesday,
                     DayOfWeek.Thursday,
                     DayOfWeek.Friday,
-                    DayOfWeek.Saturday
+                    DayOfWeek.Saturday,
                 };
                 int index = Array.IndexOf(weeks, now.DayOfWeek);
                 return new DateTimeRange(now.Date.AddDays(-index), now.Date.AddDays(7 - index).AddMilliseconds(-1));
@@ -142,7 +142,7 @@ namespace OSharp.Timing
                     DayOfWeek.Wednesday,
                     DayOfWeek.Thursday,
                     DayOfWeek.Friday,
-                    DayOfWeek.Saturday
+                    DayOfWeek.Saturday,
                 };
                 int index = Array.IndexOf(weeks, now.DayOfWeek);
                 return new DateTimeRange(now.Date.AddDays(-index + 7), now.Date.AddDays(14 - index).AddMilliseconds(-1));
@@ -283,7 +283,7 @@ namespace OSharp.Timing
         /// </returns>
         public override string ToString()
         {
-            return string.Format("[{0} - {1}]", StartTime, EndTime);
+            return string.Format("[{0} - {1}]", this.StartTime, this.EndTime);
         }
     }
 }

@@ -11,7 +11,6 @@ using System.Linq;
 
 using OSharp.Extensions;
 
-
 namespace OSharp.Data
 {
     /// <summary>
@@ -30,28 +29,32 @@ namespace OSharp.Data
         /// </summary>
         public OperationResult()
             : this(OperationResultType.NoChanged)
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="OperationResult"/>类型的新实例
         /// </summary>
         public OperationResult(OperationResultType resultType)
             : this(resultType, null, null)
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="OperationResult"/>类型的新实例
         /// </summary>
         public OperationResult(OperationResultType resultType, string message)
             : this(resultType, message, null)
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="OperationResult"/>类型的新实例
         /// </summary>
         public OperationResult(OperationResultType resultType, string message, object data)
             : base(resultType, message, data)
-        { }
+        {
+        }
 
         /// <summary>
         /// 获取 成功的操作结果
@@ -70,14 +73,14 @@ namespace OSharp.Data
         public OperationResult<T> ToOperationResult<T>()
         {
             T data = default(T);
-            if (Data is T variable)
+            if (this.Data is T variable)
             {
                 data = variable;
             }
-            return new OperationResult<T>(ResultType, Message, data);
+
+            return new OperationResult<T>(this.ResultType, this.Message, data);
         }
     }
-
 
     /// <summary>
     /// 泛型版本的业务操作结果信息类，对操作结果进行封装
@@ -95,36 +98,40 @@ namespace OSharp.Data
         /// </summary>
         public OperationResult()
             : this(OperationResultType.NoChanged)
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="OperationResult{TData}"/>类型的新实例
         /// </summary>
         public OperationResult(OperationResultType resultType)
             : this(resultType, null, default(TData))
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="OperationResult{TData}"/>类型的新实例
         /// </summary>
         public OperationResult(OperationResultType resultType, string message)
             : this(resultType, message, default(TData))
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="OperationResult{TData}"/>类型的新实例
         /// </summary>
         public OperationResult(OperationResultType resultType, string message, TData data)
             : base(resultType, message, data)
-        { }
+        {
+        }
 
         /// <summary>
         /// 获取或设置 返回消息
         /// </summary>
         public override string Message
         {
-            get { return _message ?? ResultType.ToDescription(); }
-            set { _message = value; }
+            get { return this._message ?? this.ResultType.ToDescription(); }
+            set { this._message = value; }
         }
 
         /// <summary>
@@ -135,7 +142,7 @@ namespace OSharp.Data
         /// <summary>
         /// 获取 是否成功
         /// </summary>
-        public bool Succeeded => ResultType == OperationResultType.Success;
+        public bool Succeeded => this.ResultType == OperationResultType.Success;
 
         /// <summary>
         /// 获取 是否失败
@@ -144,7 +151,7 @@ namespace OSharp.Data
         {
             get
             {
-                bool contains = new[] { OperationResultType.ValidError, OperationResultType.QueryNull, OperationResultType.Error }.Contains(ResultType);
+                bool contains = new[] { OperationResultType.ValidError, OperationResultType.QueryNull, OperationResultType.Error }.Contains(this.ResultType);
                 return contains;
             }
         }
@@ -155,7 +162,7 @@ namespace OSharp.Data
         /// <returns></returns>
         public OperationResult ToOperationResult()
         {
-            return new OperationResult(ResultType, Message, Data);
+            return new OperationResult(this.ResultType, this.Message, this.Data);
         }
     }
 }

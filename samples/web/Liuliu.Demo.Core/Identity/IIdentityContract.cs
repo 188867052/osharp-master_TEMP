@@ -18,7 +18,6 @@ using Liuliu.Demo.Identity.Entities;
 using OSharp.Data;
 using OSharp.Identity.OAuth2;
 
-
 namespace Liuliu.Demo.Identity
 {
     /// <summary>
@@ -26,25 +25,15 @@ namespace Liuliu.Demo.Identity
     /// </summary>
     public interface IIdentityContract
     {
-        #region 用户信息业务
-
         /// <summary>
         /// 获取 用户信息查询数据集
         /// </summary>
         IQueryable<User> Users { get; }
 
-        #endregion
-
-        #region 角色信息业务
-
         /// <summary>
         /// 获取 角色信息查询数据集
         /// </summary>
         IQueryable<Role> Roles { get; }
-
-        #endregion
-
-        #region 用户角色信息业务
 
         /// <summary>
         /// 获取 用户角色信息查询数据集
@@ -81,10 +70,6 @@ namespace Liuliu.Demo.Identity
         /// <returns>业务操作结果</returns>
         Task<OperationResult> SetUserRoles(int userId, int[] roleIds);
 
-        #endregion
-
-        #region 用户登录信息业务
-
         /// <summary>
         /// 获取 用户登录信息查询数据集
         /// </summary>
@@ -96,10 +81,6 @@ namespace Liuliu.Demo.Identity
         /// <param name="ids">要删除的实体信息编号</param>
         /// <returns>业务操作结果</returns>
         Task<OperationResult> DeleteUserLogins(params Guid[] ids);
-
-        #endregion
-
-        #region 身份认证
 
         /// <summary>
         /// 注册账号
@@ -142,8 +123,5 @@ namespace Liuliu.Demo.Identity
         /// <param name="userId">用户编号</param>
         /// <returns>业务操作结果</returns>
         Task<OperationResult> Logout(int userId);
-
-        #endregion
-
     }
 }

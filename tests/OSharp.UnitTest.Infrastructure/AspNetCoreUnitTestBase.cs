@@ -10,10 +10,10 @@ namespace OSharp.UnitTest.Infrastructure
     {
         protected AspNetCoreUnitTestBase()
         {
-            var builder = CreateWebHostBuilder();
-            Server = CreateTestServer(builder);
-            Client = Server.CreateClient();
-            ServerProvider = Server.Host.Services;
+            var builder = this.CreateWebHostBuilder();
+            this.Server = this.CreateTestServer(builder);
+            this.Client = this.Server.CreateClient();
+            this.ServerProvider = this.Server.Host.Services;
         }
 
         public TestServer Server { get; }

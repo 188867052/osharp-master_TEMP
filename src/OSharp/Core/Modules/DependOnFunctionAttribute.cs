@@ -9,7 +9,6 @@
 
 using System;
 
-
 namespace OSharp.Core.Modules
 {
     /// <summary>
@@ -23,7 +22,7 @@ namespace OSharp.Core.Modules
         /// </summary>
         public DependOnFunctionAttribute(string action)
         {
-            Action = action;
+            this.Action = action;
         }
 
         /// <summary>

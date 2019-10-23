@@ -8,26 +8,18 @@
 // -----------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-
-using OSharp.Audits;
 using OSharp.Collections;
-using OSharp.Core.EntityInfos;
-using OSharp.Core.Functions;
 using OSharp.Data;
-using OSharp.Dependency;
 using OSharp.Exceptions;
-
 
 namespace OSharp.Entity
 {
@@ -77,6 +69,7 @@ namespace OSharp.Entity
             {
                 throw new OsharpException($"参数dbContext类型为“{dbContext.GetType()}”，不能转换为 DbContext");
             }
+
             return context.Database.ExecuteSqlCommand(new RawSqlString(sql), parameters);
         }
 
@@ -89,6 +82,7 @@ namespace OSharp.Entity
             {
                 throw new OsharpException($"参数dbContext类型为“{dbContext.GetType()}”，不能转换为 DbContext");
             }
+
             return context.Database.ExecuteSqlCommandAsync(new RawSqlString(sql), parameters);
         }
 

@@ -11,7 +11,6 @@ using System.ComponentModel;
 
 using OSharp.Identity;
 
-
 namespace Liuliu.Demo.Identity.Entities
 {
     /// <summary>

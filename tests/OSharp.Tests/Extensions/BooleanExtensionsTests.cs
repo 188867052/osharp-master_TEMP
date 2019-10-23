@@ -8,13 +8,11 @@
 
 using Xunit;
 
-
 namespace OSharp.Extensions.Tests
 {
-    
     public class BooleanExtensionsTests
     {
-        [Fact()]
+        [Fact]
         public void ToLowerTest()
         {
             Assert.Equal("true", true.ToLower());

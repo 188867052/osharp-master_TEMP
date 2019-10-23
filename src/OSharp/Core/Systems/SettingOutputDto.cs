@@ -9,7 +9,6 @@
 
 using OSharp.Reflection;
 
-
 namespace OSharp.Core.Systems
 {
     /// <summary>
@@ -22,8 +21,8 @@ namespace OSharp.Core.Systems
         /// </summary>
         public SettingOutputDto(ISetting setting)
         {
-            Setting = setting;
-            SettingTypeName = setting.GetType().GetFullNameWithModule();
+            this.Setting = setting;
+            this.SettingTypeName = setting.GetType().GetFullNameWithModule();
         }
 
         /// <summary>

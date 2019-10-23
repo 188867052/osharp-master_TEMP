@@ -12,7 +12,6 @@ using System.Text;
 using OSharp.Collections;
 using OSharp.Extensions;
 
-
 namespace OSharp.Security
 {
     /// <summary>
@@ -34,8 +33,8 @@ namespace OSharp.Security
             ownPrivateKey.CheckNotNull("ownPrivateKey");
             facePublicKey.CheckNotNull("facePublicKey");
 
-            _ownPrivateKey = ownPrivateKey;
-            _facePublicKey = facePublicKey;
+            this._ownPrivateKey = ownPrivateKey;
+            this._facePublicKey = facePublicKey;
         }
 
         /// <summary>
@@ -48,20 +47,25 @@ namespace OSharp.Security
             data.CheckNotNullOrEmpty("data");
 
             string[] separators = { Separator };
-            //0为AES密钥密文，1为 正文+摘要 的密文
+
+            // 0为AES密钥密文，1为 正文+摘要 的密文
             string[] datas = data.Split(separators, StringSplitOptions.None);
-            //用接收端私钥RSA解密获取AES密钥
-            byte[] keyBytes = RsaHelper.Decrypt(Convert.FromBase64String(datas[0]), _ownPrivateKey);
+
+            // 用接收端私钥RSA解密获取AES密钥
+            byte[] keyBytes = RsaHelper.Decrypt(Convert.FromBase64String(datas[0]), this._ownPrivateKey);
             string key = keyBytes.ToString2();
-            //AES解密获取 正文+摘要 的明文
+
+            // AES解密获取 正文+摘要 的明文
             data = new AesHelper(key, true).Decrypt(datas[1]);
-            //0为正文明文，1为摘要
+
+            // 0为正文明文，1为摘要
             datas = data.Split(separators, StringSplitOptions.None);
             data = datas[0];
-            if (RsaHelper.VerifyData(data, datas[1], _facePublicKey))
+            if (RsaHelper.VerifyData(data, datas[1], this._facePublicKey))
             {
                 return data;
             }
+
             throw new CryptographicException("加密数据在进行解密时校验失败");
         }
 
@@ -74,15 +78,17 @@ namespace OSharp.Security
         {
             data.CheckNotNull("data");
 
-            //获取正文摘要
-            string signData = RsaHelper.SignData(data, _ownPrivateKey);
+            // 获取正文摘要
+            string signData = RsaHelper.SignData(data, this._ownPrivateKey);
             data = new[] { data, signData }.ExpandAndToString(Separator);
-            //使用AES加密 正文+摘要
+
+            // 使用AES加密 正文+摘要
             AesHelper aes = new AesHelper(true);
             data = aes.Encrypt(data);
-            //RSA加密AES密钥
+
+            // RSA加密AES密钥
             byte[] keyBytes = aes.Key.ToBytes();
-            string enDesKey = Convert.ToBase64String(RsaHelper.Encrypt(keyBytes, _facePublicKey));
+            string enDesKey = Convert.ToBase64String(RsaHelper.Encrypt(keyBytes, this._facePublicKey));
             return new[] { enDesKey, data }.ExpandAndToString(Separator);
         }
     }

@@ -7,10 +7,7 @@
 //  <last-date>2017-08-17 2:20</last-date>
 // -----------------------------------------------------------------------
 
-using System;
-
 using OSharp.Reflection;
-
 
 namespace OSharp.Entity
 {
@@ -18,5 +15,6 @@ namespace OSharp.Entity
     /// 定义实体类配置类型查找器
     /// </summary>
     public interface IEntityConfigurationTypeFinder : ITypeFinder
-    { }
+    {
+    }
 }

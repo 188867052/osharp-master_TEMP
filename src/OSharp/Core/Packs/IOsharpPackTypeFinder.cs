@@ -9,12 +9,12 @@
 
 using OSharp.Reflection;
 
-
 namespace OSharp.Core.Packs
 {
     /// <summary>
     /// OSharp模块类型查找器
     /// </summary>
     public interface IOsharpPackTypeFinder : ITypeFinder
-    { }
+    {
+    }
 }

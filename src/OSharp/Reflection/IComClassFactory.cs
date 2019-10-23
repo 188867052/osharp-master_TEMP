@@ -10,13 +10,15 @@
 using System;
 using System.Runtime.InteropServices;
 
-
 namespace OSharp.Reflection
 {
     /// <summary>
     /// Com类型实例工厂
     /// </summary>
-    [ComVisible(true), ComImport, Guid("00000001-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComVisible(true)]
+    [ComImport]
+    [Guid("00000001-0000-0000-C000-000000000046")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IComClassFactory
     {
         /// <summary>

@@ -12,7 +12,6 @@ using Microsoft.Extensions.DependencyInjection;
 using OSharp.Dependency;
 using OSharp.Reflection;
 
-
 namespace OSharp.Mapping
 {
     /// <summary>
@@ -26,6 +25,7 @@ namespace OSharp.Mapping
         /// </summary>
         public MapToAttributeTypeFinder(IAllAssemblyFinder allAssemblyFinder)
             : base(allAssemblyFinder)
-        { }
+        {
+        }
     }
 }

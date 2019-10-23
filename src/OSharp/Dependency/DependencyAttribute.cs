@@ -11,7 +11,6 @@ using System;
 
 using Microsoft.Extensions.DependencyInjection;
 
-
 namespace OSharp.Dependency
 {
     /// <summary>
@@ -25,7 +24,7 @@ namespace OSharp.Dependency
         /// </summary>
         public DependencyAttribute(ServiceLifetime lifetime)
         {
-            Lifetime = lifetime;
+            this.Lifetime = lifetime;
         }
 
         /// <summary>

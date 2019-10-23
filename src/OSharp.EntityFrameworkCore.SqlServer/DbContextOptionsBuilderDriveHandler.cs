@@ -7,14 +7,12 @@
 //  <last-date>2017-08-21 1:07</last-date>
 // -----------------------------------------------------------------------
 
-using System;
 using System.Data.Common;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.Dependency;
-
 
 namespace OSharp.Entity.SqlServer
 {
@@ -42,6 +40,7 @@ namespace OSharp.Entity.SqlServer
             {
                 return builder.UseSqlServer(connectionString, opts => opts.UseRowNumberForPaging());
             }
+
             return builder.UseSqlServer(existingConnection, opts => opts.UseRowNumberForPaging());
         }
     }

@@ -11,13 +11,10 @@
 //  <last-editor>郭明锋</last-editor>
 // -----------------------------------------------------------------------
 
-using System;
-
-using OSharp.Filter;
-
+using System.ComponentModel;
 using Liuliu.Demo.Infos;
 using OSharp.Core.Modules;
-using System.ComponentModel;
+using OSharp.Filter;
 
 namespace Liuliu.Demo.Web.Areas.Admin.Controllers
 {
@@ -32,7 +29,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         public MessageController(IInfosContract infosContract,
             IFilterService filterService)
             : base(infosContract, filterService)
-        { }
+        {
+        }
     }
 
     [ModuleInfo(Position = "Infos2", PositionName = "信息模块2")]
@@ -45,6 +43,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         public Message2Controller(IInfosContract infosContract,
             IFilterService filterService)
             : base(infosContract, filterService)
-        { }
+        {
+        }
     }
 }

@@ -20,7 +20,6 @@ using OSharp.Extensions;
 using OSharp.Json;
 using OSharp.Reflection;
 
-
 namespace OSharp.Core.EntityInfos
 {
     /// <summary>
@@ -31,13 +30,15 @@ namespace OSharp.Core.EntityInfos
         /// <summary>
         /// 获取或设置 实体名称
         /// </summary>
-        [Required, DisplayName("实体名称")]
+        [Required]
+        [DisplayName("实体名称")]
         public string Name { get; set; }
 
         /// <summary>
         /// 获取或设置 实体类型名称
         /// </summary>
-        [Required, DisplayName("实体类型名称")]
+        [Required]
+        [DisplayName("实体类型名称")]
         public string TypeName { get; set; }
 
         /// <summary>
@@ -49,7 +50,8 @@ namespace OSharp.Core.EntityInfos
         /// <summary>
         /// 获取或设置 实体属性信息JSON字符串
         /// </summary>
-        [Required, DisplayName("实体属性信息Json字符串")]
+        [Required]
+        [DisplayName("实体属性信息Json字符串")]
         public string PropertyJson { get; set; }
 
         /// <summary>
@@ -60,11 +62,12 @@ namespace OSharp.Core.EntityInfos
         {
             get
             {
-                if (string.IsNullOrEmpty(PropertyJson) || !PropertyJson.StartsWith("["))
+                if (string.IsNullOrEmpty(this.PropertyJson) || !this.PropertyJson.StartsWith("["))
                 {
                     return new EntityProperty[0];
                 }
-                return PropertyJson.FromJsonString<EntityProperty[]>();
+
+                return this.PropertyJson.FromJsonString<EntityProperty[]>();
             }
         }
 
@@ -76,13 +79,13 @@ namespace OSharp.Core.EntityInfos
         {
             Check.NotNull(entityType, nameof(entityType));
 
-            TypeName = entityType.GetFullNameWithModule();
-            Name = entityType.GetDescription();
-            AuditEnabled = true;
+            this.TypeName = entityType.GetFullNameWithModule();
+            this.Name = entityType.GetDescription();
+            this.AuditEnabled = true;
 
             PropertyInfo[] propertyInfos = entityType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
             string[] exceptNames = { "DeletedTime" };
-            PropertyJson = propertyInfos.Where(m => !exceptNames.Contains(m.Name)
+            this.PropertyJson = propertyInfos.Where(m => !exceptNames.Contains(m.Name)
                     && (m.GetMethod != null && !m.GetMethod.IsVirtual || m.SetMethod != null && !m.SetMethod.IsVirtual))
                 .Select(property =>
                 {
@@ -90,9 +93,10 @@ namespace OSharp.Core.EntityInfos
                     {
                         Name = property.Name,
                         Display = property.GetDescription(),
-                        TypeName = property.PropertyType.FullName
+                        TypeName = property.PropertyType.FullName,
                     };
-                    //枚举类型，获取枚举项作为取值范围
+
+                    // 枚举类型，获取枚举项作为取值范围
                     if (property.PropertyType.IsEnum)
                     {
                         ep.TypeName = typeof(int).FullName;

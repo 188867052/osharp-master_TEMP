@@ -9,7 +9,6 @@
 
 using OSharp.Extensions;
 
-
 namespace OSharp.CodeGeneration.Schema
 {
     /// <summary>
@@ -24,8 +23,8 @@ namespace OSharp.CodeGeneration.Schema
         /// </summary>
         public string SourceCode
         {
-            get => _sourceCode;
-            set => _sourceCode = value.ToHtmlDecode();
+            get => this._sourceCode;
+            set => this._sourceCode = value.ToHtmlDecode();
         }
 
         /// <summary>

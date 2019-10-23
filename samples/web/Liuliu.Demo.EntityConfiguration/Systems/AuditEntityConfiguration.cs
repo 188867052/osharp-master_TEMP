@@ -15,8 +15,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using OSharp.Entity;
 
-
-
 namespace Liuliu.Demo.EntityConfiguration.Systems
 {
     public class AuditEntityConfiguration : EntityTypeConfigurationBase<AuditEntity, Guid>

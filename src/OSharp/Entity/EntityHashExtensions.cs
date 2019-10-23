@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -20,9 +19,7 @@ using Microsoft.Extensions.Logging;
 using OSharp.Collections;
 using OSharp.Core.Data;
 using OSharp.Core.Systems;
-using OSharp.Data;
 using OSharp.Extensions;
-
 
 namespace OSharp.Entity
 {
@@ -41,6 +38,7 @@ namespace OSharp.Entity
             {
                 return false;
             }
+
             string hash = hashes.Select(m => m.GetHash()).ExpandAndToString().ToMd5Hash();
             IKeyValueStore store = provider.GetService<IKeyValueStore>();
             string entityType = hashes[0].GetType().FullName;
@@ -69,6 +67,7 @@ namespace OSharp.Entity
             {
                 sb.Append(property.GetValue(entity));
             }
+
             return sb.ToString().ToMd5Hash();
         }
     }

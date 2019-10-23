@@ -21,7 +21,6 @@ using OSharp.Core.Systems;
 using OSharp.Data;
 using OSharp.Entity;
 
-
 namespace OSharp.Systems
 {
     /// <summary>
@@ -40,14 +39,14 @@ namespace OSharp.Systems
         public KeyValueStore(IRepository<KeyValue, Guid> keyValueRepository,
             IDistributedCache cache)
         {
-            _keyValueRepository = keyValueRepository;
-            _cache = cache;
+            this._keyValueRepository = keyValueRepository;
+            this._cache = cache;
         }
 
         /// <summary>
         /// 获取 键值对数据查询数据集
         /// </summary>
-        public IQueryable<KeyValue> KeyValues => _keyValueRepository.QueryAsNoTracking();
+        public IQueryable<KeyValue> KeyValues => this._keyValueRepository.QueryAsNoTracking();
 
         /// <summary>
         /// 获取或创建设置信息
@@ -61,12 +60,13 @@ namespace OSharp.Systems
             foreach (PropertyInfo property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(m => m.PropertyType == typeof(IKeyValue)))
             {
                 string key = ((KeyValue)property.GetValue(setting)).Key;
-                IKeyValue keyValue = GetKeyValue(key);
+                IKeyValue keyValue = this.GetKeyValue(key);
                 if (keyValue != null)
                 {
                     property.SetValue(setting, keyValue);
                 }
             }
+
             return setting;
         }
 
@@ -79,7 +79,7 @@ namespace OSharp.Systems
             Type type = setting.GetType();
             IKeyValue[] keyValues = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(p => p.PropertyType == typeof(IKeyValue))
                 .Select(p => (IKeyValue)p.GetValue(setting)).ToArray();
-            return await CreateOrUpdateKeyValues(keyValues);
+            return await this.CreateOrUpdateKeyValues(keyValues);
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace OSharp.Systems
         public IKeyValue GetKeyValue(string key)
         {
             const int seconds = 60 * 1000;
-            KeyValue[] pairs = _cache.Get(AllKeyValuesKey, () => _keyValueRepository.QueryAsNoTracking(null, false).ToArray(), seconds);
+            KeyValue[] pairs = this._cache.Get(AllKeyValuesKey, () => this._keyValueRepository.QueryAsNoTracking(null, false).ToArray(), seconds);
             return pairs.FirstOrDefault(m => m.Key == key);
         }
 
@@ -102,7 +102,7 @@ namespace OSharp.Systems
         /// <returns>键值对信息是否存在</returns>
         public Task<bool> CheckKeyValueExists(Expression<Func<KeyValue, bool>> predicate, Guid id = default(Guid))
         {
-            return _keyValueRepository.CheckExistsAsync(predicate, id);
+            return this._keyValueRepository.CheckExistsAsync(predicate, id);
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace OSharp.Systems
         public Task<OperationResult> CreateOrUpdateKeyValue(string key, object value)
         {
             IKeyValue pair = new KeyValue(key, value);
-            return CreateOrUpdateKeyValues(pair);
+            return this.CreateOrUpdateKeyValues(pair);
         }
 
         /// <summary>
@@ -128,22 +128,24 @@ namespace OSharp.Systems
             int count = 0;
             foreach (IKeyValue dto in dtos)
             {
-                KeyValue pair = _keyValueRepository.Query().FirstOrDefault(m => m.Key == dto.Key);
+                KeyValue pair = this._keyValueRepository.Query().FirstOrDefault(m => m.Key == dto.Key);
                 if (pair == null)
                 {
                     pair = new KeyValue(dto.Key, dto.Value);
-                    count += await _keyValueRepository.InsertAsync(pair);
+                    count += await this._keyValueRepository.InsertAsync(pair);
                 }
                 else if (pair.Value != dto.Value)
                 {
                     pair.Value = dto.Value;
-                    count += await _keyValueRepository.UpdateAsync(pair);
+                    count += await this._keyValueRepository.UpdateAsync(pair);
                 }
             }
+
             if (count > 0)
             {
-                await _cache.RemoveAsync(AllKeyValuesKey);
+                await this._cache.RemoveAsync(AllKeyValuesKey);
             }
+
             return OperationResult.Success;
         }
 
@@ -154,11 +156,12 @@ namespace OSharp.Systems
         /// <returns>业务操作结果</returns>
         public async Task<OperationResult> DeleteKeyValues(params Guid[] ids)
         {
-            OperationResult result = await _keyValueRepository.DeleteAsync(ids);
+            OperationResult result = await this._keyValueRepository.DeleteAsync(ids);
             if (result.Succeeded)
             {
-                await _cache.RemoveAsync(AllKeyValuesKey);
+                await this._cache.RemoveAsync(AllKeyValuesKey);
             }
+
             return result;
         }
 
@@ -169,8 +172,8 @@ namespace OSharp.Systems
         /// <returns>业务操作结果</returns>
         public async Task<OperationResult> DeleteKeyValues(string rootKey)
         {
-            Guid[] ids = _keyValueRepository.QueryAsNoTracking(m => m.Key.StartsWith(rootKey)).Select(m => m.Id).ToArray();
-            return await DeleteKeyValues(ids);
+            Guid[] ids = this._keyValueRepository.QueryAsNoTracking(m => m.Key.StartsWith(rootKey)).Select(m => m.Id).ToArray();
+            return await this.DeleteKeyValues(ids);
         }
     }
 }

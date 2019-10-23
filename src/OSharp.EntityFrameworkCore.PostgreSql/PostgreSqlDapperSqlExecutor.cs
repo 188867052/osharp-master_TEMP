@@ -11,7 +11,6 @@ using System.Data;
 
 using Npgsql;
 
-
 namespace OSharp.Entity.PostgreSql
 {
     /// <summary>
@@ -26,7 +25,8 @@ namespace OSharp.Entity.PostgreSql
         /// </summary>
         public PostgreSqlDapperSqlExecutor(IUnitOfWorkManager unitOfWorkManager)
             : base(unitOfWorkManager)
-        { }
+        {
+        }
 
         /// <summary>
         /// 获取 数据库类型

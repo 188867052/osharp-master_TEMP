@@ -7,6 +7,12 @@
 //  <last-date>2018-06-27 4:49</last-date>
 // -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Liuliu.Demo.Common.Dtos;
 using Liuliu.Demo.Identity;
 using Liuliu.Demo.Identity.Dtos;
@@ -29,13 +35,6 @@ using OSharp.Filter;
 using OSharp.Identity;
 using OSharp.Mapping;
 using OSharp.Security;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-
 
 namespace Liuliu.Demo.Web.Areas.Admin.Controllers
 {
@@ -57,11 +56,11 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             ICacheService cacheService,
             IFilterService filterService)
         {
-            _userManager = userManager;
-            _securityManager = securityManager;
-            _identityContract = identityContract;
-            _cacheService = cacheService;
-            _filterService = filterService;
+            this._userManager = userManager;
+            this._securityManager = securityManager;
+            this._identityContract = identityContract;
+            this._cacheService = cacheService;
+            this._filterService = filterService;
         }
 
         /// <summary>
@@ -76,18 +75,18 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             Check.NotNull(request, nameof(request));
             IFunction function = this.GetExecuteFunction();
 
-            Func<User, bool> updateFunc = _filterService.GetDataFilterExpression<User>(null, DataAuthOperation.Update).Compile();
-            Func<User, bool> deleteFunc = _filterService.GetDataFilterExpression<User>(null, DataAuthOperation.Delete).Compile();
-            Expression<Func<User, bool>> predicate = _filterService.GetExpression<User>(request.FilterGroup);
-            var page = _cacheService.ToPageCache(_userManager.Users, predicate, request.PageCondition, m => new
+            Func<User, bool> updateFunc = this._filterService.GetDataFilterExpression<User>(null, DataAuthOperation.Update).Compile();
+            Func<User, bool> deleteFunc = this._filterService.GetDataFilterExpression<User>(null, DataAuthOperation.Delete).Compile();
+            Expression<Func<User, bool>> predicate = this._filterService.GetExpression<User>(request.FilterGroup);
+            var page = this._cacheService.ToPageCache(this._userManager.Users, predicate, request.PageCondition, m => new
             {
                 D = m,
-                Roles = m.UserRoles.Select(n => n.Role.Name)
+                Roles = m.UserRoles.Select(n => n.Role.Name),
             }, function).ToPageResult(data => data.Select(m => new UserOutputDto(m.D)
             {
                 Roles = m.Roles.ToArray(),
                 Updatable = updateFunc(m.D),
-                Deletable = deleteFunc(m.D)
+                Deletable = deleteFunc(m.D),
             }).ToArray());
             return page.ToPageData();
         }
@@ -103,11 +102,11 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         {
             Check.NotNull(group, nameof(group));
             IFunction function = this.GetExecuteFunction();
-            Expression<Func<User, bool>> exp = _filterService.GetExpression<User>(group);
-            ListNode[] nodes = _cacheService.ToCacheArray<User, ListNode>(_userManager.Users, exp, m => new ListNode()
+            Expression<Func<User, bool>> exp = this._filterService.GetExpression<User>(group);
+            ListNode[] nodes = this._cacheService.ToCacheArray<User, ListNode>(this._userManager.Users, exp, m => new ListNode()
             {
                 Id = m.Id,
-                Name = m.NickName
+                Name = m.NickName,
             }, function);
             return nodes;
         }
@@ -130,14 +129,16 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             {
                 User user = dto.MapTo<User>();
                 IdentityResult result = dto.Password.IsMissing()
-                    ? await _userManager.CreateAsync(user)
-                    : await _userManager.CreateAsync(user, dto.Password);
+                    ? await this._userManager.CreateAsync(user)
+                    : await this._userManager.CreateAsync(user, dto.Password);
                 if (!result.Succeeded)
                 {
                     return result.ToOperationResult().ToAjaxResult();
                 }
+
                 names.Add(user.UserName);
             }
+
             return new AjaxResult($"用户“{names.ExpandAndToString()}”创建成功");
         }
 
@@ -157,15 +158,17 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             List<string> names = new List<string>();
             foreach (var dto in dtos)
             {
-                User user = await _userManager.FindByIdAsync(dto.Id.ToString());
+                User user = await this._userManager.FindByIdAsync(dto.Id.ToString());
                 user = dto.MapTo(user);
-                IdentityResult result = await _userManager.UpdateAsync(user);
+                IdentityResult result = await this._userManager.UpdateAsync(user);
                 if (!result.Succeeded)
                 {
                     return result.ToOperationResult().ToAjaxResult();
                 }
+
                 names.Add(user.UserName);
             }
+
             return new AjaxResult($"用户“{names.ExpandAndToString()}”更新成功");
         }
 
@@ -185,14 +188,16 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             List<string> names = new List<string>();
             foreach (int id in ids)
             {
-                User user = await _userManager.FindByIdAsync(id.ToString());
-                IdentityResult result = await _userManager.DeleteAsync(user);
+                User user = await this._userManager.FindByIdAsync(id.ToString());
+                IdentityResult result = await this._userManager.DeleteAsync(user);
                 if (!result.Succeeded)
                 {
                     return result.ToOperationResult().ToAjaxResult();
                 }
+
                 names.Add(user.UserName);
             }
+
             return new AjaxResult($"用户“{names.ExpandAndToString()}”删除成功");
         }
 
@@ -209,7 +214,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         [Description("设置角色")]
         public async Task<AjaxResult> SetRoles(UserSetRoleDto dto)
         {
-            OperationResult result = await _identityContract.SetUserRoles(dto.UserId, dto.RoleIds);
+            OperationResult result = await this._identityContract.SetUserRoles(dto.UserId, dto.RoleIds);
             return result.ToAjaxResult();
         }
 
@@ -226,7 +231,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         [Description("设置模块")]
         public async Task<AjaxResult> SetModules(UserSetModuleDto dto)
         {
-            OperationResult result = await _securityManager.SetUserModules(dto.UserId, dto.ModuleIds);
+            OperationResult result = await this._securityManager.SetUserModules(dto.UserId, dto.ModuleIds);
             return result.ToAjaxResult();
         }
     }

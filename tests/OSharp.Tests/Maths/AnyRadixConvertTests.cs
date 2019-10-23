@@ -6,7 +6,7 @@ namespace OSharp.Maths.Tests
 {
     public class AnyRadixConvertTests
     {
-        [Fact()]
+        [Fact]
         public void X2HTest()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => AnyRadixConvert.X2H("123", 0));
@@ -19,7 +19,7 @@ namespace OSharp.Maths.Tests
             Assert.Equal(10UL, AnyRadixConvert.X2H("A", 16));
         }
 
-        [Fact()]
+        [Fact]
         public void H2XTest()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => AnyRadixConvert.H2X(123UL, 0));
@@ -31,7 +31,7 @@ namespace OSharp.Maths.Tests
             Assert.Equal("A", AnyRadixConvert.H2X(10, 16));
         }
 
-        [Fact()]
+        [Fact]
         public void X2XTest()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => AnyRadixConvert.X2X("0", 0, 10));
@@ -45,7 +45,7 @@ namespace OSharp.Maths.Tests
             Assert.Equal("256", AnyRadixConvert.X2X("100", 16, 10));
         }
 
-        [Fact()]
+        [Fact]
         public void _10To16Test()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => AnyRadixConvert._10To16(-1));
@@ -55,7 +55,7 @@ namespace OSharp.Maths.Tests
             Assert.Equal("064", AnyRadixConvert._10To16(100));
         }
 
-        [Fact()]
+        [Fact]
         public void _16To10Test()
         {
             Assert.Equal(0, AnyRadixConvert._16To10("0"));

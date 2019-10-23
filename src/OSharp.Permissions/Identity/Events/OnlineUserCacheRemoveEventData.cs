@@ -9,7 +9,6 @@
 
 using OSharp.EventBuses;
 
-
 namespace OSharp.Identity.Events
 {
     /// <summary>

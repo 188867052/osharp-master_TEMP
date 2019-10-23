@@ -12,7 +12,6 @@ using Liuliu.Demo.Security.Entities;
 using OSharp.Entity;
 using OSharp.Mapping;
 
-
 namespace Liuliu.Demo.Security.Dtos
 {
     /// <summary>

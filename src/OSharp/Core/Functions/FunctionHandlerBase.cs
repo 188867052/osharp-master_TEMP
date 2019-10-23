@@ -22,7 +22,6 @@ using OSharp.Entity;
 using OSharp.Exceptions;
 using OSharp.Reflection;
 
-
 namespace OSharp.Core.Functions
 {
     /// <summary>
@@ -39,8 +38,8 @@ namespace OSharp.Core.Functions
         /// </summary>
         protected FunctionHandlerBase(IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
-            Logger = serviceProvider.GetLogger(GetType());
+            this._serviceProvider = serviceProvider;
+            this.Logger = serviceProvider.GetLogger(this.GetType());
         }
 
         /// <summary>
@@ -63,18 +62,18 @@ namespace OSharp.Core.Functions
         /// </summary>
         public void Initialize()
         {
-            Check.NotNull(FunctionTypeFinder, nameof(FunctionTypeFinder));
+            Check.NotNull(this.FunctionTypeFinder, nameof(this.FunctionTypeFinder));
 
-            Type[] functionTypes = FunctionTypeFinder.FindAll(true);
-            TFunction[] functions = GetFunctions(functionTypes);
-            Logger.LogInformation($"功能信息初始化，共找到{functions.Length}个功能信息");
+            Type[] functionTypes = this.FunctionTypeFinder.FindAll(true);
+            TFunction[] functions = this.GetFunctions(functionTypes);
+            this.Logger.LogInformation($"功能信息初始化，共找到{functions.Length}个功能信息");
 
-            _serviceProvider.ExecuteScopedWork(provider =>
+            this._serviceProvider.ExecuteScopedWork(provider =>
             {
-                SyncToDatabase(provider, functions);
+                this.SyncToDatabase(provider, functions);
             });
 
-            RefreshCache();
+            this.RefreshCache();
         }
 
         /// <summary>
@@ -86,11 +85,12 @@ namespace OSharp.Core.Functions
         /// <returns>功能信息</returns>
         public IFunction GetFunction(string area, string controller, string action)
         {
-            if (_functions.Count == 0)
+            if (this._functions.Count == 0)
             {
-                RefreshCache();
+                this.RefreshCache();
             }
-            return _functions.FirstOrDefault(m =>
+
+            return this._functions.FirstOrDefault(m =>
                 string.Equals(m.Area, area, StringComparison.OrdinalIgnoreCase)
                 && string.Equals(m.Controller, controller, StringComparison.OrdinalIgnoreCase)
                 && string.Equals(m.Action, action, StringComparison.OrdinalIgnoreCase));
@@ -101,10 +101,10 @@ namespace OSharp.Core.Functions
         /// </summary>
         public void RefreshCache()
         {
-            _serviceProvider.ExecuteScopedWork(provider =>
+            this._serviceProvider.ExecuteScopedWork(provider =>
             {
-                _functions.Clear();
-                _functions.AddRange(GetFromDatabase(provider));
+                this._functions.Clear();
+                this._functions.AddRange(this.GetFromDatabase(provider));
             });
         }
 
@@ -113,7 +113,7 @@ namespace OSharp.Core.Functions
         /// </summary>
         public void ClearCache()
         {
-            _functions.Clear();
+            this._functions.Clear();
         }
 
         /// <summary>
@@ -126,30 +126,35 @@ namespace OSharp.Core.Functions
             List<TFunction> functions = new List<TFunction>();
             foreach (Type type in functionTypes.OrderBy(m => m.FullName))
             {
-                TFunction controller = GetFunction(type);
+                TFunction controller = this.GetFunction(type);
                 if (controller == null || type.HasAttribute<NonFunctionAttribute>())
                 {
                     continue;
                 }
-                if (!HasPickup(functions, controller))
+
+                if (!this.HasPickup(functions, controller))
                 {
                     functions.Add(controller);
                 }
-                MethodInfo[] methods = MethodInfoFinder.FindAll(type);
+
+                MethodInfo[] methods = this.MethodInfoFinder.FindAll(type);
                 foreach (MethodInfo method in methods)
                 {
-                    TFunction action = GetFunction(controller, method);
+                    TFunction action = this.GetFunction(controller, method);
                     if (action == null)
                     {
                         continue;
                     }
-                    if (IsIgnoreMethod(action, method, functions))
+
+                    if (this.IsIgnoreMethod(action, method, functions))
                     {
                         continue;
                     }
+
                     functions.Add(action);
                 }
             }
+
             return functions.ToArray();
         }
 
@@ -210,7 +215,7 @@ namespace OSharp.Core.Functions
         /// <returns></returns>
         protected virtual bool IsIgnoreMethod(TFunction action, MethodInfo method, IEnumerable<TFunction> functions)
         {
-            TFunction exist = GetFunction(functions, action.Area, action.Controller, action.Action, action.Name);
+            TFunction exist = this.GetFunction(functions, action.Area, action.Controller, action.Action, action.Name);
             return exist != null && method.HasAttribute<NonFunctionAttribute>();
         }
 
@@ -230,32 +235,33 @@ namespace OSharp.Core.Functions
             IRepository<TFunction, Guid> repository = scopedProvider.GetService<IRepository<TFunction, Guid>>();
             if (repository == null)
             {
-                Logger.LogWarning("初始化功能数据时，IRepository<,>的服务未找到，请初始化 EntityFrameworkCoreModule 模块");
+                this.Logger.LogWarning("初始化功能数据时，IRepository<,>的服务未找到，请初始化 EntityFrameworkCoreModule 模块");
                 return;
             }
 
-            if (!functions.CheckSyncByHash(scopedProvider, Logger))
+            if (!functions.CheckSyncByHash(scopedProvider, this.Logger))
             {
-                Logger.LogInformation("同步功能数据时，数据签名与上次相同，取消同步");
+                this.Logger.LogInformation("同步功能数据时，数据签名与上次相同，取消同步");
                 return;
             }
 
             TFunction[] dbItems = repository.Query(null, false).ToArray();
 
-            //删除的功能
+            // 删除的功能
             TFunction[] removeItems = dbItems.Except(functions,
                 EqualityHelper<TFunction>.CreateComparer(m => m.Area + m.Controller + m.Action)).ToArray();
             int removeCount = removeItems.Length;
-            //todo：由于外键关联不能物理删除的实体，需要实现逻辑删除
+
+            // todo：由于外键关联不能物理删除的实体，需要实现逻辑删除
             repository.Delete(removeItems);
 
-            //新增的功能
+            // 新增的功能
             TFunction[] addItems = functions.Except(dbItems,
                 EqualityHelper<TFunction>.CreateComparer(m => m.Area + m.Controller + m.Action)).ToArray();
             int addCount = addItems.Length;
             repository.Insert(addItems);
 
-            //更新的功能信息
+            // 更新的功能信息
             int updateCount = 0;
             foreach (TFunction item in dbItems.Except(removeItems))
             {
@@ -272,32 +278,38 @@ namespace OSharp.Core.Functions
                 {
                     throw new OsharpException($"发现多个“{item.Area}-{item.Controller}-{item.Action}”的功能信息，不允许重名");
                 }
+
                 if (function == null)
                 {
                     continue;
                 }
+
                 if (!string.Equals(item.Name, function.Name, StringComparison.OrdinalIgnoreCase))
                 {
                     item.Name = function.Name;
                     isUpdate = true;
                 }
+
                 if (item.IsAjax != function.IsAjax)
                 {
                     item.IsAjax = function.IsAjax;
                     isUpdate = true;
                 }
+
                 if (!item.IsAccessTypeChanged && item.AccessType != function.AccessType)
                 {
                     item.AccessType = function.AccessType;
                     isUpdate = true;
                 }
+
                 if (isUpdate)
                 {
                     repository.Update(item);
                     updateCount++;
-                    Logger.LogDebug($"更新功能“{function.Name}({function.Area}/{function.Controller}/{function.Action})”");
+                    this.Logger.LogDebug($"更新功能“{function.Name}({function.Area}/{function.Controller}/{function.Action})”");
                 }
             }
+
             repository.UnitOfWork.Commit();
             if (removeCount + addCount + updateCount > 0)
             {
@@ -306,23 +318,28 @@ namespace OSharp.Core.Functions
                 {
                     foreach (TFunction function in addItems)
                     {
-                        Logger.LogDebug($"新增功能“{function.Name}({function.Area}/{function.Controller}/{function.Action})”");
+                        this.Logger.LogDebug($"新增功能“{function.Name}({function.Area}/{function.Controller}/{function.Action})”");
                     }
+
                     msg += "，添加功能信息 " + addCount + " 个";
                 }
+
                 if (updateCount > 0)
                 {
                     msg += "，更新功能信息 " + updateCount + " 个";
                 }
+
                 if (removeCount > 0)
                 {
                     foreach (TFunction function in removeItems)
                     {
-                        Logger.LogDebug($"更新功能“{function.Name}({function.Area}/{function.Controller}/{function.Action})”");
+                        this.Logger.LogDebug($"更新功能“{function.Name}({function.Area}/{function.Controller}/{function.Action})”");
                     }
+
                     msg += "，移除功能信息 " + removeCount + " 个";
                 }
-                Logger.LogInformation(msg);
+
+                this.Logger.LogInformation(msg);
             }
         }
 
@@ -337,8 +354,8 @@ namespace OSharp.Core.Functions
             {
                 return new TFunction[0];
             }
+
             return repository.QueryAsNoTracking(null, false).ToArray();
         }
-
     }
 }

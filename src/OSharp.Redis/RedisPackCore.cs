@@ -15,10 +15,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 using OSharp.Core.Packs;
-using OSharp.Data;
 using OSharp.Exceptions;
 using OSharp.Extensions;
-
 
 namespace OSharp.Redis
 {
@@ -42,8 +40,8 @@ namespace OSharp.Redis
         public override IServiceCollection AddServices(IServiceCollection services)
         {
             IConfiguration configuration = services.GetConfiguration();
-            _enabled = configuration["OSharp:Redis:Enabled"].CastTo(false);
-            if (!_enabled)
+            this._enabled = configuration["OSharp:Redis:Enabled"].CastTo(false);
+            if (!this._enabled)
             {
                 return services;
             }
@@ -53,6 +51,7 @@ namespace OSharp.Redis
             {
                 throw new OsharpException("配置文件中Redis节点的Configuration不能为空");
             }
+
             string name = configuration["OSharp:Redis:InstanceName"].CastTo("RedisName");
 
             services.RemoveAll(typeof(IDistributedCache));
@@ -71,7 +70,7 @@ namespace OSharp.Redis
         /// <param name="provider">服务提供者</param>
         public override void UsePack(IServiceProvider provider)
         {
-            IsEnabled = _enabled;
+            this.IsEnabled = this._enabled;
         }
     }
 }

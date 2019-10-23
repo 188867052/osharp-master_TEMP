@@ -8,9 +8,7 @@
 // -----------------------------------------------------------------------
 
 using AutoMapper.Configuration;
-
 using OSharp.Dependency;
-
 
 namespace OSharp.AutoMapper
 {

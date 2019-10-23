@@ -15,7 +15,6 @@ using OSharp.Entity;
 using OSharp.Extensions;
 using OSharp.Filter;
 
-
 namespace OSharp.Security
 {
     /// <summary>
@@ -49,11 +48,12 @@ namespace OSharp.Security
         {
             get
             {
-                if (FilterGroupJson.IsNullOrEmpty())
+                if (this.FilterGroupJson.IsNullOrEmpty())
                 {
                     return null;
                 }
-                return FilterGroupJson.FromJsonString<FilterGroup>();
+
+                return this.FilterGroupJson.FromJsonString<FilterGroup>();
             }
         }
 

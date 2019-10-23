@@ -2,7 +2,6 @@
 
 using Xunit;
 
-
 namespace OSharp.Develop.Tests
 {
     public class CodeRamerTests
@@ -18,6 +17,7 @@ namespace OSharp.Develop.Tests
                 {
                     sum += i;
                 }
+
                 Console.Write($"sum: {sum}, ");
             });
         }

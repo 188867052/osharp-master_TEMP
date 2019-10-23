@@ -14,7 +14,6 @@ using Shouldly;
 
 using Xunit;
 
-
 namespace OSharp.Tests.Security
 {
     public class RsaHelperTests
@@ -25,12 +24,12 @@ namespace OSharp.Tests.Security
             string source = "admin";
             RsaHelper rsa = new RsaHelper();
 
-            //byte[]
+            // byte[]
             byte[] sourceBytes = source.ToBytes();
             byte[] enBytes = rsa.Encrypt(sourceBytes);
             rsa.Decrypt(enBytes).ShouldBe(sourceBytes);
 
-            //string
+            // string
             string enstr = rsa.Encrypt(source);
             rsa.Decrypt(enstr).ShouldBe(source);
         }

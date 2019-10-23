@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 
 using OSharp.Data;
 
-
 namespace OSharp.Log4Net
 {
     /// <summary>
@@ -21,7 +20,7 @@ namespace OSharp.Log4Net
         /// </summary>
         public Log4NetLogger(string loggerRepository, string name)
         {
-            _log = LogManager.GetLogger(loggerRepository, name);
+            this._log = LogManager.GetLogger(loggerRepository, name);
         }
 
         /// <summary>Writes a log entry.</summary>
@@ -32,41 +31,43 @@ namespace OSharp.Log4Net
         /// <param name="formatter">Function to create a <c>string</c> message of the <paramref name="state" /> and <paramref name="exception" />.</param>
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
-            if (!IsEnabled(logLevel))
+            if (!this.IsEnabled(logLevel))
             {
                 return;
             }
+
             Check.NotNull(formatter, nameof(formatter));
             string message = null;
             if (formatter != null)
             {
                 message = formatter(state, exception);
             }
+
             if (!string.IsNullOrEmpty(message) || exception != null)
             {
                 switch (logLevel)
                 {
                     case LogLevel.Trace:
                     case LogLevel.Debug:
-                        _log.Debug(message);
+                        this._log.Debug(message);
                         break;
                     case LogLevel.Information:
-                        _log.Info(message);
+                        this._log.Info(message);
                         break;
                     case LogLevel.Warning:
-                        _log.Warn(message);
+                        this._log.Warn(message);
                         break;
                     case LogLevel.Error:
-                        _log.Error(message, exception);
+                        this._log.Error(message, exception);
                         break;
                     case LogLevel.Critical:
-                        _log.Fatal(message, exception);
+                        this._log.Fatal(message, exception);
                         break;
                     case LogLevel.None:
                         break;
                     default:
-                        _log.Warn($"遇到未知的日志级别 {logLevel}, 使用Info级别写入日志。");
-                        _log.Info(message, exception);
+                        this._log.Warn($"遇到未知的日志级别 {logLevel}, 使用Info级别写入日志。");
+                        this._log.Info(message, exception);
                         break;
                 }
             }
@@ -83,15 +84,15 @@ namespace OSharp.Log4Net
             {
                 case LogLevel.Trace:
                 case LogLevel.Debug:
-                    return _log.IsDebugEnabled;
+                    return this._log.IsDebugEnabled;
                 case LogLevel.Information:
-                    return _log.IsInfoEnabled;
+                    return this._log.IsInfoEnabled;
                 case LogLevel.Warning:
-                    return _log.IsWarnEnabled;
+                    return this._log.IsWarnEnabled;
                 case LogLevel.Error:
-                    return _log.IsErrorEnabled;
+                    return this._log.IsErrorEnabled;
                 case LogLevel.Critical:
-                    return _log.IsFatalEnabled;
+                    return this._log.IsFatalEnabled;
                 case LogLevel.None:
                     return false;
                 default:

@@ -9,7 +9,6 @@
 
 using System;
 
-
 namespace OSharp.EventBuses.Internal
 {
     /// <summary>
@@ -24,8 +23,8 @@ namespace OSharp.EventBuses.Internal
         /// </summary>
         public EventHandlerDisposeWrapper(IEventHandler eventHandler, Action disposeAction = null)
         {
-            _disposeAction = disposeAction;
-            EventHandler = eventHandler;
+            this._disposeAction = disposeAction;
+            this.EventHandler = eventHandler;
         }
 
         /// <summary>
@@ -36,7 +35,7 @@ namespace OSharp.EventBuses.Internal
         /// <summary>释放资源.</summary>
         public void Dispose()
         {
-            _disposeAction?.Invoke();
+            this._disposeAction?.Invoke();
         }
     }
 }

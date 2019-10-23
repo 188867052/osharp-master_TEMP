@@ -9,7 +9,6 @@
 
 using System.Threading;
 
-
 namespace OSharp.Threading
 {
     /// <summary>

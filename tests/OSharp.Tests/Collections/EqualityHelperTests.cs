@@ -2,12 +2,11 @@
 using System.Linq;
 using Xunit;
 
-
 namespace OSharp.Collections.Tests
 {
     public class EqualityHelperTests
     {
-        [Fact()]
+        [Fact]
         public void CreateComparerTest()
         {
             List<int> list1 = new List<int>();
@@ -15,11 +14,13 @@ namespace OSharp.Collections.Tests
             {
                 list1.Add(i);
             }
+
             List<int> list2 = new List<int>();
             for (int i = 50; i < 150; i++)
             {
                 list2.Add(i);
             }
+
             IEqualityComparer<int> comparer = EqualityHelper<int>.CreateComparer(m => m);
             List<int> list3 = list1.Intersect(list2, comparer).ToList();
             Assert.Equal(50, list3.Count);
@@ -31,8 +32,6 @@ namespace OSharp.Collections.Tests
             Assert.Equal(49, list4.Max());
 
             EqualityHelper<int>.CreateComparer(m => m, comparer);
-
         }
-
     }
 }

@@ -15,7 +15,6 @@ using System.Linq.Expressions;
 
 using OSharp.Reflection;
 
-
 namespace OSharp.Caching
 {
     internal class LocalCollectionExpressionVisitor : ExpressionVisitor
@@ -24,8 +23,6 @@ namespace OSharp.Caching
         {
             return new LocalCollectionExpressionVisitor().Visit(expression);
         }
-
-        #region Overrides of ExpressionVisitor
 
         /// <summary>
         /// Visits the children of the <see cref="T:System.Linq.Expressions.MethodCallExpression"/>.
@@ -48,7 +45,7 @@ namespace OSharp.Caching
                 .Select(p => new
                 {
                     p.o.m.Arg,
-                    Replacement = Expression.Constant("{" + string.Join("|", (IEnumerable)((ConstantExpression)p.o.m.Arg).Value) + "}")
+                    Replacement = Expression.Constant("{" + string.Join("|", (IEnumerable)((ConstantExpression)p.o.m.Arg).Value) + "}"),
                 }).ToList();
 
             if (replacements.Any())
@@ -67,7 +64,5 @@ namespace OSharp.Caching
 
             return base.VisitMethodCall(node);
         }
-
-        #endregion
     }
 }

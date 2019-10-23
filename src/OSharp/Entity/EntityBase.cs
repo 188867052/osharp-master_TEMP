@@ -14,7 +14,6 @@ using OSharp.Data;
 using OSharp.Extensions;
 using OSharp.Reflection;
 
-
 namespace OSharp.Entity
 {
     /// <summary>
@@ -29,7 +28,7 @@ namespace OSharp.Entity
         {
             if (typeof(TKey) == typeof(Guid))
             {
-                Id = CombGuid.NewGuid().CastTo<TKey>();
+                this.Id = CombGuid.NewGuid().CastTo<TKey>();
             }
         }
 
@@ -50,11 +49,13 @@ namespace OSharp.Entity
             {
                 return false;
             }
+
             if (!(obj is EntityBase<TKey> entity))
             {
                 return false;
             }
-            return IsKeyEqual(entity.Id, Id);
+
+            return IsKeyEqual(entity.Id, this.Id);
         }
 
         /// <summary>
@@ -66,6 +67,7 @@ namespace OSharp.Entity
             {
                 return true;
             }
+
             if (id1 == null || id2 == null)
             {
                 return false;
@@ -76,6 +78,7 @@ namespace OSharp.Entity
             {
                 return id1.Equals(id2);
             }
+
             return Equals(id1, id2);
         }
 
@@ -89,11 +92,12 @@ namespace OSharp.Entity
         /// </returns>
         public override int GetHashCode()
         {
-            if (Id == null)
+            if (this.Id == null)
             {
                 return 0;
             }
-            return Id.ToString().GetHashCode();
+
+            return this.Id.ToString().GetHashCode();
         }
     }
 }

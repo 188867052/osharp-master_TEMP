@@ -13,5 +13,6 @@ namespace Liuliu.Demo.Systems
     /// 业务实现：系统模块
     /// </summary>
     public class SystemsService
-    { }
+    {
+    }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-
 namespace OSharp.Extensions
 {
     /// <summary>
@@ -38,6 +37,7 @@ namespace OSharp.Extensions
             {
                 throw new InvalidOperationException();
             }
+
             Array array = Enum.GetValues(type);
             int index = random.Next(array.GetLowerBound(0), array.GetUpperBound(0) + 1);
             return (T)array.GetValue(index);
@@ -55,6 +55,7 @@ namespace OSharp.Extensions
             {
                 throw new ArgumentOutOfRangeException("length");
             }
+
             byte[] data = new byte[length];
             random.NextBytes(data);
             return data;
@@ -107,6 +108,7 @@ namespace OSharp.Extensions
             {
                 throw new ArgumentOutOfRangeException("length");
             }
+
             char[] pattern = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
             string result = "";
             int n = pattern.Length;
@@ -115,6 +117,7 @@ namespace OSharp.Extensions
                 int rnd = random.Next(0, n);
                 result += pattern[rnd];
             }
+
             return result;
         }
 
@@ -130,8 +133,9 @@ namespace OSharp.Extensions
             {
                 throw new ArgumentOutOfRangeException("length");
             }
+
             char[] pattern = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
-                'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+                'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', };
             string result = "";
             int n = pattern.Length;
             for (int i = 0; i < length; i++)
@@ -139,6 +143,7 @@ namespace OSharp.Extensions
                 int rnd = random.Next(0, n);
                 result += pattern[rnd];
             }
+
             return result;
         }
 
@@ -154,9 +159,10 @@ namespace OSharp.Extensions
             {
                 throw new ArgumentOutOfRangeException("length");
             }
+
             char[] pattern = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
-                'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+                'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', };
             string result = "";
             int n = pattern.Length;
             for (int i = 0; i < length; i++)
@@ -164,6 +170,7 @@ namespace OSharp.Extensions
                 int rnd = random.Next(0, n);
                 result += pattern[rnd];
             }
+
             return result;
         }
 
@@ -179,6 +186,7 @@ namespace OSharp.Extensions
             {
                 name += random.NextItem(Mings);
             }
+
             return xing + name;
         }
 
@@ -227,15 +235,19 @@ namespace OSharp.Extensions
             {
                 areaCodes = AreaCodes;
             }
-            //地区码
+
+            // 地区码
             string areaCode = random.NextItem(areaCodes);
-            //生日
+
+            // 生日
             DateTime beginTime = DateTime.Now.AddYears(-15);
             DateTime endTime = beginTime.AddYears(-30);
             string birthday = random.NextDateTime(beginTime, endTime).ToString("yyyyMMdd");
-            //顺序号
+
+            // 顺序号
             string order = random.Next(0, 999).ToString("D3");
-            //校验码，根据前面17位号码，计算最后一个校验位，也可用于身份证校验，乘以权重之后求和，最后除以11求余，根据余数映射字符
+
+            // 校验码，根据前面17位号码，计算最后一个校验位，也可用于身份证校验，乘以权重之后求和，最后除以11求余，根据余数映射字符
             int[] weights = { 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 };
             string id17 = $"{areaCode}{birthday}{order}";
             string[] chars = id17.ToCharArray().Select(m => m.ToString()).ToArray();
@@ -245,8 +257,9 @@ namespace OSharp.Extensions
                 int num = int.Parse(chars[i]);
                 sum += num * weights[i];
             }
+
             int mod = sum % 11;
-            string vCode = "10X98765432";//检验码字符串
+            string vCode = "10X98765432";// 检验码字符串
             string last = vCode.ToCharArray().ElementAt(mod).ToString();
             return id17 + last;
         }
@@ -266,6 +279,7 @@ namespace OSharp.Extensions
             {
                 return source.ToList();
             }
+
             List<T> result = new List<T>();
             while (result.Count < count)
             {
@@ -274,8 +288,10 @@ namespace OSharp.Extensions
                 {
                     continue;
                 }
+
                 result.Add(item);
             }
+
             return result;
         }
 
@@ -295,6 +311,7 @@ namespace OSharp.Extensions
             {
                 source.Add(i);
             }
+
             return random.NextItems(source.ToArray(), count, excepts);
         }
     }

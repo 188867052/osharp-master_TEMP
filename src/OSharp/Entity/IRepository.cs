@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 
 using OSharp.Data;
 
-
 namespace OSharp.Entity
 {
     /// <summary>
@@ -30,8 +29,6 @@ namespace OSharp.Entity
         /// 获取 当前单元操作对象
         /// </summary>
         IUnitOfWork UnitOfWork { get; }
-
-        #region 同步方法
 
         /// <summary>
         /// 插入实体
@@ -132,7 +129,7 @@ namespace OSharp.Entity
         /// <param name="predicate">数据查询谓语表达式</param>
         /// <returns>符合条件的实体，不存在时返回null</returns>
         TEntity GetFirst(Expression<Func<TEntity, bool>> predicate);
-        
+
         /// <summary>
         /// 查找第一个符合条件的数据
         /// </summary>
@@ -196,10 +193,6 @@ namespace OSharp.Entity
         /// <param name="includePropertySelectors">要Include操作的属性表达式</param>
         /// <returns>符合条件的数据集</returns>
         IQueryable<TEntity> Query(params Expression<Func<TEntity, object>>[] includePropertySelectors);
-
-        #endregion
-
-        #region 异步方法
 
         /// <summary>
         /// 异步插入实体
@@ -293,7 +286,5 @@ namespace OSharp.Entity
         /// <param name="key">实体主键</param>
         /// <returns>符合主键的实体，不存在时返回null</returns>
         Task<TEntity> GetAsync(TKey key);
-
-        #endregion
     }
 }

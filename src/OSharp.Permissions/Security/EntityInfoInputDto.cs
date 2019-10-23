@@ -10,7 +10,6 @@
 using OSharp.Core.EntityInfos;
 using OSharp.Mapping;
 
-
 namespace OSharp.Security
 {
     /// <summary>
@@ -18,5 +17,6 @@ namespace OSharp.Security
     /// </summary>
     [MapTo(typeof(EntityInfo))]
     public class EntityInfoInputDto : EntityInfoInputDtoBase
-    { }
+    {
+    }
 }

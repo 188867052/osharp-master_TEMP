@@ -17,7 +17,6 @@ using OSharp.Core.Packs;
 
 using StackExchange.Profiling;
 
-
 namespace OSharp.MiniProfiler
 {
     /// <summary>
@@ -44,7 +43,7 @@ namespace OSharp.MiniProfiler
         /// <returns></returns>
         public override IServiceCollection AddServices(IServiceCollection services)
         {
-            Action<MiniProfilerOptions> miniProfilerAction = GetMiniProfilerAction(services);
+            Action<MiniProfilerOptions> miniProfilerAction = this.GetMiniProfilerAction(services);
 
             services.AddMiniProfiler(miniProfilerAction).AddEntityFramework();
 
@@ -58,7 +57,7 @@ namespace OSharp.MiniProfiler
         public override void UsePack(IApplicationBuilder app)
         {
             app.UseMiniProfiler();
-            IsEnabled = true;
+            this.IsEnabled = true;
         }
 
         /// <summary>

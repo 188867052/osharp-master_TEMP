@@ -9,7 +9,6 @@
 
 using System;
 
-
 namespace OSharp.Reflection
 {
     /// <summary>

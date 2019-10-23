@@ -2,7 +2,6 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using OSharp.Core.Packs;
 
-
 namespace OSharp.UnitTest.Infrastructure
 {
     public class AppUnitTestBase
@@ -14,7 +13,7 @@ namespace OSharp.UnitTest.Infrastructure
             services.AddOSharp<OsharpPackManager>();
             IServiceProvider provider = services.BuildServiceProvider();
             provider.UseOsharp();
-            ServiceProvider = provider;
+            this.ServiceProvider = provider;
         }
 
         /// <summary>

@@ -11,7 +11,6 @@ using System.Security.Principal;
 
 using OSharp.Core.Functions;
 
-
 namespace OSharp.Security
 {
     /// <summary>

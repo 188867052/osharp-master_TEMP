@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.Dependency;
 
-
 namespace OSharp.AspNetCore
 {
     /// <summary>
@@ -31,18 +30,18 @@ namespace OSharp.AspNetCore
         /// </summary>
         public RequestScopedServiceResolver(IHttpContextAccessor httpContextAccessor)
         {
-            _httpContextAccessor = httpContextAccessor;
+            this._httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
         /// 获取 是否可解析
         /// </summary>
-        public bool ResolveEnabled => _httpContextAccessor.HttpContext != null;
+        public bool ResolveEnabled => this._httpContextAccessor.HttpContext != null;
 
         /// <summary>
         /// 获取 <see cref="ServiceLifetime.Scoped"/>生命周期的服务提供者
         /// </summary>
-        public IServiceProvider ScopedProvider => _httpContextAccessor.HttpContext.RequestServices;
+        public IServiceProvider ScopedProvider => this._httpContextAccessor.HttpContext.RequestServices;
 
         /// <summary>
         /// 获取指定服务类型的实例
@@ -51,7 +50,7 @@ namespace OSharp.AspNetCore
         /// <returns></returns>
         public T GetService<T>()
         {
-            return _httpContextAccessor.HttpContext.RequestServices.GetService<T>();
+            return this._httpContextAccessor.HttpContext.RequestServices.GetService<T>();
         }
 
         /// <summary>
@@ -61,7 +60,7 @@ namespace OSharp.AspNetCore
         /// <returns></returns>
         public object GetService(Type serviceType)
         {
-            return _httpContextAccessor.HttpContext.RequestServices.GetService(serviceType);
+            return this._httpContextAccessor.HttpContext.RequestServices.GetService(serviceType);
         }
 
         /// <summary>
@@ -71,7 +70,7 @@ namespace OSharp.AspNetCore
         /// <returns></returns>
         public IEnumerable<T> GetServices<T>()
         {
-            return _httpContextAccessor.HttpContext.RequestServices.GetServices<T>();
+            return this._httpContextAccessor.HttpContext.RequestServices.GetServices<T>();
         }
 
         /// <summary>
@@ -81,7 +80,7 @@ namespace OSharp.AspNetCore
         /// <returns></returns>
         public IEnumerable<object> GetServices(Type serviceType)
         {
-            return _httpContextAccessor.HttpContext.RequestServices.GetServices(serviceType);
+            return this._httpContextAccessor.HttpContext.RequestServices.GetServices(serviceType);
         }
     }
 }

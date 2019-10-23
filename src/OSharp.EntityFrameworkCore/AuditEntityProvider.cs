@@ -22,7 +22,6 @@ using OSharp.Core.EntityInfos;
 using OSharp.Core.Functions;
 using OSharp.Dependency;
 
-
 namespace OSharp.Entity
 {
     /// <summary>
@@ -39,9 +38,8 @@ namespace OSharp.Entity
         /// </summary>
         public AuditEntityProvider(ScopedDictionary scopedDict, IEntityInfoHandler entityInfoHandler)
         {
-            _scopedDict = scopedDict;
-            _entityInfoHandler = entityInfoHandler;
-
+            this._scopedDict = scopedDict;
+            this._entityInfoHandler = entityInfoHandler;
         }
 
         /// <summary>
@@ -52,35 +50,40 @@ namespace OSharp.Entity
         public virtual IEnumerable<AuditEntityEntry> GetAuditEntities(DbContext context)
         {
             List<AuditEntityEntry> result = new List<AuditEntityEntry>();
-            //当前操作的功能是否允许数据审计
-            IFunction function = _scopedDict?.Function;
+
+            // 当前操作的功能是否允许数据审计
+            IFunction function = this._scopedDict?.Function;
             if (function == null || !function.AuditEntityEnabled)
             {
                 return result;
             }
-            if (_entityInfoHandler == null)
+
+            if (this._entityInfoHandler == null)
             {
                 return result;
             }
+
             EntityState[] states = { EntityState.Added, EntityState.Modified, EntityState.Deleted };
             List<EntityEntry> entries = context.ChangeTracker.Entries().Where(m => m.Entity != null && states.Contains(m.State)).ToList();
             if (entries.Count == 0)
             {
                 return result;
             }
+
             foreach (EntityEntry entry in entries)
             {
-                //当前操作的实体是否允许数据审计
-                IEntityInfo entityInfo = _entityInfoHandler.GetEntityInfo(entry.Entity.GetType());
+                // 当前操作的实体是否允许数据审计
+                IEntityInfo entityInfo = this._entityInfoHandler.GetEntityInfo(entry.Entity.GetType());
                 if (entityInfo == null || !entityInfo.AuditEnabled)
                 {
                     continue;
                 }
+
                 result.AddIfNotNull(GetAuditEntity(entry, entityInfo));
             }
+
             return result;
         }
-
 
         private static AuditEntityEntry GetAuditEntity(EntityEntry entry, IEntityInfo entityInfo)
         {
@@ -95,7 +98,7 @@ namespace OSharp.Entity
                         : entry.State == EntityState.Deleted
                             ? OperateType.Delete
                             : OperateType.Query,
-                Entity = entry.Entity
+                Entity = entry.Entity,
             };
             EntityProperty[] entityProperties = entityInfo.Properties;
             foreach (IProperty property in entry.CurrentValues.Properties)
@@ -104,6 +107,7 @@ namespace OSharp.Entity
                 {
                     continue;
                 }
+
                 string name = property.Name;
                 if (property.IsPrimaryKey())
                 {
@@ -111,11 +115,12 @@ namespace OSharp.Entity
                         ? entry.Property(property.Name).OriginalValue?.ToString()
                         : entry.Property(property.Name).CurrentValue?.ToString();
                 }
+
                 AuditPropertyEntry auditProperty = new AuditPropertyEntry()
                 {
                     FieldName = name,
                     DisplayName = entityProperties.First(m => m.Name == name).Display,
-                    DataType = property.ClrType.ToString()
+                    DataType = property.ClrType.ToString(),
                 };
                 if (entry.State == EntityState.Added)
                 {
@@ -135,11 +140,13 @@ namespace OSharp.Entity
                     {
                         continue;
                     }
+
                     auditProperty.NewValue = currentValue;
                     auditProperty.OriginalValue = originalValue;
                     audit.PropertyEntries.Add(auditProperty);
                 }
             }
+
             return audit.PropertyEntries.Count == 0 ? null : audit;
         }
     }

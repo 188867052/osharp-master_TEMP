@@ -16,5 +16,6 @@ namespace OSharp.Dependency
     /// </summary>
     [IgnoreDependency]
     public interface IScopeDependency
-    { }
+    {
+    }
 }

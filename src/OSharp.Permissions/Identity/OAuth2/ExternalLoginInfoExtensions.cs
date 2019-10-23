@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Identity;
 
 using OSharp.Security.Claims;
 
-
 namespace OSharp.Identity.OAuth2
 {
     /// <summary>
@@ -30,10 +29,11 @@ namespace OSharp.Identity.OAuth2
             {
                 return null;
             }
+
             string displayName = identity.GetUserName();
             UserLoginInfoEx info = new UserLoginInfoEx(loginInfo.LoginProvider, loginInfo.ProviderKey, displayName)
             {
-                AvatarUrl = identity.FindFirst(m => m.Type == "urn:qq:figure")?.Value
+                AvatarUrl = identity.FindFirst(m => m.Type == "urn:qq:figure")?.Value,
             };
 
             return info;

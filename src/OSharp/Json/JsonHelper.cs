@@ -14,7 +14,6 @@ using Newtonsoft.Json.Serialization;
 
 using OSharp.Extensions;
 
-
 namespace OSharp.Json
 {
     /// <summary>
@@ -56,10 +55,12 @@ namespace OSharp.Json
             {
                 settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             }
+
             if (indented)
             {
                 settings.Formatting = Formatting.Indented;
             }
+
             string json = JsonConvert.SerializeObject(@object, settings);
             return JsonDateTimeFormat(json);
         }

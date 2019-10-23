@@ -16,7 +16,6 @@ using OSharp.Core.Options;
 using OSharp.Core.Packs;
 using OSharp.Data;
 
-
 namespace OSharp.Core.Builders
 {
     /// <summary>
@@ -29,8 +28,8 @@ namespace OSharp.Core.Builders
         /// </summary>
         public OsharpBuilder()
         {
-            AddPacks = new List<Type>();
-            ExceptPacks = new List<Type>();
+            this.AddPacks = new List<Type>();
+            this.ExceptPacks = new List<Type>();
         }
 
         /// <summary>
@@ -54,9 +53,9 @@ namespace OSharp.Core.Builders
         /// <typeparam name="TPack">要添加的模块类型</typeparam>
         public IOsharpBuilder AddPack<TPack>() where TPack : OsharpPack
         {
-            List<Type> list = AddPacks.ToList();
+            List<Type> list = this.AddPacks.ToList();
             list.AddIfNotExist(typeof(TPack));
-            AddPacks = list;
+            this.AddPacks = list;
             return this;
         }
 
@@ -67,9 +66,9 @@ namespace OSharp.Core.Builders
         /// <returns></returns>
         public IOsharpBuilder ExceptPack<TPack>() where TPack : OsharpPack
         {
-            List<Type> list = ExceptPacks.ToList();
+            List<Type> list = this.ExceptPacks.ToList();
             list.AddIfNotExist(typeof(TPack));
-            ExceptPacks = list;
+            this.ExceptPacks = list;
             return this;
         }
 
@@ -81,7 +80,7 @@ namespace OSharp.Core.Builders
         public IOsharpBuilder AddOptions(Action<OsharpOptions> optionsAction)
         {
             Check.NotNull(optionsAction, nameof(optionsAction));
-            OptionsAction = optionsAction;
+            this.OptionsAction = optionsAction;
             return this;
         }
     }

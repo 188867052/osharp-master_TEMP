@@ -7,26 +7,23 @@
 //  <last-date>2018-06-27 4:44</last-date>
 // -----------------------------------------------------------------------
 
+using System;
+using System.Linq;
+using System.Security.Principal;
+using System.Threading.Tasks;
 using Liuliu.Demo.Identity.Dtos;
 using Liuliu.Demo.Identity.Entities;
 using Liuliu.Demo.Identity.Events;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
+using OSharp.Caching;
 using OSharp.Data;
 using OSharp.Entity;
 using OSharp.EventBuses;
 using OSharp.Extensions;
 using OSharp.Identity;
 using OSharp.Identity.OAuth2;
-using System;
-using System.Linq;
-using System.Security.Principal;
-using System.Threading.Tasks;
-
-using Microsoft.Extensions.Caching.Distributed;
-
-using OSharp.Caching;
-
 
 namespace Liuliu.Demo.Identity
 {
@@ -60,16 +57,16 @@ namespace Liuliu.Demo.Identity
             IDistributedCache cache,
             IPrincipal currentUser)
         {
-            _userManager = userManager;
-            _roleManager = roleManager;
-            _signInManager = signInManager;
-            _eventBus = eventBus;
-            _logger = loggerFactory.CreateLogger<IdentityService>();
-            _userRoleRepository = userRoleRepository;
-            _userDetailRepository = userDetailRepository;
-            _userLoginRepository = userLoginRepository;
-            _cache = cache;
-            _currentUser = currentUser;
+            this._userManager = userManager;
+            this._roleManager = roleManager;
+            this._signInManager = signInManager;
+            this._eventBus = eventBus;
+            this._logger = loggerFactory.CreateLogger<IdentityService>();
+            this._userRoleRepository = userRoleRepository;
+            this._userDetailRepository = userDetailRepository;
+            this._userLoginRepository = userLoginRepository;
+            this._cache = cache;
+            this._currentUser = currentUser;
         }
 
         /// <summary>
@@ -77,7 +74,7 @@ namespace Liuliu.Demo.Identity
         /// </summary>
         public IQueryable<Role> Roles
         {
-            get { return _roleManager.Roles; }
+            get { return this._roleManager.Roles; }
         }
 
         /// <summary>
@@ -85,7 +82,7 @@ namespace Liuliu.Demo.Identity
         /// </summary>
         public IQueryable<User> Users
         {
-            get { return _userManager.Users; }
+            get { return this._userManager.Users; }
         }
 
         /// <summary>
@@ -98,24 +95,26 @@ namespace Liuliu.Demo.Identity
             Check.NotNull(dto, nameof(dto));
 
             User user = new User() { UserName = dto.UserName, NickName = dto.NickName ?? dto.UserName, Email = dto.Email };
-            IdentityResult result = dto.Password == null ? await _userManager.CreateAsync(user) : await _userManager.CreateAsync(user, dto.Password);
+            IdentityResult result = dto.Password == null ? await this._userManager.CreateAsync(user) : await this._userManager.CreateAsync(user, dto.Password);
             if (!result.Succeeded)
             {
                 return result.ToOperationResult(user);
             }
-            UserDetail detail = new UserDetail() { RegisterIp = dto.RegisterIp, UserId = user.Id };
-            int count = await _userDetailRepository.InsertAsync(detail);
 
-            //触发注册成功事件
+            UserDetail detail = new UserDetail() { RegisterIp = dto.RegisterIp, UserId = user.Id };
+            int count = await this._userDetailRepository.InsertAsync(detail);
+
+            // 触发注册成功事件
             if (count > 0)
             {
                 RegisterEventData eventData = new RegisterEventData() { RegisterDto = dto, User = user };
-                _eventBus.Publish(eventData);
+                this._eventBus.Publish(eventData);
                 return new OperationResult<User>(OperationResultType.Success, "用户注册成功", user);
             }
+
             return new OperationResult<User>(OperationResultType.NoChanged);
         }
-        
+
         /// <summary>
         /// 使用账号登录
         /// </summary>
@@ -125,26 +124,29 @@ namespace Liuliu.Demo.Identity
         {
             Check.NotNull(dto, nameof(dto));
 
-            User user = await FindUserByAccount(dto.Account);
+            User user = await this.FindUserByAccount(dto.Account);
             if (user == null)
             {
                 return new OperationResult<User>(OperationResultType.Error, "用户不存在");
             }
+
             if (user.IsLocked)
             {
                 return new OperationResult<User>(OperationResultType.Error, "用户已被冻结，无法登录");
             }
-            SignInResult signInResult = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, true);
-            OperationResult<User> result = ToOperationResult(signInResult, user);
+
+            SignInResult signInResult = await this._signInManager.CheckPasswordSignInAsync(user, dto.Password, true);
+            OperationResult<User> result = this.ToOperationResult(signInResult, user);
             if (!result.Succeeded)
             {
                 return result;
             }
-            _logger.LogInformation(1, $"用户 {user.Id} 使用账号登录系统成功");
 
-            //触发登录成功事件
+            this._logger.LogInformation(1, $"用户 {user.Id} 使用账号登录系统成功");
+
+            // 触发登录成功事件
             LoginEventData loginEventData = new LoginEventData() { LoginDto = dto, User = user };
-            _eventBus.Publish(loginEventData);
+            this._eventBus.Publish(loginEventData);
 
             return result;
         }
@@ -156,14 +158,14 @@ namespace Liuliu.Demo.Identity
         /// <returns>业务操作结果</returns>
         public async Task<OperationResult> LoginOAuth2(UserLoginInfoEx loginInfo)
         {
-            SignInResult result = await _signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, true);
+            SignInResult result = await this._signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, true);
             if (!result.Succeeded)
             {
-                string cacheId = await SetLoginInfoEx(loginInfo);
+                string cacheId = await this.SetLoginInfoEx(loginInfo);
                 return new OperationResult(OperationResultType.Error, "登录失败", cacheId);
             }
 
-            User user = await _userManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey);
+            User user = await this._userManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey);
             return new OperationResult(OperationResultType.Success, "登录成功", user);
         }
 
@@ -174,25 +176,26 @@ namespace Liuliu.Demo.Identity
         /// <returns>业务操作结果</returns>
         public virtual async Task<OperationResult<User>> LoginBind(UserLoginInfoEx loginInfoEx)
         {
-            UserLoginInfoEx existLoginInfoEx = await GetLoginInfoEx(loginInfoEx.ProviderKey);
+            UserLoginInfoEx existLoginInfoEx = await this.GetLoginInfoEx(loginInfoEx.ProviderKey);
             if (existLoginInfoEx == null)
             {
                 return new OperationResult<User>(OperationResultType.Error, "无法找到相应的第三方登录信息");
             }
 
             LoginDto loginDto = new LoginDto() { Account = loginInfoEx.Account, Password = loginInfoEx.Password };
-            OperationResult<User> loginResult = await Login(loginDto);
+            OperationResult<User> loginResult = await this.Login(loginDto);
             if (!loginResult.Succeeded)
             {
                 return loginResult;
             }
 
             User user = loginResult.Data;
-            IdentityResult result = await CreateOrUpdateUserLogin(user, existLoginInfoEx);
+            IdentityResult result = await this.CreateOrUpdateUserLogin(user, existLoginInfoEx);
             if (!result.Succeeded)
             {
                 return result.ToOperationResult(user);
             }
+
             return new OperationResult<User>(OperationResultType.Success, "登录并绑定账号成功", user);
         }
 
@@ -203,39 +206,42 @@ namespace Liuliu.Demo.Identity
         /// <returns>业务操作结果</returns>
         public virtual async Task<OperationResult<User>> LoginOneKey(string cacheId)
         {
-            UserLoginInfoEx loginInfoEx = await GetLoginInfoEx(cacheId);
+            UserLoginInfoEx loginInfoEx = await this.GetLoginInfoEx(cacheId);
             if (loginInfoEx == null)
             {
                 return new OperationResult<User>(OperationResultType.Error, "无法找到相应的第三方登录信息");
             }
+
             IdentityResult result;
-            User user = await _userManager.FindByLoginAsync(loginInfoEx.LoginProvider, loginInfoEx.ProviderKey);
+            User user = await this._userManager.FindByLoginAsync(loginInfoEx.LoginProvider, loginInfoEx.ProviderKey);
             if (user == null)
             {
                 user = new User()
                 {
                     UserName = $"{loginInfoEx.LoginProvider}_{loginInfoEx.ProviderKey}",
                     NickName = loginInfoEx.ProviderDisplayName,
-                    HeadImg = loginInfoEx.AvatarUrl
+                    HeadImg = loginInfoEx.AvatarUrl,
                 };
-                result = await _userManager.CreateAsync(user);
+                result = await this._userManager.CreateAsync(user);
                 if (!result.Succeeded)
                 {
                     return result.ToOperationResult(user);
                 }
+
                 UserDetail detail = new UserDetail() { RegisterIp = loginInfoEx.RegisterIp, UserId = user.Id };
-                int count = await _userDetailRepository.InsertAsync(detail);
+                int count = await this._userDetailRepository.InsertAsync(detail);
                 if (count == 0)
                 {
                     return new OperationResult<User>(OperationResultType.NoChanged);
                 }
             }
 
-            result = await CreateOrUpdateUserLogin(user, loginInfoEx);
+            result = await this.CreateOrUpdateUserLogin(user, loginInfoEx);
             if (!result.Succeeded)
             {
                 return result.ToOperationResult(user);
             }
+
             return new OperationResult<User>(OperationResultType.Success, "第三方用户一键登录成功", user);
         }
 
@@ -245,22 +251,24 @@ namespace Liuliu.Demo.Identity
             {
                 user.HeadImg = loginInfoEx.AvatarUrl;
             }
-            UserLogin userLogin = _userLoginRepository.GetFirst(m =>
+
+            UserLogin userLogin = this._userLoginRepository.GetFirst(m =>
                 m.LoginProvider == loginInfoEx.LoginProvider && m.ProviderKey == loginInfoEx.ProviderKey);
             if (userLogin == null)
             {
                 userLogin = new UserLogin()
                 {
                     LoginProvider = loginInfoEx.LoginProvider, ProviderKey = loginInfoEx.ProviderKey,
-                    ProviderDisplayName = loginInfoEx.ProviderDisplayName, Avatar = loginInfoEx.AvatarUrl, UserId = user.Id
+                    ProviderDisplayName = loginInfoEx.ProviderDisplayName, Avatar = loginInfoEx.AvatarUrl, UserId = user.Id,
                 };
-                await _userLoginRepository.InsertAsync(userLogin);
+                await this._userLoginRepository.InsertAsync(userLogin);
             }
             else
             {
                 userLogin.UserId = user.Id;
-                await _userLoginRepository.UpdateAsync(userLogin);
+                await this._userLoginRepository.UpdateAsync(userLogin);
             }
+
             return IdentityResult.Success;
         }
 
@@ -271,12 +279,12 @@ namespace Liuliu.Demo.Identity
         /// <returns>业务操作结果</returns>
         public async Task<OperationResult> Logout(int userId)
         {
-            await _signInManager.SignOutAsync();
-            _logger.LogInformation(4, $"用户 {userId} 登出系统");
+            await this._signInManager.SignOutAsync();
+            this._logger.LogInformation(4, $"用户 {userId} 登出系统");
 
-            //触发登出成功事件
+            // 触发登出成功事件
             LogoutEventData logoutEventData = new LogoutEventData() { UserId = userId };
-            await _eventBus.PublishAsync(logoutEventData);
+            await this._eventBus.PublishAsync(logoutEventData);
 
             return OperationResult.Success;
         }
@@ -288,23 +296,26 @@ namespace Liuliu.Demo.Identity
         /// <returns></returns>
         private async Task<User> FindUserByAccount(string account)
         {
-            User user = await _userManager.FindByNameAsync(account);
+            User user = await this._userManager.FindByNameAsync(account);
             if (user != null)
             {
                 return user;
             }
+
             if (account.IsEmail())
             {
-                user = await _userManager.FindByEmailAsync(account);
+                user = await this._userManager.FindByEmailAsync(account);
                 if (user != null)
                 {
                     return user;
                 }
             }
+
             if (account.IsMobileNumber())
             {
-                user = _userManager.Users.FirstOrDefault(m => m.PhoneNumber == account);
+                user = this._userManager.Users.FirstOrDefault(m => m.PhoneNumber == account);
             }
+
             return user;
         }
 
@@ -312,47 +323,53 @@ namespace Liuliu.Demo.Identity
         {
             if (result.IsNotAllowed)
             {
-                if (_userManager.Options.SignIn.RequireConfirmedEmail && !user.EmailConfirmed)
+                if (this._userManager.Options.SignIn.RequireConfirmedEmail && !user.EmailConfirmed)
                 {
-                    _logger.LogWarning(2, $"用户 {user.Id} 因邮箱未验证而不允许登录");
+                    this._logger.LogWarning(2, $"用户 {user.Id} 因邮箱未验证而不允许登录");
                     return new OperationResult<User>(OperationResultType.Error, "用户邮箱未验证，请到邮箱收邮件进行确认后再登录");
                 }
-                if (_userManager.Options.SignIn.RequireConfirmedPhoneNumber && !user.PhoneNumberConfirmed)
+
+                if (this._userManager.Options.SignIn.RequireConfirmedPhoneNumber && !user.PhoneNumberConfirmed)
                 {
-                    _logger.LogWarning(2, $"用户 {user.Id} 因手机号未验证而不允许登录");
+                    this._logger.LogWarning(2, $"用户 {user.Id} 因手机号未验证而不允许登录");
                     return new OperationResult<User>(OperationResultType.Error, "用户手机号未验证，请接收手机验证码验证之后再登录");
                 }
+
                 return new OperationResult<User>(OperationResultType.Error, "用户未满足登录条件，不允许登录");
             }
+
             if (result.IsLockedOut)
             {
-                _logger.LogWarning(2, $"用户 {user.Id} 因密码错误次数过多被锁定，解锁时间：{user.LockoutEnd}");
+                this._logger.LogWarning(2, $"用户 {user.Id} 因密码错误次数过多被锁定，解锁时间：{user.LockoutEnd}");
                 return new OperationResult<User>(OperationResultType.Error,
-                    $"用户因密码错误次数过多而被锁定 {_userManager.Options.Lockout.DefaultLockoutTimeSpan.TotalMinutes} 分钟，请稍后重试");
+                    $"用户因密码错误次数过多而被锁定 {this._userManager.Options.Lockout.DefaultLockoutTimeSpan.TotalMinutes} 分钟，请稍后重试");
             }
+
             if (result.RequiresTwoFactor)
             {
                 return new OperationResult<User>(OperationResultType.Error, "用户登录需要二元验证");
             }
+
             if (result.Succeeded)
             {
                 return new OperationResult<User>(OperationResultType.Success, "用户登录成功", user);
             }
+
             return new OperationResult<User>(OperationResultType.Error,
-                $"用户名或密码错误，剩余 {_userManager.Options.Lockout.MaxFailedAccessAttempts - user.AccessFailedCount} 次机会");
+                $"用户名或密码错误，剩余 {this._userManager.Options.Lockout.MaxFailedAccessAttempts - user.AccessFailedCount} 次机会");
         }
 
         private async Task<UserLoginInfoEx> GetLoginInfoEx(string cacheId)
         {
             string key = $"Identity_UserLoginInfoEx_{cacheId}";
-            return await _cache.GetAsync<UserLoginInfoEx>(key);
+            return await this._cache.GetAsync<UserLoginInfoEx>(key);
         }
 
         private async Task<string> SetLoginInfoEx(UserLoginInfoEx loginInfo)
         {
             string cacheId = Guid.NewGuid().ToString("N");
             string key = $"Identity_UserLoginInfoEx_{cacheId}";
-            await _cache.SetAsync(key, loginInfo, 60 * 5);
+            await this._cache.SetAsync(key, loginInfo, 60 * 5);
             return cacheId;
         }
     }

@@ -16,7 +16,6 @@ using Microsoft.Extensions.DependencyInjection;
 using OSharp.Dependency;
 using OSharp.Extensions;
 
-
 namespace OSharp.Entity
 {
     /// <summary>
@@ -34,7 +33,7 @@ namespace OSharp.Entity
         /// <returns>数据模型</returns>
         public IModel Get(Type dbContextType)
         {
-            return _dict.GetOrDefault(dbContextType);
+            return this._dict.GetOrDefault(dbContextType);
         }
 
         /// <summary>
@@ -44,7 +43,7 @@ namespace OSharp.Entity
         /// <param name="model">模型</param>
         public void Set(Type dbContextType, IModel model)
         {
-            _dict[dbContextType] = model;
+            this._dict[dbContextType] = model;
         }
 
         /// <summary>
@@ -52,7 +51,7 @@ namespace OSharp.Entity
         /// </summary>
         public void Remove(Type dbContextType)
         {
-            _dict.TryRemove(dbContextType, out IModel model);
+            this._dict.TryRemove(dbContextType, out IModel model);
         }
     }
 }

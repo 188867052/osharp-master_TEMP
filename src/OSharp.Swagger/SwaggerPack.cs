@@ -12,7 +12,6 @@ using System.ComponentModel;
 using OSharp.AspNetCore;
 using OSharp.Core.Packs;
 
-
 namespace OSharp.Swagger
 {
     /// <summary>
@@ -21,5 +20,6 @@ namespace OSharp.Swagger
     [DependsOnPacks(typeof(AspNetCorePack))]
     [Description("SwaggerApi模块 ")]
     public class SwaggerPack : SwaggerPackBase
-    { }
+    {
+    }
 }

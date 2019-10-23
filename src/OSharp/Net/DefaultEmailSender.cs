@@ -19,7 +19,6 @@ using OSharp.Dependency;
 using OSharp.Exceptions;
 using OSharp.Extensions;
 
-
 namespace OSharp.Net
 {
     /// <summary>
@@ -35,7 +34,7 @@ namespace OSharp.Net
         /// </summary>
         public DefaultEmailSender(IServiceProvider provider)
         {
-            _provider = provider;
+            this._provider = provider;
         }
 
         /// <summary>
@@ -47,7 +46,7 @@ namespace OSharp.Net
         /// <returns></returns>
         public Task SendEmailAsync(string email, string subject, string body)
         {
-            OsharpOptions options = _provider.GetOSharpOptions();
+            OsharpOptions options = this._provider.GetOSharpOptions();
             MailSenderOptions mailSender = options.MailSender;
             if (mailSender == null || mailSender.Host == null || mailSender.Host.Contains("请替换"))
             {
@@ -61,7 +60,7 @@ namespace OSharp.Net
             SmtpClient client = new SmtpClient(host)
             {
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(userName, password)
+                Credentials = new NetworkCredential(userName, password),
             };
 
             string fromEmail = userName.Contains("@") ? userName : "{0}@{1}".FormatWith(userName, client.Host.Replace("smtp.", ""));
@@ -70,7 +69,7 @@ namespace OSharp.Net
                 From = new MailAddress(fromEmail, displayName),
                 Subject = subject,
                 Body = body,
-                IsBodyHtml = true
+                IsBodyHtml = true,
             };
             mail.To.Add(email);
             return client.SendMailAsync(mail);

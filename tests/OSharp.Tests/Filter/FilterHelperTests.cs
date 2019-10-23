@@ -15,68 +15,66 @@ using OSharp.UnitTest.Infrastructure;
 
 using Xunit;
 
-
 namespace OSharp.Filter.Tests
 {
     public class FilterHelperTests : EntityTestBase
     {
-        [Fact()]
+        [Fact]
         public void GetExpressionTest()
         {
-            IQueryable<TestEntity> source = Entities.AsQueryable();
+            IQueryable<TestEntity> source = this.Entities.AsQueryable();
 
-            //空条件
+            // 空条件
             FilterRule rule = null;
             Expression<Func<TestEntity, bool>> predicate = FilterHelper.GetExpression<TestEntity>(rule);
             Assert.True(source.Where(predicate).SequenceEqual(source));
 
-            //单条件，属性不存在
+            // 单条件，属性不存在
             rule = new FilterRule("Name1", "5", FilterOperate.EndsWith);
             Assert.Throws<InvalidOperationException>(() => FilterHelper.GetExpression<TestEntity>(rule));
 
-            //单条件
+            // 单条件
             rule = new FilterRule("Name", "5", FilterOperate.EndsWith);
             predicate = FilterHelper.GetExpression<TestEntity>(rule);
             Assert.True(source.Where(predicate).SequenceEqual(source.Where(m => m.Name.EndsWith("5"))));
 
-            //二级条件
+            // 二级条件
             rule = new FilterRule("Name.Length", 5, FilterOperate.Greater);
             predicate = FilterHelper.GetExpression<TestEntity>(rule);
             Assert.True(source.Where(predicate).SequenceEqual(source.Where(m => m.Name.Length > 5)));
 
-            //多条件，异常
+            // 多条件，异常
             Assert.Throws<InvalidOperationException>(() => new FilterGroup
             {
                 Rules = new List<FilterRule> { rule, new FilterRule("IsDeleted", true) },
-                Operate = FilterOperate.Equal
+                Operate = FilterOperate.Equal,
             });
 
-            //多条件
+            // 多条件
             FilterGroup group = new FilterGroup
             {
                 Rules = new List<FilterRule> { rule, new FilterRule("IsDeleted", true) },
-                Operate = FilterOperate.And
+                Operate = FilterOperate.And,
             };
             predicate = FilterHelper.GetExpression<TestEntity>(group);
             Assert.True(source.Where(predicate).SequenceEqual(source.Where(m => m.Name.Length > 5 && m.IsDeleted)));
 
-            //条件组嵌套
+            // 条件组嵌套
             DateTime dt = DateTime.Now;
             group = new FilterGroup
             {
                 Rules = new List<FilterRule>
                 {
-                    new FilterRule("AddDate", dt, FilterOperate.Greater)
+                    new FilterRule("AddDate", dt, FilterOperate.Greater),
                 },
                 Groups = new List<FilterGroup> { group },
-                Operate = FilterOperate.Or
+                Operate = FilterOperate.Or,
             };
             predicate = FilterHelper.GetExpression<TestEntity>(group);
             Assert.True(source.Where(predicate).SequenceEqual(source.Where(m => m.AddDate > dt || m.Name.Length > 5 && m.IsDeleted)));
-
         }
 
-        [Fact()]
+        [Fact]
         public void ToOperateCodeTest()
         {
             Assert.Equal("and", FilterOperate.And.ToOperateCode());
@@ -92,7 +90,7 @@ namespace OSharp.Filter.Tests
             Assert.Equal("contains", FilterOperate.Contains.ToOperateCode());
         }
 
-        [Fact()]
+        [Fact]
         public void GetFilterOperateTest()
         {
             Assert.Throws<ArgumentNullException>(() => FilterHelper.GetFilterOperate(null));
@@ -110,6 +108,5 @@ namespace OSharp.Filter.Tests
             Assert.Equal(FilterOperate.EndsWith, FilterHelper.GetFilterOperate("endswith"));
             Assert.Equal(FilterOperate.Contains, FilterHelper.GetFilterOperate("contains"));
         }
-
     }
 }

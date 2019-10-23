@@ -12,7 +12,6 @@ using Microsoft.Extensions.DependencyInjection;
 using OSharp.Dependency;
 using OSharp.Reflection;
 
-
 namespace OSharp.Entity
 {
     /// <summary>
@@ -26,6 +25,7 @@ namespace OSharp.Entity
         /// </summary>
         public EntityConfigurationTypeFinder(IAllAssemblyFinder allAssemblyFinder)
             : base(allAssemblyFinder)
-        { }
+        {
+        }
     }
 }

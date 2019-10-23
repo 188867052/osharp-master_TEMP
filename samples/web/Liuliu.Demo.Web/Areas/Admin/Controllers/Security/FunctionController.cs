@@ -30,7 +30,6 @@ using OSharp.Entity;
 using OSharp.Filter;
 using OSharp.Security;
 
-
 namespace Liuliu.Demo.Web.Areas.Admin.Controllers
 {
     [ModuleInfo(Order = 2, Position = "Security", PositionName = "权限安全模块")]
@@ -45,9 +44,9 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             ICacheService cacheService,
             IFilterService filterService)
         {
-            _securityManager = securityManager;
-            _cacheService = cacheService;
-            _filterService = filterService;
+            this._securityManager = securityManager;
+            this._cacheService = cacheService;
+            this._filterService = filterService;
         }
 
         /// <summary>
@@ -65,8 +64,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
                 new SortCondition("Controller"),
                 new SortCondition("IsController", ListSortDirection.Descending));
 
-            Expression<Func<Function, bool>> predicate = _filterService.GetExpression<Function>(request.FilterGroup);
-            PageResult<FunctionOutputDto> page = _cacheService.ToPageCache<Function, FunctionOutputDto>(_securityManager.Functions, predicate, request.PageCondition, function);
+            Expression<Func<Function, bool>> predicate = this._filterService.GetExpression<Function>(request.FilterGroup);
+            PageResult<FunctionOutputDto> page = this._cacheService.ToPageCache<Function, FunctionOutputDto>(this._securityManager.Functions, predicate, request.PageCondition, function);
             return page.ToPageData();
         }
 
@@ -80,9 +79,9 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         public TreeNode[] ReadTreeNode(int moduleId)
         {
             Check.GreaterThan(moduleId, nameof(moduleId), 0);
-            Guid[] checkFuncIds = _securityManager.ModuleFunctions.Where(m => m.ModuleId == moduleId).Select(m => m.FunctionId).ToArray();
+            Guid[] checkFuncIds = this._securityManager.ModuleFunctions.Where(m => m.ModuleId == moduleId).Select(m => m.FunctionId).ToArray();
 
-            var groups = _securityManager.Functions.Unlocked()
+            var groups = this._securityManager.Functions.Unlocked()
                 .Where(m => m.Area == null || m.Area == "Admin")
                 .Select(m => new
                 {
@@ -92,7 +91,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
                     m.Controller,
                     m.Action,
                     m.IsController,
-                    m.AccessType
+                    m.AccessType,
                 }).ToList().GroupBy(m => m.Area).OrderBy(m => m.Key).ToList();
 
             TreeNode root = new TreeNode { Id = Guid.NewGuid().ToString("N"), Name = "系统", HasChildren = true };
@@ -118,12 +117,13 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
                                 ? $"{action.Name}[{action.Controller}/{action.Action}]"
                                 : $"{action.Name}[{action.Area}/{action.Controller}/{action.Action}]",
                             Data = action.AccessType,
-                            IsChecked = checkFuncIds.Contains(action.Id)
+                            IsChecked = checkFuncIds.Contains(action.Id),
                         };
                         controllerNode.Items.Add(actionNode);
                     }
                 }
             }
+
             return new[] { root };
         }
 
@@ -141,7 +141,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         {
             Check.NotNull(dtos, nameof(dtos));
 
-            OperationResult result = await _securityManager.UpdateFunctions(dtos);
+            OperationResult result = await this._securityManager.UpdateFunctions(dtos);
             return result.ToAjaxResult();
         }
     }

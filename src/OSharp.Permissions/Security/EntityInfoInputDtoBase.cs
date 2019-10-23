@@ -12,7 +12,6 @@ using System.ComponentModel;
 
 using OSharp.Entity;
 
-
 namespace OSharp.Security
 {
     /// <summary>
@@ -31,6 +30,5 @@ namespace OSharp.Security
         /// </summary>
         [DisplayName("是否数据审计")]
         public bool AuditEnabled { get; set; }
-
     }
 }

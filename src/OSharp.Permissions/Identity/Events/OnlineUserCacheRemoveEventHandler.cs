@@ -13,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.EventBuses;
 
-
 namespace OSharp.Identity.Events
 {
     /// <summary>
@@ -28,7 +27,7 @@ namespace OSharp.Identity.Events
         /// </summary>
         public OnlineUserCacheRemoveEventHandler(IServiceProvider provider)
         {
-            _provider = provider;
+            this._provider = provider;
         }
 
         /// <summary>
@@ -37,7 +36,7 @@ namespace OSharp.Identity.Events
         /// <param name="eventData">事件源数据</param>
         public override void Handle(OnlineUserCacheRemoveEventData eventData)
         {
-            IOnlineUserProvider onlineUserProvider = _provider.GetService<IOnlineUserProvider>();
+            IOnlineUserProvider onlineUserProvider = this._provider.GetService<IOnlineUserProvider>();
             onlineUserProvider.Remove(eventData.UserNames);
         }
     }

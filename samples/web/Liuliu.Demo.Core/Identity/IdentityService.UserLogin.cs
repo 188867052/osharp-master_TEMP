@@ -17,7 +17,6 @@ using OSharp.Data;
 using OSharp.Exceptions;
 using OSharp.Security.Claims;
 
-
 namespace Liuliu.Demo.Identity
 {
     public partial class IdentityService
@@ -27,7 +26,7 @@ namespace Liuliu.Demo.Identity
         /// </summary>
         public IQueryable<UserLogin> UserLogins
         {
-            get { return _userLoginRepository.QueryAsNoTracking(); }
+            get { return this._userLoginRepository.QueryAsNoTracking(); }
         }
 
         /// <summary>
@@ -37,24 +36,24 @@ namespace Liuliu.Demo.Identity
         /// <returns>业务操作结果</returns>
         public Task<OperationResult> DeleteUserLogins(params Guid[] ids)
         {
-            return _userLoginRepository.DeleteAsync(ids,
+            return this._userLoginRepository.DeleteAsync(ids,
                 entity =>
                 {
-                    int userId = _currentUser.Identity.GetUserId<int>();
+                    int userId = this._currentUser.Identity.GetUserId<int>();
                     if (entity.UserId != userId)
                     {
                         throw new OsharpException("要解除的第三方登录绑定不属于当前用户");
                     }
 
-                    var user = _userManager.Users.Where(m => m.Id == userId).Select(m => new { m.PasswordHash, m.NormalizeEmail }).First();
+                    var user = this._userManager.Users.Where(m => m.Id == userId).Select(m => new { m.PasswordHash, m.NormalizeEmail }).First();
                     if ((string.IsNullOrEmpty(user.PasswordHash) || string.IsNullOrEmpty(user.NormalizeEmail))
-                        && _userLoginRepository.QueryAsNoTracking(m => m.UserId == entity.UserId).Count() == 1)
+                        && this._userLoginRepository.QueryAsNoTracking(m => m.UserId == entity.UserId).Count() == 1)
                     {
                         throw new OsharpException("当前用户未设置登录密码，并且要解除的第三方登录是唯一登录方式，无法解除");
                     }
+
                     return Task.FromResult(0);
                 });
         }
-
     }
 }

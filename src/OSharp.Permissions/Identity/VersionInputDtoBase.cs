@@ -12,7 +12,6 @@ using System.ComponentModel.DataAnnotations;
 
 using OSharp.Entity;
 
-
 namespace OSharp.Identity
 {
     /// <summary>
@@ -29,7 +28,8 @@ namespace OSharp.Identity
         /// <summary>
         /// 获取或设置 用户名
         /// </summary>
-        [Required, DisplayName("用户名")]
+        [Required]
+        [DisplayName("用户名")]
         [StringLength(30, MinimumLength = 3)]
         public string Name { get; set; }
 

@@ -9,7 +9,6 @@
 
 using Microsoft.Extensions.Configuration;
 
-
 namespace OSharp.Core.Options
 {
     /// <summary>

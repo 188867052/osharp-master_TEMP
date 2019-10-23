@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using OSharp.Audits;
 using OSharp.Entity;
 
-
 namespace Liuliu.Demo.Systems.Dtos
 {
     /// <summary>

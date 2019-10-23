@@ -14,7 +14,6 @@ using Dapper;
 
 using Microsoft.EntityFrameworkCore;
 
-
 namespace OSharp.Entity
 {
     /// <summary>
@@ -30,9 +29,9 @@ namespace OSharp.Entity
         protected SqlExecutorBase(IUnitOfWorkManager unitOfWorkManager)
         {
             DbContext dbContext = (DbContext)unitOfWorkManager.GetDbContext<TEntity, TKey>();
-            _connectionString = dbContext.Database.GetDbConnection().ConnectionString;
+            this._connectionString = dbContext.Database.GetDbConnection().ConnectionString;
         }
-        
+
         /// <summary>
         /// 获取 数据库类型
         /// </summary>
@@ -54,7 +53,7 @@ namespace OSharp.Entity
         /// <returns>结果集</returns>
         public virtual IEnumerable<TResult> FromSql<TResult>(string sql, object param = null)
         {
-            using (IDbConnection db = GetDbConnection(_connectionString))
+            using (IDbConnection db = this.GetDbConnection(this._connectionString))
             {
                 return db.Query<TResult>(sql, param);
             }
@@ -68,7 +67,7 @@ namespace OSharp.Entity
         /// <returns>操作影响的行数</returns>
         public virtual int ExecuteSqlCommand(string sql, object param = null)
         {
-            using (IDbConnection db = GetDbConnection(_connectionString))
+            using (IDbConnection db = this.GetDbConnection(this._connectionString))
             {
                 return db.Execute(sql, param);
             }

@@ -9,7 +9,6 @@
 
 using OSharp.Reflection;
 
-
 namespace OSharp.Dependency
 {
     /// <summary>
@@ -17,5 +16,6 @@ namespace OSharp.Dependency
     /// 或者<see cref="ISingletonDependency"/>,<see cref="IScopeDependency"/>,<see cref="ITransientDependency"/>三个接口的服务实现类型
     /// </summary>
     public interface IDependencyTypeFinder : ITypeFinder
-    { }
+    {
+    }
 }

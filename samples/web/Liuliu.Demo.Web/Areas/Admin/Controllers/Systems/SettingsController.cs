@@ -24,7 +24,6 @@ using OSharp.Core.Systems;
 using OSharp.Data;
 using OSharp.Exceptions;
 
-
 namespace Liuliu.Demo.Web.Areas.Admin.Controllers
 {
     [ModuleInfo(Order = 1, Position = "Systems", PositionName = "系统管理模块")]
@@ -38,7 +37,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         /// </summary>
         public SettingsController(IKeyValueStore keyValueStore)
         {
-            _keyValueStore = keyValueStore;
+            this._keyValueStore = keyValueStore;
         }
 
         /// <summary>
@@ -55,13 +54,13 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             switch (root)
             {
                 case "System":
-                    setting = _keyValueStore.GetSetting<SystemSetting>();
+                    setting = this._keyValueStore.GetSetting<SystemSetting>();
                     break;
                 default:
                     throw new OsharpException($"未知的设置根节点: {root}");
             }
 
-            return Json(new SettingOutputDto(setting));
+            return this.Json(new SettingOutputDto(setting));
         }
 
         /// <summary>
@@ -82,12 +81,14 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             {
                 return new AjaxResult($"设置类型\"{dto.SettingTypeName}\"无法找到");
             }
+
             ISetting setting = JsonConvert.DeserializeObject(dto.SettingJson, type) as ISetting;
-            OperationResult result = await _keyValueStore.SaveSetting(setting);
+            OperationResult result = await this._keyValueStore.SaveSetting(setting);
             if (result.Succeeded)
             {
                 return new AjaxResult("设置保存成功");
             }
+
             return result.ToAjaxResult();
         }
     }

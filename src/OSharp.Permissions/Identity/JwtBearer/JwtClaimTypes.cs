@@ -18,6 +18,7 @@ namespace OSharp.Identity.JwtBearer
         /// 是否管理
         /// </summary>
         public const string IsAdmin = "is-admin";
+
         /// <summary>
         /// 头像图片
         /// </summary>

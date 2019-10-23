@@ -15,7 +15,6 @@ using System.Security.Principal;
 using OSharp.Data;
 using OSharp.Extensions;
 
-
 namespace OSharp.Security.Claims
 {
     /// <summary>
@@ -33,6 +32,7 @@ namespace OSharp.Security.Claims
             {
                 return null;
             }
+
             return claimsIdentity.FindFirst(type)?.Value;
         }
 
@@ -46,6 +46,7 @@ namespace OSharp.Security.Claims
             {
                 return null;
             }
+
             return claimsIdentity.Claims.Where(m => m.Type == type).Select(m => m.Value).ToArray();
         }
 
@@ -59,11 +60,13 @@ namespace OSharp.Security.Claims
             {
                 return default(T);
             }
+
             string value = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (value == null)
             {
                 return default(T);
             }
+
             return value.CastTo<T>();
         }
 
@@ -77,6 +80,7 @@ namespace OSharp.Security.Claims
             {
                 return null;
             }
+
             return claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         }
 
@@ -90,6 +94,7 @@ namespace OSharp.Security.Claims
             {
                 return null;
             }
+
             return claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
         }
 
@@ -103,6 +108,7 @@ namespace OSharp.Security.Claims
             {
                 return null;
             }
+
             return claimsIdentity.FindFirst(ClaimTypes.Email)?.Value;
         }
 
@@ -116,6 +122,7 @@ namespace OSharp.Security.Claims
             {
                 return null;
             }
+
             return claimsIdentity.FindFirst(ClaimTypes.GivenName)?.Value;
         }
 
@@ -129,11 +136,13 @@ namespace OSharp.Security.Claims
             {
                 return;
             }
+
             Claim claim = claimsIdentity.FindFirst(claimType);
             if (claim == null)
             {
                 return;
             }
+
             claimsIdentity.RemoveClaim(claim);
         }
 
@@ -147,6 +156,7 @@ namespace OSharp.Security.Claims
             {
                 return new string[0];
             }
+
             return claimsIdentity.FindAll(ClaimTypes.Role).SelectMany(m =>
             {
                 string[] roles = m.Value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);

@@ -14,7 +14,6 @@ using System.Linq;
 using OSharp.Extensions;
 using OSharp.Properties;
 
-
 namespace OSharp.Maths
 {
     /// <summary>
@@ -45,8 +44,10 @@ namespace OSharp.Maths
                 {
                     throw new ArgumentException(string.Format(Resources.AnyRadixConvert_CharacterIsNotValid, @char, fromRadix));
                 }
+
                 result += (ulong)baseChar.IndexOf(@char) * (ulong)Math.Pow(baseChar.Length, value.Length - i - 1);
             }
+
             return result;
         }
 
@@ -63,6 +64,7 @@ namespace OSharp.Maths
             {
                 return "0";
             }
+
             string baseChar = BaseChar.Substring(0, toRadix);
             string result = string.Empty;
             while (value > 0)
@@ -71,6 +73,7 @@ namespace OSharp.Maths
                 result = baseChar[index] + result;
                 value = value / (ulong)baseChar.Length;
             }
+
             return result;
         }
 

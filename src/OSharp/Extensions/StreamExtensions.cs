@@ -10,7 +10,6 @@
 using System.IO;
 using System.Text;
 
-
 namespace OSharp.Extensions
 {
     /// <summary>
@@ -27,6 +26,7 @@ namespace OSharp.Extensions
             {
                 encoding = Encoding.UTF8;
             }
+
             using (StreamReader reader = new StreamReader(stream, encoding))
             {
                 return reader.ReadToEnd();

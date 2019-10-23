@@ -1,20 +1,10 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="SerializeHelper.cs" company="OSharp开源团队">
-//      Copyright (c) 2015 OSharp. All rights reserved.
-//  </copyright>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2015-01-02 15:54</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Xml.Serialization;
-
 using OSharp.Extensions;
-
 
 namespace OSharp.Data
 {
@@ -23,8 +13,6 @@ namespace OSharp.Data
     /// </summary>
     public static class SerializeHelper
     {
-        #region 二进制序列化
-
         /// <summary>
         /// 将对象序列化为byte[]，此方法不需要源类型标记可<see cref="SerializableAttribute"/>
         /// </summary>
@@ -107,10 +95,6 @@ namespace OSharp.Data
             }
         }
 
-        #endregion
-
-        #region XML序列化
-
         /// <summary>
         /// 将数据序列化为XML形式
         /// </summary>
@@ -166,7 +150,5 @@ namespace OSharp.Data
                 return (T)serializer.Deserialize(fs);
             }
         }
-
-        #endregion
     }
 }

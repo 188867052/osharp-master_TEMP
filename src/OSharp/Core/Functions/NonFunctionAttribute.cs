@@ -9,7 +9,6 @@
 
 using System;
 
-
 namespace OSharp.Core.Functions
 {
     /// <summary>
@@ -17,5 +16,6 @@ namespace OSharp.Core.Functions
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class NonFunctionAttribute : Attribute
-    { }
+    {
+    }
 }

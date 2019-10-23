@@ -9,7 +9,6 @@
 
 using System.ComponentModel;
 
-
 namespace OSharp.Core.Functions
 {
     /// <summary>
@@ -33,6 +32,6 @@ namespace OSharp.Core.Functions
         /// 指定角色可访问
         /// </summary>
         [Description("角色访问")]
-        RoleLimit = 2
+        RoleLimit = 2,
     }
 }

@@ -8,7 +8,6 @@
 
 using System.Collections.Generic;
 
-
 namespace OSharp.Data
 {
     /// <summary>
@@ -26,6 +25,9 @@ namespace OSharp.Data
         /// <summary>
         /// 获取指定类型的字典的单例实例
         /// </summary>
-        public new static IDictionary<TKey, TValue> Instance { get { return Singleton<IDictionary<TKey, TValue>>.Instance; } }
+        public new static IDictionary<TKey, TValue> Instance
+        {
+            get { return Singleton<IDictionary<TKey, TValue>>.Instance; }
+        }
     }
 }

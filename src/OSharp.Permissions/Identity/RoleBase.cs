@@ -13,7 +13,6 @@ using System.ComponentModel.DataAnnotations;
 
 using OSharp.Entity;
 
-
 namespace OSharp.Identity
 {
     /// <summary>
@@ -28,19 +27,21 @@ namespace OSharp.Identity
         /// </summary>
         protected RoleBase()
         {
-            CreatedTime = DateTime.Now;
+            this.CreatedTime = DateTime.Now;
         }
 
         /// <summary>
         /// 获取或设置 角色名称
         /// </summary>
-        [Required, DisplayName("角色名称")]
+        [Required]
+        [DisplayName("角色名称")]
         public string Name { get; set; }
 
         /// <summary>
         /// 获取或设置 标准化角色名称
         /// </summary>
-        [Required, DisplayName("标准化角色名称")]
+        [Required]
+        [DisplayName("标准化角色名称")]
         public string NormalizedName { get; set; }
 
         /// <summary>
@@ -95,8 +96,7 @@ namespace OSharp.Identity
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return Name;
+            return this.Name;
         }
-
     }
 }

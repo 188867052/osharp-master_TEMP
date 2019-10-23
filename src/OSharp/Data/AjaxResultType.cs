@@ -1,13 +1,4 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="AjaxResultType.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2017 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2017-09-01 20:36</last-date>
-// -----------------------------------------------------------------------
-
-namespace OSharp.Data
+﻿namespace OSharp.Data
 {
     /// <summary>
     /// 表示 ajax 操作结果类型的枚举
@@ -47,6 +38,6 @@ namespace OSharp.Data
         /// <summary>
         /// 资源被锁定
         /// </summary>
-        Locked = 423
+        Locked = 423,
     }
 }

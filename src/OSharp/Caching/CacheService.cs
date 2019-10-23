@@ -23,7 +23,6 @@ using OSharp.Extensions;
 using OSharp.Filter;
 using OSharp.Reflection;
 
-
 namespace OSharp.Caching
 {
     /// <summary>
@@ -38,10 +37,8 @@ namespace OSharp.Caching
         /// </summary>
         public CacheService(IDistributedCache cache)
         {
-            _cache = cache;
+            this._cache = cache;
         }
-
-        #region Implementation of ICacheService
 
         /// <summary>
         /// 查询分页数据结果，如缓存存在，直接返回，否则从数据源查找分页结果，并存入缓存中再返回
@@ -63,7 +60,7 @@ namespace OSharp.Caching
             params object[] keyParams)
         {
             string key = GetKey(source, predicate, pageCondition, selector, keyParams);
-            return _cache.Get(key, () => source.ToPage(predicate, pageCondition, selector), cacheSeconds);
+            return this._cache.Get(key, () => source.ToPage(predicate, pageCondition, selector), cacheSeconds);
         }
 
         /// <summary>
@@ -86,7 +83,7 @@ namespace OSharp.Caching
             params object[] keyParams)
         {
             string key = GetKey(source, predicate, pageCondition, selector, keyParams);
-            return _cache.Get(key, () => source.ToPage(predicate, pageCondition, selector), function);
+            return this._cache.Get(key, () => source.ToPage(predicate, pageCondition, selector), function);
         }
 
         /// <summary>
@@ -106,7 +103,7 @@ namespace OSharp.Caching
             int cacheSeconds = 60,
             params object[] keyParams)
         {
-            return ToCacheList(source.Where(predicate), selector, cacheSeconds, keyParams);
+            return this.ToCacheList(source.Where(predicate), selector, cacheSeconds, keyParams);
         }
 
         /// <summary>
@@ -126,7 +123,7 @@ namespace OSharp.Caching
             int cacheSeconds = 60,
             params object[] keyParams)
         {
-            return ToCacheArray(source.Where(predicate), selector, cacheSeconds, keyParams);
+            return this.ToCacheArray(source.Where(predicate), selector, cacheSeconds, keyParams);
         }
 
         /// <summary>
@@ -146,7 +143,7 @@ namespace OSharp.Caching
             IFunction function,
             params object[] keyParams)
         {
-            return ToCacheList(source.Where(predicate), selector, function, keyParams);
+            return this.ToCacheList(source.Where(predicate), selector, function, keyParams);
         }
 
         /// <summary>
@@ -166,7 +163,7 @@ namespace OSharp.Caching
             IFunction function,
             params object[] keyParams)
         {
-            return ToCacheArray(source.Where(predicate), selector, function, keyParams);
+            return this.ToCacheArray(source.Where(predicate), selector, function, keyParams);
         }
 
         /// <summary>
@@ -185,7 +182,7 @@ namespace OSharp.Caching
             params object[] keyParams)
         {
             string key = GetKey(source, selector, keyParams);
-            return _cache.Get(key, () => source.Select(selector).ToList(), cacheSeconds);
+            return this._cache.Get(key, () => source.Select(selector).ToList(), cacheSeconds);
         }
 
         /// <summary>
@@ -204,7 +201,7 @@ namespace OSharp.Caching
             params object[] keyParams)
         {
             string key = GetKey(source, selector, keyParams);
-            return _cache.Get(key, () => source.Select(selector).ToArray(), cacheSeconds);
+            return this._cache.Get(key, () => source.Select(selector).ToArray(), cacheSeconds);
         }
 
         /// <summary>
@@ -223,7 +220,7 @@ namespace OSharp.Caching
             params object[] keyParams)
         {
             string key = GetKey(source, selector, keyParams);
-            return _cache.Get(key, () => source.Select(selector).ToList(), function);
+            return this._cache.Get(key, () => source.Select(selector).ToList(), function);
         }
 
         /// <summary>
@@ -242,7 +239,7 @@ namespace OSharp.Caching
             params object[] keyParams)
         {
             string key = GetKey(source, selector, keyParams);
-            return _cache.Get(key, () => source.Select(selector).ToArray(), function);
+            return this._cache.Get(key, () => source.Select(selector).ToArray(), function);
         }
 
         /// <summary>
@@ -256,7 +253,7 @@ namespace OSharp.Caching
         public virtual List<TSource> ToCacheList<TSource>(IQueryable<TSource> source, int cacheSeconds = 60, params object[] keyParams)
         {
             string key = GetKey(source.Expression, keyParams);
-            return _cache.Get(key, source.ToList, cacheSeconds);
+            return this._cache.Get(key, source.ToList, cacheSeconds);
         }
 
         /// <summary>
@@ -270,7 +267,7 @@ namespace OSharp.Caching
         public virtual TSource[] ToCacheArray<TSource>(IQueryable<TSource> source, int cacheSeconds = 60, params object[] keyParams)
         {
             string key = GetKey(source.Expression, keyParams);
-            return _cache.Get(key, source.ToArray, cacheSeconds);
+            return this._cache.Get(key, source.ToArray, cacheSeconds);
         }
 
         /// <summary>
@@ -289,7 +286,7 @@ namespace OSharp.Caching
             }
 
             string key = GetKey(source.Expression, keyParams);
-            return _cache.Get(key, source.ToList, function);
+            return this._cache.Get(key, source.ToList, function);
         }
 
         /// <summary>
@@ -308,7 +305,7 @@ namespace OSharp.Caching
             }
 
             string key = GetKey(source.Expression, keyParams);
-            return _cache.Get(key, source.ToArray, function);
+            return this._cache.Get(key, source.ToArray, function);
         }
 
         /// <summary>
@@ -329,7 +326,7 @@ namespace OSharp.Caching
             params object[] keyParams) where TOutputDto : IOutputDto
         {
             string key = GetKey<TEntity, TOutputDto>(source, predicate, pageCondition, keyParams);
-            return _cache.Get(key, () => source.ToPage<TEntity, TOutputDto>(predicate, pageCondition), cacheSeconds);
+            return this._cache.Get(key, () => source.ToPage<TEntity, TOutputDto>(predicate, pageCondition), cacheSeconds);
         }
 
         /// <summary>
@@ -350,7 +347,7 @@ namespace OSharp.Caching
             params object[] keyParams) where TOutputDto : IOutputDto
         {
             string key = GetKey<TEntity, TOutputDto>(source, predicate, pageCondition, keyParams);
-            return _cache.Get(key, () => source.ToPage<TEntity, TOutputDto>(predicate, pageCondition), function);
+            return this._cache.Get(key, () => source.ToPage<TEntity, TOutputDto>(predicate, pageCondition), function);
         }
 
         /// <summary>
@@ -368,7 +365,7 @@ namespace OSharp.Caching
             int cacheSeconds = 60,
             params object[] keyParams)
         {
-            return ToCacheList<TSource, TOutputDto>(source.Where(predicate), cacheSeconds, keyParams);
+            return this.ToCacheList<TSource, TOutputDto>(source.Where(predicate), cacheSeconds, keyParams);
         }
 
         /// <summary>
@@ -386,7 +383,7 @@ namespace OSharp.Caching
             int cacheSeconds = 60,
             params object[] keyParams)
         {
-            return ToCacheArray<TSource, TOutputDto>(source.Where(predicate), cacheSeconds, keyParams);
+            return this.ToCacheArray<TSource, TOutputDto>(source.Where(predicate), cacheSeconds, keyParams);
         }
 
         /// <summary>
@@ -404,7 +401,7 @@ namespace OSharp.Caching
             IFunction function,
             params object[] keyParams)
         {
-            return ToCacheList<TSource, TOutputDto>(source.Where(predicate), function, keyParams);
+            return this.ToCacheList<TSource, TOutputDto>(source.Where(predicate), function, keyParams);
         }
 
         /// <summary>
@@ -422,7 +419,7 @@ namespace OSharp.Caching
             IFunction function,
             params object[] keyParams)
         {
-            return ToCacheArray<TSource, TOutputDto>(source.Where(predicate), function, keyParams);
+            return this.ToCacheArray<TSource, TOutputDto>(source.Where(predicate), function, keyParams);
         }
 
         /// <summary>
@@ -437,7 +434,7 @@ namespace OSharp.Caching
         public virtual List<TOutputDto> ToCacheList<TSource, TOutputDto>(IQueryable<TSource> source, int cacheSeconds = 60, params object[] keyParams)
         {
             string key = GetKey<TSource, TOutputDto>(source, keyParams);
-            return _cache.Get(key, () => source.ToOutput<TSource, TOutputDto>().ToList(), cacheSeconds);
+            return this._cache.Get(key, () => source.ToOutput<TSource, TOutputDto>().ToList(), cacheSeconds);
         }
 
         /// <summary>
@@ -452,7 +449,7 @@ namespace OSharp.Caching
         public virtual TOutputDto[] ToCacheArray<TSource, TOutputDto>(IQueryable<TSource> source, int cacheSeconds = 60, params object[] keyParams)
         {
             string key = GetKey<TSource, TOutputDto>(source, keyParams);
-            return _cache.Get(key, () => source.ToOutput<TSource, TOutputDto>().ToArray(), cacheSeconds);
+            return this._cache.Get(key, () => source.ToOutput<TSource, TOutputDto>().ToArray(), cacheSeconds);
         }
 
         /// <summary>
@@ -467,7 +464,7 @@ namespace OSharp.Caching
         public virtual List<TOutputDto> ToCacheList<TSource, TOutputDto>(IQueryable<TSource> source, IFunction function, params object[] keyParams)
         {
             string key = GetKey<TSource, TOutputDto>(source, keyParams);
-            return _cache.Get(key, () => source.ToOutput<TSource, TOutputDto>().ToList(), function);
+            return this._cache.Get(key, () => source.ToOutput<TSource, TOutputDto>().ToList(), function);
         }
 
         /// <summary>
@@ -482,12 +479,8 @@ namespace OSharp.Caching
         public virtual TOutputDto[] ToCacheArray<TSource, TOutputDto>(IQueryable<TSource> source, IFunction function, params object[] keyParams)
         {
             string key = GetKey<TSource, TOutputDto>(source, keyParams);
-            return _cache.Get(key, () => source.ToOutput<TSource, TOutputDto>().ToArray(), function);
+            return this._cache.Get(key, () => source.ToOutput<TSource, TOutputDto>().ToArray(), function);
         }
-
-        #endregion
-
-        #region 私有方法
 
         private static string GetKey<TEntity, TResult>(IQueryable<TEntity> source,
             Expression<Func<TEntity, bool>> predicate,
@@ -610,7 +603,5 @@ namespace OSharp.Caching
 
             return key.ToMd5Hash();
         }
-
-        #endregion
     }
 }

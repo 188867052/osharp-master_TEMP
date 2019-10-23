@@ -7,8 +7,6 @@
 //  <last-date>2018-06-27 4:50</last-date>
 // -----------------------------------------------------------------------
 
-using Liuliu.Demo.Web.Startups;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,9 +16,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 using OSharp.AspNetCore;
-using OSharp.Core.Builders;
-using OSharp.Entity;
-
 
 namespace Liuliu.Demo.Web
 {
@@ -53,7 +48,8 @@ namespace Liuliu.Demo.Web
             }
 
             app
-                //.UseMiddleware<NodeNoFoundHandlerMiddleware>()
+
+                // .UseMiddleware<NodeNoFoundHandlerMiddleware>()
                 .UseMiddleware<NodeExceptionHandlerMiddleware>()
                 .UseDefaultFiles()
                 .UseStaticFiles()

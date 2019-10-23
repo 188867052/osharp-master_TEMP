@@ -1,18 +1,6 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="ModuleInfo.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2018 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2018-06-23 11:38</last-date>
-// -----------------------------------------------------------------------
-
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
-
+﻿using System.Diagnostics;
 using OSharp.Core.Functions;
 using OSharp.Entity;
-
 
 namespace OSharp.Core.Modules
 {
@@ -54,10 +42,8 @@ namespace OSharp.Core.Modules
 
         private string ToDebugDisplay()
         {
-            return $"{Name}[{Code}]({Position}),FunctionCount:{DependOnFunctions.Length}";
+            return $"{this.Name}[{this.Code}]({this.Position}),FunctionCount:{this.DependOnFunctions.Length}";
         }
-
-        #region Overrides of Object
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>
@@ -68,9 +54,8 @@ namespace OSharp.Core.Modules
             {
                 return false;
             }
-            return $"{info.Position}.{info.Code}" == $"{Position}.{Code}";
-        }
 
-        #endregion
+            return $"{info.Position}.{info.Code}" == $"{this.Position}.{this.Code}";
+        }
     }
 }

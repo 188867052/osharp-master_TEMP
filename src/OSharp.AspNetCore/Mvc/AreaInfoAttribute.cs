@@ -9,7 +9,6 @@
 
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace OSharp.AspNetCore.Mvc
 {
     /// <summary>
@@ -23,7 +22,8 @@ namespace OSharp.AspNetCore.Mvc
         /// <param name="areaName">The area containing the controller or action.</param>
         public AreaInfoAttribute(string areaName)
             : base(areaName)
-        { }
+        {
+        }
 
         /// <summary>
         /// 获取或设置 区域的显示名称

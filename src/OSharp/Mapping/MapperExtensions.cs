@@ -14,7 +14,6 @@ using System.Linq.Expressions;
 using OSharp.Extensions;
 using OSharp.Properties;
 
-
 namespace OSharp.Mapping
 {
     /// <summary>

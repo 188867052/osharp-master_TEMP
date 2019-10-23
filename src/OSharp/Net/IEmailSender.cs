@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 
-
 namespace OSharp.Net
 {
     /// <summary>

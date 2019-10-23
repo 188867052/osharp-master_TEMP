@@ -11,7 +11,6 @@ using System;
 
 using OSharp.Data;
 
-
 namespace OSharp.Mapping
 {
     /// <summary>
@@ -25,7 +24,7 @@ namespace OSharp.Mapping
         public MapToAttribute(params Type[] targetTypes)
         {
             Check.NotNull(targetTypes, nameof(targetTypes));
-            TargetTypes = targetTypes;
+            this.TargetTypes = targetTypes;
         }
 
         /// <summary>

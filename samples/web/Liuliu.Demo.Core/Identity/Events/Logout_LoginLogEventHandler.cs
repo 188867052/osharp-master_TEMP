@@ -17,7 +17,6 @@ using Liuliu.Demo.Identity.Entities;
 using OSharp.Entity;
 using OSharp.EventBuses;
 
-
 namespace Liuliu.Demo.Identity.Events
 {
     /// <summary>
@@ -32,7 +31,7 @@ namespace Liuliu.Demo.Identity.Events
         /// </summary>
         public LogoutLoginLogEventHandler(IRepository<LoginLog, Guid> loginLogRepository)
         {
-            _loginLogRepository = loginLogRepository;
+            this._loginLogRepository = loginLogRepository;
         }
 
         /// <summary>
@@ -41,13 +40,14 @@ namespace Liuliu.Demo.Identity.Events
         /// <param name="eventData">事件源数据</param>
         public override void Handle(LogoutEventData eventData)
         {
-            LoginLog log = _loginLogRepository.QueryAsNoTracking().LastOrDefault(m => m.UserId == eventData.UserId);
+            LoginLog log = this._loginLogRepository.QueryAsNoTracking().LastOrDefault(m => m.UserId == eventData.UserId);
             if (log == null)
             {
                 return;
             }
+
             log.LogoutTime = DateTime.Now;
-            _loginLogRepository.Update(log);
+            this._loginLogRepository.Update(log);
         }
 
         /// <summary>
@@ -58,13 +58,14 @@ namespace Liuliu.Demo.Identity.Events
         /// <returns>是否成功</returns>
         public override async Task HandleAsync(LogoutEventData eventData, CancellationToken cancelToken = default(CancellationToken))
         {
-            LoginLog log = _loginLogRepository.QueryAsNoTracking().LastOrDefault(m => m.UserId == eventData.UserId);
+            LoginLog log = this._loginLogRepository.QueryAsNoTracking().LastOrDefault(m => m.UserId == eventData.UserId);
             if (log == null)
             {
                 return;
             }
+
             log.LogoutTime = DateTime.Now;
-            await _loginLogRepository.UpdateAsync(log);
+            await this._loginLogRepository.UpdateAsync(log);
         }
     }
 }

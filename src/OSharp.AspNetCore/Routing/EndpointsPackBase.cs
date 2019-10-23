@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Routing;
 
 using OSharp.Core.Packs;
 
-
 namespace OSharp.AspNetCore.Routing
 {
     /// <summary>
@@ -42,11 +41,11 @@ namespace OSharp.AspNetCore.Routing
         {
             app.UseEndpoints(endpoints =>
             {
-                endpoints = MvcEndpoints(endpoints);
-                SignalREndpoints(endpoints);
-                OtherEndpoints(endpoints);
+                endpoints = this.MvcEndpoints(endpoints);
+                this.SignalREndpoints(endpoints);
+                this.OtherEndpoints(endpoints);
             });
-            IsEnabled = true;
+            this.IsEnabled = true;
         }
 
         /// <summary>
@@ -78,7 +77,6 @@ namespace OSharp.AspNetCore.Routing
         {
             return endpoints;
         }
-
     }
 }
 #endif

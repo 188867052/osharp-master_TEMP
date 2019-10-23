@@ -16,7 +16,6 @@ using AutoMapper.QueryableExtensions;
 
 using IMapper = OSharp.Mapping.IMapper;
 
-
 namespace OSharp.AutoMapper
 {
     /// <summary>
@@ -32,8 +31,8 @@ namespace OSharp.AutoMapper
         /// </summary>
         public AutoMapperMapper(MapperConfiguration configuration)
         {
-            _configuration = configuration;
-            _mapper = configuration.CreateMapper();
+            this._configuration = configuration;
+            this._mapper = configuration.CreateMapper();
         }
 
         /// <summary>
@@ -44,7 +43,7 @@ namespace OSharp.AutoMapper
         /// <returns>目标类型的对象</returns>
         public TTarget MapTo<TTarget>(object source)
         {
-            return _mapper.Map<TTarget>(source);
+            return this._mapper.Map<TTarget>(source);
         }
 
         /// <summary>
@@ -57,7 +56,7 @@ namespace OSharp.AutoMapper
         /// <returns>更新后的目标类型对象</returns>
         public TTarget MapTo<TSource, TTarget>(TSource source, TTarget target)
         {
-            return _mapper.Map<TSource, TTarget>(source, target);
+            return this._mapper.Map<TSource, TTarget>(source, target);
         }
 
         /// <summary>
@@ -69,7 +68,7 @@ namespace OSharp.AutoMapper
         /// <returns>输出DTO的结果集</returns>
         public IQueryable<TOutputDto> ToOutput<TOutputDto>(IQueryable source, params Expression<Func<TOutputDto, object>>[] membersToExpand)
         {
-            return source.ProjectTo(_configuration, membersToExpand);
+            return source.ProjectTo(this._configuration, membersToExpand);
         }
     }
 }

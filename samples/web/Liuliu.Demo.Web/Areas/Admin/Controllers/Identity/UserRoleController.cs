@@ -27,7 +27,6 @@ using OSharp.Entity;
 using OSharp.Filter;
 using OSharp.Security;
 
-
 namespace Liuliu.Demo.Web.Areas.Admin.Controllers
 {
     [ModuleInfo(Order = 3, Position = "Identity", PositionName = "身份认证模块")]
@@ -40,8 +39,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         public UserRoleController(IIdentityContract identityContract,
             IFilterService filterService)
         {
-            _identityContract = identityContract;
-            _filterService = filterService;
+            this._identityContract = identityContract;
+            this._filterService = filterService;
         }
 
         /// <summary>
@@ -53,11 +52,11 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         [Description("读取")]
         public PageData<UserRoleOutputDto> Read(PageRequest request)
         {
-            Expression<Func<UserRole, bool>> predicate = _filterService.GetExpression<UserRole>(request.FilterGroup);
-            Func<UserRole, bool> updateFunc = _filterService.GetDataFilterExpression<UserRole>(null, DataAuthOperation.Update).Compile();
-            Func<UserRole, bool> deleteFunc = _filterService.GetDataFilterExpression<UserRole>(null, DataAuthOperation.Delete).Compile();
+            Expression<Func<UserRole, bool>> predicate = this._filterService.GetExpression<UserRole>(request.FilterGroup);
+            Func<UserRole, bool> updateFunc = this._filterService.GetDataFilterExpression<UserRole>(null, DataAuthOperation.Update).Compile();
+            Func<UserRole, bool> deleteFunc = this._filterService.GetDataFilterExpression<UserRole>(null, DataAuthOperation.Delete).Compile();
 
-            PageResult<UserRoleOutputDto> page = _identityContract.UserRoles.ToPage(predicate, request.PageCondition, m => new
+            PageResult<UserRoleOutputDto> page = this._identityContract.UserRoles.ToPage(predicate, request.PageCondition, m => new
             {
                 D = m,
                 UserName = m.User.UserName,
@@ -67,7 +66,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
                 UserName = m.UserName,
                 RoleName = m.RoleName,
                 Updatable = updateFunc(m.D),
-                Deletable = deleteFunc(m.D)
+                Deletable = deleteFunc(m.D),
             }).ToArray());
             return page.ToPageData();
         }
@@ -85,8 +84,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         public async Task<AjaxResult> Update(UserRoleInputDto[] dtos)
         {
             Check.NotNull(dtos, nameof(dtos));
-            
-            OperationResult result = await _identityContract.UpdateUserRoles(dtos);
+
+            OperationResult result = await this._identityContract.UpdateUserRoles(dtos);
             return result.ToAjaxResult();
         }
 
@@ -103,10 +102,9 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         public async Task<AjaxResult> Delete(Guid[] ids)
         {
             Check.NotNull(ids, nameof(ids));
-            
-            OperationResult result = await _identityContract.DeleteUserRoles(ids);
+
+            OperationResult result = await this._identityContract.DeleteUserRoles(ids);
             return result.ToAjaxResult();
         }
-
     }
 }

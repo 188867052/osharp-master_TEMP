@@ -2,7 +2,6 @@
 
 using OSharp.Logging.RollingFile.Internal;
 
-
 namespace OSharp.Logging.RollingFile
 {
     /// <summary>
@@ -15,7 +14,6 @@ namespace OSharp.Logging.RollingFile
         private int? _retainedFileCountLimit = 2;
         private string _fileName = "log-";
 
-
         /// <summary>
         /// Gets or sets a strictly positive value representing the maximum log size in bytes or null for no limit.
         /// Once the log is full, no more messages will be appended.
@@ -23,14 +21,15 @@ namespace OSharp.Logging.RollingFile
         /// </summary>
         public int? FileSizeLimit
         {
-            get { return _fileSizeLimit; }
+            get { return this._fileSizeLimit; }
             set
             {
                 if (value <= 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), $"{nameof(FileSizeLimit)} must be positive.");
+                    throw new ArgumentOutOfRangeException(nameof(value), $"{nameof(this.FileSizeLimit)} must be positive.");
                 }
-                _fileSizeLimit = value;
+
+                this._fileSizeLimit = value;
             }
         }
 
@@ -40,14 +39,15 @@ namespace OSharp.Logging.RollingFile
         /// </summary>
         public int? RetainedFileCountLimit
         {
-            get { return _retainedFileCountLimit; }
+            get { return this._retainedFileCountLimit; }
             set
             {
                 if (value <= 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), $"{nameof(RetainedFileCountLimit)} must be positive.");
+                    throw new ArgumentOutOfRangeException(nameof(value), $"{nameof(this.RetainedFileCountLimit)} must be positive.");
                 }
-                _retainedFileCountLimit = value;
+
+                this._retainedFileCountLimit = value;
             }
         }
 
@@ -57,14 +57,15 @@ namespace OSharp.Logging.RollingFile
         /// </summary>
         public string FileName
         {
-            get { return _fileName; }
+            get { return this._fileName; }
             set
             {
                 if (string.IsNullOrEmpty(value))
                 {
                     throw new ArgumentException(nameof(value));
                 }
-                _fileName = value;
+
+                this._fileName = value;
             }
         }
 

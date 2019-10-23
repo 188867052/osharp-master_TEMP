@@ -4,7 +4,6 @@ using Shouldly;
 
 using Xunit;
 
-
 namespace OSharp.Entity.Tests
 {
     public class ExpirableBaseTests
@@ -23,7 +22,7 @@ namespace OSharp.Entity.Tests
             TestEntity entity = new TestEntity
             {
                 BeginTime = DateTime.Now.AddDays(-1),
-                EndTime = DateTime.Now.AddDays(1)
+                EndTime = DateTime.Now.AddDays(1),
             };
             entity.ThrowIfTimeInvalid();
 
@@ -34,6 +33,8 @@ namespace OSharp.Entity.Tests
             });
         }
 
-        private class TestEntity : ExpirableBase<int> { }
+        private class TestEntity : ExpirableBase<int>
+        {
+        }
     }
 }

@@ -11,7 +11,6 @@ using System.Data;
 
 using Microsoft.Data.Sqlite;
 
-
 namespace OSharp.Entity.Sqlite
 {
     /// <summary>
@@ -26,8 +25,9 @@ namespace OSharp.Entity.Sqlite
         /// </summary>
         public SqliteDapperSqlExecutor(IUnitOfWorkManager unitOfWorkManager)
             : base(unitOfWorkManager)
-        { }
-        
+        {
+        }
+
         /// <summary>
         /// 获取 数据库类型
         /// </summary>

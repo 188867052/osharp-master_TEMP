@@ -1,11 +1,7 @@
 ﻿using System;
-
-using NLog;
-
 using Microsoft.Extensions.Logging;
-
+using NLog;
 using OSharp.Data;
-
 
 namespace OSharp.NLog
 {
@@ -15,13 +11,13 @@ namespace OSharp.NLog
     public class NLogLogger : Microsoft.Extensions.Logging.ILogger
     {
         private readonly Logger _log;
-        
+
         /// <summary>
         /// 初始化一个<see cref="NLogLogger"/>类型的新实例
         /// </summary>
         public NLogLogger(string name)
         {
-            _log = LogManager.GetLogger(name);
+            this._log = LogManager.GetLogger(name);
         }
 
         /// <summary>Writes a log entry.</summary>
@@ -33,43 +29,45 @@ namespace OSharp.NLog
         [Obsolete]
         public void Log<TState>(Microsoft.Extensions.Logging.LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
-            if (!IsEnabled(logLevel))
+            if (!this.IsEnabled(logLevel))
             {
                 return;
             }
+
             Check.NotNull(formatter, nameof(formatter));
             string message = null;
             if (formatter != null)
             {
                 message = formatter(state, exception);
             }
+
             if (!string.IsNullOrEmpty(message) || exception != null)
             {
                 switch (logLevel)
                 {
                     case Microsoft.Extensions.Logging.LogLevel.Trace:
-                        _log.Trace(message);
+                        this._log.Trace(message);
                         break;
                     case Microsoft.Extensions.Logging.LogLevel.Debug:
-                        _log.Debug(message);
+                        this._log.Debug(message);
                         break;
                     case Microsoft.Extensions.Logging.LogLevel.Information:
-                        _log.Info(message);
+                        this._log.Info(message);
                         break;
                     case Microsoft.Extensions.Logging.LogLevel.Warning:
-                        _log.Warn(message);
+                        this._log.Warn(message);
                         break;
                     case Microsoft.Extensions.Logging.LogLevel.Error:
-                        _log.Error(message, exception);
+                        this._log.Error(message, exception);
                         break;
                     case Microsoft.Extensions.Logging.LogLevel.Critical:
-                        _log.Fatal(message, exception);
+                        this._log.Fatal(message, exception);
                         break;
                     case Microsoft.Extensions.Logging.LogLevel.None:
                         break;
                     default:
-                        _log.Warn($"遇到未知的日志级别 {logLevel}, 使用Info级别写入日志。");
-                        _log.Info(message, exception);
+                        this._log.Warn($"遇到未知的日志级别 {logLevel}, 使用Info级别写入日志。");
+                        this._log.Info(message, exception);
                         break;
                 }
             }
@@ -85,17 +83,17 @@ namespace OSharp.NLog
             switch (logLevel)
             {
                 case Microsoft.Extensions.Logging.LogLevel.Trace:
-                    return _log.IsTraceEnabled;
+                    return this._log.IsTraceEnabled;
                 case Microsoft.Extensions.Logging.LogLevel.Debug:
-                    return _log.IsDebugEnabled;
+                    return this._log.IsDebugEnabled;
                 case Microsoft.Extensions.Logging.LogLevel.Information:
-                    return _log.IsInfoEnabled;
+                    return this._log.IsInfoEnabled;
                 case Microsoft.Extensions.Logging.LogLevel.Warning:
-                    return _log.IsWarnEnabled;
+                    return this._log.IsWarnEnabled;
                 case Microsoft.Extensions.Logging.LogLevel.Error:
-                    return _log.IsErrorEnabled;
+                    return this._log.IsErrorEnabled;
                 case Microsoft.Extensions.Logging.LogLevel.Critical:
-                    return _log.IsFatalEnabled;
+                    return this._log.IsFatalEnabled;
 
                 case Microsoft.Extensions.Logging.LogLevel.None:
                     return false;

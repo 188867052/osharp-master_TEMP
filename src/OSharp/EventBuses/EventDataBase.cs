@@ -9,7 +9,6 @@
 
 using System;
 
-
 namespace OSharp.EventBuses
 {
     /// <summary>
@@ -22,8 +21,8 @@ namespace OSharp.EventBuses
         /// </summary>
         protected EventDataBase()
         {
-            Id = Guid.NewGuid();
-            EventTime = DateTime.Now;
+            this.Id = Guid.NewGuid();
+            this.EventTime = DateTime.Now;
         }
 
         /// <summary>

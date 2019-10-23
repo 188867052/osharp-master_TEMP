@@ -11,7 +11,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-
 namespace OSharp.Threading.Asyncs
 {
     /// <summary>
@@ -27,8 +26,8 @@ namespace OSharp.Threading.Asyncs
         /// </summary>
         public AsyncLock()
         {
-            _semaphore = new AsyncSemaphore(1);
-            _releaser = Task.FromResult(new Releaser(this));
+            this._semaphore = new AsyncSemaphore(1);
+            this._releaser = Task.FromResult(new Releaser(this));
         }
 
         /// <summary>
@@ -36,16 +35,15 @@ namespace OSharp.Threading.Asyncs
         /// </summary>
         public Task<Releaser> LockAsync()
         {
-            var wait = _semaphore.WaitAsync();
+            var wait = this._semaphore.WaitAsync();
             return wait.IsCompleted
-                ? _releaser
+                ? this._releaser
                 : wait.ContinueWith((_, state) => new Releaser((AsyncLock)state),
                     this,
                     CancellationToken.None,
                     TaskContinuationOptions.ExecuteSynchronously,
                     TaskScheduler.Default);
         }
-
 
         /// <summary>
         /// 释放资源的包装
@@ -56,7 +54,7 @@ namespace OSharp.Threading.Asyncs
 
             internal Releaser(AsyncLock toRelease)
             {
-                _toRelease = toRelease;
+                this._toRelease = toRelease;
             }
 
             /// <summary>
@@ -65,9 +63,9 @@ namespace OSharp.Threading.Asyncs
             /// <filterpriority>2</filterpriority>
             public void Dispose()
             {
-                if (_toRelease != null)
+                if (this._toRelease != null)
                 {
-                    _toRelease._semaphore.Release();
+                    this._toRelease._semaphore.Release();
                 }
             }
         }

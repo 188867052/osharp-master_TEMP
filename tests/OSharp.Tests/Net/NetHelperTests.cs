@@ -11,7 +11,7 @@ namespace OSharp.Net.Tests
             Assert.True(flag);
         }
 
-        [Fact()]
+        [Fact]
         public void IsInternetConnectedTest()
         {
             bool flag = NetHelper.IsInternetConnected();

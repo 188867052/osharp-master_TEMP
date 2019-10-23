@@ -19,7 +19,6 @@ using OSharp.Core.Functions;
 using OSharp.Data;
 using OSharp.Security;
 
-
 namespace OSharp.AspNetCore.Mvc.Filters
 {
     /// <summary>
@@ -35,10 +34,10 @@ namespace OSharp.AspNetCore.Mvc.Filters
         {
             Check.NotNull(context, nameof(context));
             IFunction function = context.GetExecuteFunction();
-            AuthorizationResult result = AuthorizeCore(context, function);
+            AuthorizationResult result = this.AuthorizeCore(context, function);
             if (!result.IsOk)
             {
-                HandleUnauthorizedRequest(context, result);
+                this.HandleUnauthorizedRequest(context, result);
             }
         }
 
@@ -64,7 +63,7 @@ namespace OSharp.AspNetCore.Mvc.Filters
         /// <param name="result">权限检查结果</param>
         protected virtual void HandleUnauthorizedRequest(AuthorizationFilterContext context, AuthorizationResult result)
         {
-            //Json方式请求，返回AjaxResult
+            // Json方式请求，返回AjaxResult
             bool isJsRequest = context.HttpContext.Request.IsAjaxRequest() || context.HttpContext.Request.IsJsonContextType();
 
             AuthorizationStatus status = result.ResultType;
@@ -96,6 +95,7 @@ namespace OSharp.AspNetCore.Mvc.Filters
                         : new StatusCodeResult(500);
                     break;
             }
+
             if (isJsRequest)
             {
                 context.HttpContext.Response.StatusCode = 200;

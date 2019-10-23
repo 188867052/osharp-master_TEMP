@@ -4,7 +4,6 @@ using Shouldly;
 
 using Xunit;
 
-
 namespace OSharp.Data.Tests
 {
     public class CombGuidTests

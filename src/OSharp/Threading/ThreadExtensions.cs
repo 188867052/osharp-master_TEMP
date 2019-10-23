@@ -9,7 +9,6 @@
 using System;
 using System.Threading;
 
-
 namespace OSharp.Threading
 {
     /// <summary>
@@ -26,6 +25,7 @@ namespace OSharp.Threading
             {
                 return;
             }
+
             thread.Interrupt();
         }
 

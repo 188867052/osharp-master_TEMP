@@ -14,8 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.Core.Options;
 using OSharp.Core.Packs;
-using OSharp.Dependency;
-
 
 namespace OSharp.Entity
 {
@@ -41,17 +39,17 @@ namespace OSharp.Entity
         /// </summary>
         /// <param name="provider">服务提供者</param>
         public override void UsePack(IServiceProvider provider)
-        { 
+        {
             OsharpOptions options = provider.GetOSharpOptions();
             OsharpDbContextOptions contextOptions = options.GetDbContextOptions(typeof(TDbContext));
-            if (contextOptions?.DatabaseType != DatabaseType)
+            if (contextOptions?.DatabaseType != this.DatabaseType)
             {
                 return;
             }
 
             using (IServiceScope scope = provider.CreateScope())
             {
-                TDbContext context = CreateDbContext(scope.ServiceProvider);
+                TDbContext context = this.CreateDbContext(scope.ServiceProvider);
                 if (context != null && contextOptions.AutoMigrationEnabled)
                 {
                     context.CheckAndMigration();
@@ -60,7 +58,7 @@ namespace OSharp.Entity
                 }
             }
 
-            IsEnabled = true;
+            this.IsEnabled = true;
         }
 
         /// <summary>

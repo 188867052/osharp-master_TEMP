@@ -17,8 +17,6 @@ using OSharp.Core.Functions;
 using OSharp.Core.Modules;
 using OSharp.Core.Packs;
 using OSharp.EventBuses;
-using OSharp.Security;
-
 
 namespace OSharp.Security
 {
@@ -111,7 +109,7 @@ namespace OSharp.Security
             IModuleHandler moduleHandler = provider.GetService<IModuleHandler>();
             moduleHandler.Initialize();
 
-            //初始化各种缓存
+            // 初始化各种缓存
             IFunctionHandler functionHandler = provider.GetService<IFunctionHandler>();
             functionHandler.RefreshCache();
 
@@ -124,7 +122,7 @@ namespace OSharp.Security
             IDataAuthCache dataAuthCache = provider.GetService<IDataAuthCache>();
             dataAuthCache.BuildCaches();
 
-            IsEnabled = true;
+            this.IsEnabled = true;
         }
     }
 }

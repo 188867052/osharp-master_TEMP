@@ -20,7 +20,6 @@ using OSharp.Dependency;
 using OSharp.Exceptions;
 using OSharp.Reflection;
 
-
 namespace OSharp.Entity
 {
     /// <summary>
@@ -47,14 +46,15 @@ namespace OSharp.Entity
                     throw new OsharpException($"无法找到数据上下文“{dbContextType.DisplayName()}”的配置信息");
                 }
 
-                //启用延迟加载
+                // 启用延迟加载
                 if (osharpDbContextOptions.LazyLoadingProxiesEnabled)
                 {
                     builder = builder.UseLazyLoadingProxies();
                 }
+
                 DatabaseType databaseType = osharpDbContextOptions.DatabaseType;
 
-                //处理数据库驱动差异处理
+                // 处理数据库驱动差异处理
                 IDbContextOptionsBuilderDriveHandler driveHandler = provider.GetServices<IDbContextOptionsBuilderDriveHandler>()
                     .FirstOrDefault(m => m.Type == databaseType);
                 if (driveHandler == null)
@@ -67,7 +67,7 @@ namespace OSharp.Entity
                 DbConnection existingDbConnection = scopedDictionary.GetValue<DbConnection>(key);
                 builder = driveHandler.Handle(builder, osharpDbContextOptions.ConnectionString, existingDbConnection);
 
-                //使用模型缓存
+                // 使用模型缓存
                 DbContextModelCache modelCache = provider.GetService<DbContextModelCache>();
                 IModel model = modelCache?.Get(dbContextType);
                 if (model != null)
@@ -75,7 +75,7 @@ namespace OSharp.Entity
                     builder = builder.UseModel(model);
                 }
 
-                //额外的选项
+                // 额外的选项
                 optionsAction?.Invoke(provider, builder);
             });
             return services;

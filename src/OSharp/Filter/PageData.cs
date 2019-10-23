@@ -9,7 +9,6 @@
 
 using System.Collections.Generic;
 
-
 namespace OSharp.Filter
 {
     /// <summary>
@@ -23,15 +22,16 @@ namespace OSharp.Filter
         /// </summary>
         public PageData()
             : this(new List<T>(), 0)
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="PageData{T}"/>类型的新实例
         /// </summary>
         public PageData(IEnumerable<T>rows, int total)
         {
-            Rows = rows;
-            Total = total;
+            this.Rows = rows;
+            this.Total = total;
         }
 
         /// <summary>

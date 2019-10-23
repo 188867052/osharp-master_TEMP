@@ -15,7 +15,6 @@ using OSharp.Audits;
 using OSharp.Entity;
 using OSharp.Mapping;
 
-
 namespace Liuliu.Demo.Systems.Entities
 {
     /// <summary>
@@ -30,16 +29,17 @@ namespace Liuliu.Demo.Systems.Entities
         /// </summary>
         public AuditEntity()
             : this(null, null, OperateType.Query)
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="AuditEntityEntry"/>类型的新实例
         /// </summary>
         public AuditEntity(string name, string typeName, OperateType operateType)
         {
-            Name = name;
-            TypeName = typeName;
-            OperateType = operateType;
+            this.Name = name;
+            this.TypeName = typeName;
+            this.OperateType = operateType;
         }
 
         /// <summary>

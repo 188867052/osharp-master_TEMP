@@ -12,7 +12,6 @@ using System.Linq;
 
 using OSharp.Entity;
 
-
 namespace OSharp.Dependency
 {
     /// <summary>

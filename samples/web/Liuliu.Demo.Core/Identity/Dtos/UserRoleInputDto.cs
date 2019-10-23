@@ -12,7 +12,6 @@ using Liuliu.Demo.Identity.Entities;
 using OSharp.Identity;
 using OSharp.Mapping;
 
-
 namespace Liuliu.Demo.Identity.Dtos
 {
     /// <summary>
@@ -20,5 +19,6 @@ namespace Liuliu.Demo.Identity.Dtos
     /// </summary>
     [MapTo(typeof(UserRole))]
     public class UserRoleInputDto : UserRoleInputDtoBase<int, int>
-    { }
+    {
+    }
 }

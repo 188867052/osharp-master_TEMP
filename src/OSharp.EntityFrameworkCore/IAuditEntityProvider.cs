@@ -13,7 +13,6 @@ using Microsoft.EntityFrameworkCore;
 
 using OSharp.Audits;
 
-
 namespace OSharp.Entity
 {
     /// <summary>

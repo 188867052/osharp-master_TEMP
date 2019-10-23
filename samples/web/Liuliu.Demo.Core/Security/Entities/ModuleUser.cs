@@ -13,7 +13,6 @@ using Liuliu.Demo.Identity.Entities;
 
 using OSharp.Security;
 
-
 namespace Liuliu.Demo.Security.Entities
 {
     /// <summary>

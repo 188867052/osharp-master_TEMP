@@ -22,6 +22,6 @@ namespace OSharp.Filter
         /// <summary>
         ///   编辑数据时重复性检查
         /// </summary>
-        Update
+        Update,
     }
 }

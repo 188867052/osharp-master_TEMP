@@ -12,7 +12,6 @@ using System.Collections.Generic;
 
 using OSharp.Data;
 
-
 namespace OSharp.Audits
 {
     /// <summary>
@@ -25,7 +24,7 @@ namespace OSharp.Audits
         /// </summary>
         public AuditOperationEntry()
         {
-            EntityEntries = new List<AuditEntityEntry>();
+            this.EntityEntries = new List<AuditEntityEntry>();
         }
 
         /// <summary>
@@ -82,6 +81,5 @@ namespace OSharp.Audits
         /// 获取或设置 审计数据信息集合
         /// </summary>
         public ICollection<AuditEntityEntry> EntityEntries { get; set; }
-
     }
 }

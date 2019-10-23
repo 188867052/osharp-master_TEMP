@@ -9,7 +9,6 @@
 
 using OSharp.Data;
 
-
 namespace OSharp.CodeGeneration.Schema
 {
     /// <summary>
@@ -28,6 +27,7 @@ namespace OSharp.CodeGeneration.Schema
             {
                 startIndex = 0;
             }
+
             string name = fullName.Substring(startIndex);
             switch (fullName)
             {
@@ -62,12 +62,13 @@ namespace OSharp.CodeGeneration.Schema
                     name = "DateTime";
                     break;
             }
+
             if (isNullable)
             {
                 name = name + "?";
             }
+
             return name;
         }
-
     }
 }

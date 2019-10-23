@@ -12,7 +12,6 @@ using System.ComponentModel;
 using OSharp.Core.Packs;
 using OSharp.Entity;
 
-
 namespace Liuliu.Demo.Systems.Dtos
 {
     /// <summary>

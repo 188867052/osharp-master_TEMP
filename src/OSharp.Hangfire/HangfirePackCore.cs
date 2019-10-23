@@ -21,7 +21,6 @@ using OSharp.AspNetCore;
 using OSharp.Core.Packs;
 using OSharp.Extensions;
 
-
 namespace OSharp.Hangfire
 {
     /// <summary>
@@ -59,7 +58,7 @@ namespace OSharp.Hangfire
                 return services;
             }
 
-            Action<IGlobalConfiguration> hangfireAction = GetHangfireAction(services);
+            Action<IGlobalConfiguration> hangfireAction = this.GetHangfireAction(services);
             services.AddHangfire(hangfireAction);
             return services;
         }
@@ -85,17 +84,17 @@ namespace OSharp.Hangfire
             IGlobalConfiguration globalConfiguration = serviceProvider.GetService<IGlobalConfiguration>();
             globalConfiguration.UseLogProvider(new AspNetCoreLogProvider(serviceProvider.GetService<ILoggerFactory>()));
 
-            BackgroundJobServerOptions serverOptions = GetBackgroundJobServerOptions(configuration);
+            BackgroundJobServerOptions serverOptions = this.GetBackgroundJobServerOptions(configuration);
             app.UseHangfireServer(serverOptions);
 
             string url = configuration["OSharp:Hangfire:DashboardUrl"].CastTo("/hangfire");
-            DashboardOptions dashboardOptions = GetDashboardOptions(configuration);
+            DashboardOptions dashboardOptions = this.GetDashboardOptions(configuration);
             app.UseHangfireDashboard(url, dashboardOptions);
 
             IHangfireJobRunner jobRunner = serviceProvider.GetService<IHangfireJobRunner>();
             jobRunner?.Start();
 
-            IsEnabled = true;
+            this.IsEnabled = true;
         }
 
         /// <summary>
@@ -128,6 +127,7 @@ namespace OSharp.Hangfire
             {
                 serverOptions.WorkerCount = workerCount;
             }
+
             return serverOptions;
         }
 
@@ -140,11 +140,13 @@ namespace OSharp.Hangfire
         {
             string[] roles = configuration["OSharp:Hangfire:Roles"].CastTo("").Split(",", true);
             DashboardOptions dashboardOptions = new DashboardOptions();
-            //限制角色存在时，才启用角色限制
+
+            // 限制角色存在时，才启用角色限制
             if (roles.Length > 0)
             {
                 dashboardOptions.Authorization = new[] { new RoleDashboardAuthorizationFilter(roles) };
             }
+
             return dashboardOptions;
         }
     }

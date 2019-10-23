@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Identity;
 
 using OSharp.Extensions;
 
-
 namespace OSharp.Identity
 {
     /// <summary>

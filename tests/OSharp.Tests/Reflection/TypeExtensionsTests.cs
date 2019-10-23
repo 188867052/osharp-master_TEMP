@@ -11,18 +11,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
-
-using OSharp.Entity;
 using OSharp.Core.EntityInfos;
-
-using Xunit;
-
+using OSharp.Entity;
 using OSharp.UnitTest.Infrastructure;
-
+using Xunit;
 
 namespace OSharp.Reflection.Tests
 {
-
     public class TypeExtensionsTests
     {
         [Fact]
@@ -32,7 +27,7 @@ namespace OSharp.Reflection.Tests
             Assert.True(typeof(EntityInfo).IsDeriveClassFrom(typeof(IEntity<>)));
         }
 
-        [Fact()]
+        [Fact]
         public void IsNullableTypeTest()
         {
             // ReSharper disable ConvertNullableToShortForm
@@ -42,7 +37,7 @@ namespace OSharp.Reflection.Tests
             Assert.False(typeof(int).IsNullableType());
         }
 
-        [Fact()]
+        [Fact]
         public void IsEnumerableTest()
         {
             Assert.True(typeof(string[]).IsEnumerable());
@@ -56,7 +51,7 @@ namespace OSharp.Reflection.Tests
             Assert.False(typeof(string).IsEnumerable());
         }
 
-        [Fact()]
+        [Fact]
         public void GetNonNullableType()
         {
             Assert.Equal(typeof(int), typeof(int?).GetNonNullableType());
@@ -65,7 +60,7 @@ namespace OSharp.Reflection.Tests
             Assert.Equal(typeof(int), typeof(int).GetNonNullableType());
         }
 
-        [Fact()]
+        [Fact]
         public void GetUnNullableTypeTest()
         {
             Assert.Equal(typeof(int), typeof(int?).GetUnNullableType());
@@ -74,7 +69,7 @@ namespace OSharp.Reflection.Tests
             Assert.Equal(typeof(int), typeof(int).GetUnNullableType());
         }
 
-        [Fact()]
+        [Fact]
         public void ToDescriptionTest()
         {
             Type type = typeof(TestEntity);
@@ -82,37 +77,37 @@ namespace OSharp.Reflection.Tests
             PropertyInfo property = type.GetProperty("Id");
             Assert.Equal("编号", property.GetDescription());
 
-            type = GetType();
+            type = this.GetType();
             Assert.Equal("OSharp.Reflection.Tests.TypeExtensionsTests", type.GetDescription());
         }
 
-        [Fact()]
+        [Fact]
         public void HasAttributeTest()
         {
-            Type type = GetType();
+            Type type = this.GetType();
             MethodInfo method = type.GetMethod("HasAttributeTest");
             Assert.True(method.HasAttribute<FactAttribute>());
         }
 
-        [Fact()]
+        [Fact]
         public void GetAttributeTest()
         {
             Type type = typeof(TestEntity);
             Assert.Equal("测试实体", type.GetAttribute<DescriptionAttribute>().Description);
             PropertyInfo property = type.GetProperty("Id");
             Assert.Equal("编号", property.GetAttribute<DescriptionAttribute>().Description);
-            MethodInfo method = GetType().GetMethod("GetAttributeTest");
+            MethodInfo method = this.GetType().GetMethod("GetAttributeTest");
             Assert.False(method.GetAttribute<FactAttribute>() == null);
         }
 
-        [Fact()]
+        [Fact]
         public void GetAttributesTest()
         {
-            Type type = GetType();
+            Type type = this.GetType();
             Assert.Empty(type.GetAttributes<DescriptionAttribute>());
         }
 
-        [Fact()]
+        [Fact]
         public void IsGenericAssignableFromTest()
         {
             Assert.True(typeof(IEnumerable<>).IsGenericAssignableFrom(typeof(List<>)));
@@ -122,7 +117,7 @@ namespace OSharp.Reflection.Tests
                 (typeof(string)).IsGenericAssignableFrom(typeof(int)));
         }
 
-        [Fact()]
+        [Fact]
         public void IsBaseOnTest()
         {
             Assert.True(typeof(List<>).IsBaseOn(typeof(List<>)));

@@ -7,8 +7,6 @@
 //  <last-date>2019-02-28 1:42</last-date>
 // -----------------------------------------------------------------------
 
-using System;
-
 using Exceptionless;
 
 using Microsoft.AspNetCore.Builder;
@@ -20,7 +18,6 @@ using OSharp.AspNetCore;
 using OSharp.Core.Packs;
 using OSharp.Exceptions;
 using OSharp.Extensions;
-
 
 namespace OSharp.Exceptionless
 {
@@ -81,8 +78,7 @@ namespace OSharp.Exceptionless
 
             app.UseExceptionless();
 
-            UsePack(app.ApplicationServices);
+            this.UsePack(app.ApplicationServices);
         }
-
     }
 }

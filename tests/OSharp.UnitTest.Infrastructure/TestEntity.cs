@@ -11,7 +11,6 @@ using System.ComponentModel;
 
 using OSharp.Entity;
 
-
 namespace OSharp.UnitTest.Infrastructure
 {
     [Description("测试实体")]
@@ -20,8 +19,8 @@ namespace OSharp.UnitTest.Infrastructure
     {
         public TestEntity()
         {
-            AddDate = DateTime.Now;
-            IsDeleted = false;
+            this.AddDate = DateTime.Now;
+            this.IsDeleted = false;
         }
 
         [Description("编号")]

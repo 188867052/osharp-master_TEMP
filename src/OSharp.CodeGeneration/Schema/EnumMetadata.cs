@@ -11,7 +11,6 @@ using System;
 
 using OSharp.Extensions;
 
-
 namespace OSharp.CodeGeneration.Schema
 {
     /// <summary>
@@ -23,7 +22,8 @@ namespace OSharp.CodeGeneration.Schema
         /// 初始化一个<see cref="EnumMetadata"/>类型的新实例
         /// </summary>
         public EnumMetadata()
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="EnumMetadata"/>类型的新实例
@@ -34,9 +34,10 @@ namespace OSharp.CodeGeneration.Schema
             {
                 return;
             }
-            Value = enumItem.CastTo<int>();
-            Name = enumItem.ToString();
-            Display = enumItem.ToDescription();
+
+            this.Value = enumItem.CastTo<int>();
+            this.Name = enumItem.ToString();
+            this.Display = enumItem.ToDescription();
         }
 
         /// <summary>

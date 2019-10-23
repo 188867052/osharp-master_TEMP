@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.Reflection;
 
-
 namespace OSharp.Core.Packs
 {
     /// <summary>
@@ -55,7 +54,7 @@ namespace OSharp.Core.Packs
         /// <param name="provider">服务提供者</param>
         public virtual void UsePack(IServiceProvider provider)
         {
-            IsEnabled = true;
+            this.IsEnabled = true;
         }
 
         /// <summary>
@@ -66,13 +65,15 @@ namespace OSharp.Core.Packs
         {
             if (packType == null)
             {
-                packType = GetType();
+                packType = this.GetType();
             }
+
             DependsOnPacksAttribute[] dependAttrs = packType.GetAttributes<DependsOnPacksAttribute>();
             if (dependAttrs.Length == 0)
             {
                 return new Type[0];
             }
+
             List<Type> dependTypes = new List<Type>();
             foreach (DependsOnPacksAttribute dependAttr in dependAttrs)
             {
@@ -81,10 +82,11 @@ namespace OSharp.Core.Packs
                 {
                     continue;
                 }
+
                 dependTypes.AddRange(packTypes);
                 foreach (Type type in packTypes)
                 {
-                    dependTypes.AddRange(GetDependPackTypes(type));
+                    dependTypes.AddRange(this.GetDependPackTypes(type));
                 }
             }
 

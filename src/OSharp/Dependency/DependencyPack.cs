@@ -10,7 +10,6 @@ using OSharp.Core.Packs;
 using OSharp.Extensions;
 using OSharp.Reflection;
 
-
 namespace OSharp.Dependency
 {
     /// <summary>
@@ -41,14 +40,14 @@ namespace OSharp.Dependency
 
             services.AddTransient(typeof(Lazy<>), typeof(Lazier<>));
 
-            //查找所有自动注册的服务实现类型
+            // 查找所有自动注册的服务实现类型
             IDependencyTypeFinder dependencyTypeFinder =
                 services.GetOrAddTypeFinder<IDependencyTypeFinder>(assemblyFinder => new DependencyTypeFinder(assemblyFinder));
 
             Type[] dependencyTypes = dependencyTypeFinder.FindAll();
             foreach (Type dependencyType in dependencyTypes)
             {
-                AddToServices(services, dependencyType);
+                this.AddToServices(services, dependencyType);
             }
 
             return services;
@@ -61,7 +60,7 @@ namespace OSharp.Dependency
         public override void UsePack(IServiceProvider provider)
         {
             ServiceLocator.Instance.SetApplicationServiceProvider(provider);
-            IsEnabled = true;
+            this.IsEnabled = true;
         }
 
         /// <summary>
@@ -75,22 +74,24 @@ namespace OSharp.Dependency
             {
                 return;
             }
-            ServiceLifetime? lifetime = GetLifetimeOrNull(implementationType);
+
+            ServiceLifetime? lifetime = this.GetLifetimeOrNull(implementationType);
             if (lifetime == null)
             {
                 return;
             }
-            DependencyAttribute dependencyAttribute = implementationType.GetAttribute<DependencyAttribute>();
-            Type[] serviceTypes = GetImplementedInterfaces(implementationType);
 
-            //服务数量为0时注册自身
+            DependencyAttribute dependencyAttribute = implementationType.GetAttribute<DependencyAttribute>();
+            Type[] serviceTypes = this.GetImplementedInterfaces(implementationType);
+
+            // 服务数量为0时注册自身
             if (serviceTypes.Length == 0)
             {
                 services.TryAdd(new ServiceDescriptor(implementationType, implementationType, lifetime.Value));
                 return;
             }
 
-            //服务实现显示要求注册身处时，注册自身并且继续注册接口
+            // 服务实现显示要求注册身处时，注册自身并且继续注册接口
             if (dependencyAttribute?.AddSelf == true)
             {
                 services.TryAdd(new ServiceDescriptor(implementationType, implementationType, lifetime.Value));
@@ -103,7 +104,7 @@ namespace OSharp.Dependency
                 serviceTypes = serviceTypes.OrderByPrefixes(m => m.FullName, orderTokens.ToArray()).ToArray();
             }
 
-            //注册服务
+            // 注册服务
             for (int i = 0; i < serviceTypes.Length; i++)
             {
                 Type serviceType = serviceTypes[i];
@@ -134,7 +135,7 @@ namespace OSharp.Dependency
                     }
                     else
                     {
-                        //有多个接口，后边的接口注册使用第一个接口的实例，保证同个实现类的多个接口获得同一实例
+                        // 有多个接口，后边的接口注册使用第一个接口的实例，保证同个实现类的多个接口获得同一实例
                         Type firstServiceType = serviceTypes[0];
                         descriptor = new ServiceDescriptor(serviceType, provider => provider.GetService(firstServiceType), lifetime.Value);
                         AddSingleService(services, descriptor, dependencyAttribute);
@@ -191,6 +192,7 @@ namespace OSharp.Dependency
                     interfaceTypes[index] = interfaceType.GetGenericTypeDefinition();
                 }
             }
+
             return interfaceTypes;
         }
 

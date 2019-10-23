@@ -9,7 +9,6 @@
 
 using System.ComponentModel;
 
-
 namespace OSharp.Redis
 {
     /// <summary>
@@ -17,5 +16,6 @@ namespace OSharp.Redis
     /// </summary>
     [Description("Redis模块")]
     public class RedisPack : RedisPackBase
-    { }
+    {
+    }
 }

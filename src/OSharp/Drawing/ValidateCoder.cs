@@ -16,7 +16,6 @@ using System.Text;
 using OSharp.Collections;
 using OSharp.Extensions;
 
-
 namespace OSharp.Drawing
 {
     /// <summary>
@@ -31,15 +30,13 @@ namespace OSharp.Drawing
         /// </summary>
         public ValidateCoder()
         {
-            FontNames = new List<string> { "Arial", "Batang", "Buxton Sketch", "David", "SketchFlow Print" };
-            FontNamesForHanzi = new List<string> { "宋体", "幼圆", "楷体", "仿宋", "隶书", "黑体" };
-            FontSize = 20;
-            FontWidth = FontSize;
-            BgColor = Color.FromArgb(240, 240, 240);
-            RandomPointPercent = 0;
+            this.FontNames = new List<string> { "Arial", "Batang", "Buxton Sketch", "David", "SketchFlow Print" };
+            this.FontNamesForHanzi = new List<string> { "宋体", "幼圆", "楷体", "仿宋", "隶书", "黑体" };
+            this.FontSize = 20;
+            this.FontWidth = this.FontSize;
+            this.BgColor = Color.FromArgb(240, 240, 240);
+            this.RandomPointPercent = 0;
         }
-
-        #region 属性
 
         /// <summary>
         /// 获取或设置 字体名称集合
@@ -101,10 +98,6 @@ namespace OSharp.Drawing
         /// </summary>
         public int RandomLineCount { get; set; }
 
-        #endregion
-
-        #region 公共方法
-
         /// <summary>
         /// 获取指定长度的验证码字符串
         /// </summary>
@@ -130,30 +123,30 @@ namespace OSharp.Drawing
         {
             code.CheckNotNullOrEmpty("code");
 
-            int width = FontWidth * code.Length + FontWidth;
-            int height = FontSize + FontSize / 2;
+            int width = this.FontWidth * code.Length + this.FontWidth;
+            int height = this.FontSize + this.FontSize / 2;
             const int flag = 255 / 2;
-            bool isBgLight = (BgColor.R + BgColor.G + BgColor.B) / 3 > flag;
+            bool isBgLight = (this.BgColor.R + this.BgColor.G + this.BgColor.B) / 3 > flag;
             Bitmap image = new Bitmap(width, height);
             Graphics graph = Graphics.FromImage(image);
-            graph.Clear(BgColor);
-            Brush brush = new SolidBrush(Color.FromArgb(255 - BgColor.R, 255 - BgColor.G, 255 - BgColor.B));
+            graph.Clear(this.BgColor);
+            Brush brush = new SolidBrush(Color.FromArgb(255 - this.BgColor.R, 255 - this.BgColor.G, 255 - this.BgColor.B));
             int x, y = 3;
-            if (HasBorder)
+            if (this.HasBorder)
             {
                 graph.DrawRectangle(new Pen(Color.Silver), 0, 0, image.Width - 1, image.Height - 1);
             }
 
             Random rnd = Random;
 
-            //绘制干扰线
-            for (int i = 0; i < RandomLineCount; i++)
+            // 绘制干扰线
+            for (int i = 0; i < this.RandomLineCount; i++)
             {
                 x = rnd.Next(image.Width);
                 y = rnd.Next(image.Height);
                 int m = rnd.Next(image.Width);
                 int n = rnd.Next(image.Height);
-                Color lineColor = !RandomColor
+                Color lineColor = !this.RandomColor
                     ? Color.FromArgb(90, 90, 90)
                     : isBgLight
                         ? Color.FromArgb(rnd.Next(130, 200), rnd.Next(130, 200), rnd.Next(130, 200))
@@ -162,8 +155,8 @@ namespace OSharp.Drawing
                 graph.DrawLine(pen, x, y, m, n);
             }
 
-            //绘制干扰点
-            for (int i = 0; i < (int)(image.Width * image.Height * RandomPointPercent / 100); i++)
+            // 绘制干扰点
+            for (int i = 0; i < (int)(image.Width * image.Height * this.RandomPointPercent / 100); i++)
             {
                 x = rnd.Next(image.Width);
                 y = rnd.Next(image.Height);
@@ -173,25 +166,26 @@ namespace OSharp.Drawing
                 image.SetPixel(x, y, pointColor);
             }
 
-            //绘制文字
+            // 绘制文字
             for (int i = 0; i < code.Length; i++)
             {
                 rnd = Random;
-                x = FontWidth / 4 + FontWidth * i;
-                if (RandomPosition)
+                x = this.FontWidth / 4 + this.FontWidth * i;
+                if (this.RandomPosition)
                 {
-                    x = rnd.Next(FontWidth / 4) + FontWidth * i;
+                    x = rnd.Next(this.FontWidth / 4) + this.FontWidth * i;
                     y = rnd.Next(image.Height / 5);
                 }
+
                 PointF point = new PointF(x, y);
-                if (RandomColor)
+                if (this.RandomColor)
                 {
                     int r, g, b;
                     if (!isBgLight)
                     {
-                        r = rnd.Next(255 - BgColor.R);
-                        g = rnd.Next(255 - BgColor.G);
-                        b = rnd.Next(255 - BgColor.B);
+                        r = rnd.Next(255 - this.BgColor.R);
+                        g = rnd.Next(255 - this.BgColor.G);
+                        b = rnd.Next(255 - this.BgColor.B);
                         if ((r + g + b) / 3 < flag)
                         {
                             r = 255 - r;
@@ -201,9 +195,9 @@ namespace OSharp.Drawing
                     }
                     else
                     {
-                        r = rnd.Next(BgColor.R);
-                        g = rnd.Next(BgColor.G);
-                        b = rnd.Next(BgColor.B);
+                        r = rnd.Next(this.BgColor.R);
+                        g = rnd.Next(this.BgColor.G);
+                        b = rnd.Next(this.BgColor.B);
                         if ((r + g + b) / 3 > flag)
                         {
                             r = 255 - r;
@@ -211,19 +205,22 @@ namespace OSharp.Drawing
                             b = 255 - b;
                         }
                     }
+
                     brush = new SolidBrush(Color.FromArgb(r, g, b));
                 }
+
                 string fontName = codeType == ValidateCodeType.Hanzi
-                    ? FontNamesForHanzi[rnd.Next(FontNamesForHanzi.Count)]
-                    : FontNames[rnd.Next(FontNames.Count)];
-                Font font = new Font(fontName, FontSize, FontStyle.Bold);
-                if (RandomItalic)
+                    ? this.FontNamesForHanzi[rnd.Next(this.FontNamesForHanzi.Count)]
+                    : this.FontNames[rnd.Next(this.FontNames.Count)];
+                Font font = new Font(fontName, this.FontSize, FontStyle.Bold);
+                if (this.RandomItalic)
                 {
                     graph.TranslateTransform(0, 0);
                     Matrix transform = graph.Transform;
                     transform.Shear(Convert.ToSingle(rnd.Next(2, 9) / 10d - 0.5), 0.001f);
                     graph.Transform = transform;
                 }
+
                 graph.DrawString(code.Substring(i, 1), font, brush, point);
                 graph.ResetTransform();
             }
@@ -251,16 +248,14 @@ namespace OSharp.Drawing
                     code = GetRandomNumsAndLetters(length);
                     break;
             }
+
             if (code.Length > length)
             {
                 code = code.Substring(0, length);
             }
-            return CreateImage(code, codeType);
+
+            return this.CreateImage(code, codeType);
         }
-
-        #endregion
-
-        #region 私有方法
 
         private static string GetRandomNums(int length)
         {
@@ -269,6 +264,7 @@ namespace OSharp.Drawing
             {
                 ints[i] = Random.Next(0, 9);
             }
+
             return ints.ExpandAndToString("");
         }
 
@@ -285,6 +281,7 @@ namespace OSharp.Drawing
                 string c = allChars[index];
                 result.Add(c);
             }
+
             return result.ExpandAndToString("");
         }
 
@@ -295,13 +292,13 @@ namespace OSharp.Drawing
         /// <returns></returns>
         private static string GetRandomHanzis(int length)
         {
-            //汉字编码的组成元素，十六进制数
+            // 汉字编码的组成元素，十六进制数
             string[] baseStrs = "0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f".Split(',');
             Encoding encoding = Encoding.GetEncoding("GB2312");
             string result = null;
 
-            //每循环一次产生一个含两个元素的十六进制字节数组，并放入bytes数组中
-            //汉字由四个区位码组成，1、2位作为字节数组的第一个元素，3、4位作为第二个元素
+            // 每循环一次产生一个含两个元素的十六进制字节数组，并放入bytes数组中
+            // 汉字由四个区位码组成，1、2位作为字节数组的第一个元素，3、4位作为第二个元素
             for (int i = 0; i < length; i++)
             {
                 Random rnd = Random;
@@ -317,17 +314,15 @@ namespace OSharp.Drawing
                 int index4 = index3 == 10 ? rnd.Next(1, 16) : (index3 == 15 ? rnd.Next(0, 15) : rnd.Next(0, 16));
                 string str4 = baseStrs[index4];
 
-                //定义两个字节变量存储产生的随机汉字区位码
+                // 定义两个字节变量存储产生的随机汉字区位码
                 byte b1 = Convert.ToByte(str1 + str2, 16);
                 byte b2 = Convert.ToByte(str3 + str4, 16);
                 byte[] bs = { b1, b2 };
 
                 result += encoding.GetString(bs);
             }
+
             return result;
         }
-
-        #endregion
-
     }
 }

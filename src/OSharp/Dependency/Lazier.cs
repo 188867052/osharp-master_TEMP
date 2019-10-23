@@ -11,7 +11,6 @@ using System;
 
 using Microsoft.Extensions.DependencyInjection;
 
-
 namespace OSharp.Dependency
 {
     /// <summary>
@@ -24,6 +23,7 @@ namespace OSharp.Dependency
         /// </summary>
         public Lazier(IServiceProvider provider)
             : base(provider.GetRequiredService<T>)
-        { }
+        {
+        }
     }
 }

@@ -6,7 +6,7 @@ namespace OSharp.Extensions.Tests
 {
     public class StringExtensionsTests
     {
-        [Fact()]
+        [Fact]
         public void IsMatchTest()
         {
             const string pattern = @"\d.*";
@@ -15,7 +15,7 @@ namespace OSharp.Extensions.Tests
             Assert.True("abc123".IsMatch(pattern));
         }
 
-        [Fact()]
+        [Fact]
         public void MatchTest()
         {
             const string pattern = @"\d.*";
@@ -24,7 +24,7 @@ namespace OSharp.Extensions.Tests
             Assert.Equal("123", "abc123".Match(pattern));
         }
 
-        [Fact()]
+        [Fact]
         public void MatchesTest()
         {
             const string pattern = @"\d";
@@ -33,7 +33,7 @@ namespace OSharp.Extensions.Tests
             Assert.Equal(3, "abc123".Matches(pattern).Count());
         }
 
-        [Fact()]
+        [Fact]
         public void StrLengthTest()
         {
             Assert.Equal(0, "".TextLength());
@@ -43,7 +43,7 @@ namespace OSharp.Extensions.Tests
             Assert.Equal(8, "汉字测试".TextLength());
         }
 
-        [Fact()]
+        [Fact]
         public void IsEmailTest()
         {
             string value = null;
@@ -60,7 +60,7 @@ namespace OSharp.Extensions.Tests
             Assert.True(value.IsEmail());
         }
 
-        [Fact()]
+        [Fact]
         public void IsIpAddressTest()
         {
             string value = null;
@@ -77,7 +77,7 @@ namespace OSharp.Extensions.Tests
             Assert.True(value.IsIpAddress());
         }
 
-        [Fact()]
+        [Fact]
         public void AddUrlQueryTest()
         {
             const string url = "http://localhost:801";
@@ -89,7 +89,7 @@ namespace OSharp.Extensions.Tests
             Assert.Equal(url.AddUrlQuery("id=1", "name=abc"), excepted);
         }
 
-        [Fact()]
+        [Fact]
         public void GetQueryParamTest()
         {
             string url = "http://www.baidu.com?key=website&word=beyond&name=%E9%83%AD%E6%98%8E%E9%94%8B";
@@ -99,7 +99,7 @@ namespace OSharp.Extensions.Tests
             Assert.Equal(url.GetUrlQuery("nokey"), string.Empty);
         }
 
-        [Fact()]
+        [Fact]
         public void AddHashFragmentTest()
         {
             const string url = "http://localhost:801";
@@ -107,28 +107,28 @@ namespace OSharp.Extensions.Tests
             Assert.Equal(url.AddHashFragment("title"), excepted);
         }
 
-        [Fact()]
+        [Fact]
         public void MatchFirstNumberTest()
         {
             const string source = "电话号码：13800138000，卡号：123456789，QQ号码：123202901，记住了吗？";
             Assert.Equal("13800138000", source.MatchFirstNumber());
         }
 
-        [Fact()]
+        [Fact]
         public void MatchLastNumberTest()
         {
             const string source = "电话号码：13800138000，卡号：123456789，QQ号码：123202901，记住了吗？";
             Assert.Equal("123202901", source.MatchLastNumber());
         }
 
-        [Fact()]
+        [Fact]
         public void MatchNumbersTest()
         {
             const string source = "电话号码：13800138000，卡号：123456789，QQ号码：123202901，记住了吗？";
             Assert.Equal(source.MatchNumbers(), new[] { "13800138000", "123456789", "123202901" });
         }
 
-        [Fact()]
+        [Fact]
         public void IsMatchNumberTest()
         {
             string source = "电话号码：13800138000，卡号：123456789，QQ号码：123202901，记住了吗？";
@@ -137,7 +137,7 @@ namespace OSharp.Extensions.Tests
             Assert.False(source.IsMatchNumber());
         }
 
-        [Fact()]
+        [Fact]
         public void IsMatchNumberTest1()
         {
             string source = "123456789";
@@ -146,7 +146,7 @@ namespace OSharp.Extensions.Tests
             Assert.False(source.IsMatchNumber(9));
         }
 
-        [Fact()]
+        [Fact]
         public void SubstringTest()
         {
             const string source = "http://vote3.52meirongwang.com/members/vote_detail.aspx?id=484&pid=37857&from=groupmessage&isappinstalled=0";
@@ -155,7 +155,7 @@ namespace OSharp.Extensions.Tests
             Assert.Equal("0", source.Substring("&isappinstalled=", "&", ""));
         }
 
-        [Fact()]
+        [Fact]
         public void IsUnicodeTest()
         {
             string source = "今天天气不错";
@@ -164,7 +164,7 @@ namespace OSharp.Extensions.Tests
             Assert.False(source.IsUnicode());
         }
 
-        [Fact()]
+        [Fact]
         public void IsIdentityCardTest()
         {
             string value = "321081199801018994";
@@ -176,8 +176,8 @@ namespace OSharp.Extensions.Tests
             value = "37132819810401653x";
             Assert.False(value.IsIdentityCardId());
         }
-        
-        [Fact()]
+
+        [Fact]
         public void ToUnicodeStringTest()
         {
             string unicode = "编码".ToUnicodeString();
@@ -185,7 +185,7 @@ namespace OSharp.Extensions.Tests
             Assert.Equal("编码", unicode.FromUnicodeString());
         }
 
-        [Fact()]
+        [Fact]
         public void ToHexStringTest()
         {
             string str1 = "http://b1.1ydb360.com/app/index.php?i=8&c=entry&rid=53&id=2286&do=view&m=tyzm_diamondvote&wxref=mp.weixin.qq.com&from=groupmessage&winzoom=1";
@@ -194,7 +194,7 @@ namespace OSharp.Extensions.Tests
             Assert.Equal(str1, str2);
         }
 
-        [Fact()]
+        [Fact]
         public void IsUrlTest()
         {
             string url =

@@ -18,10 +18,8 @@ using Microsoft.Extensions.Logging;
 using OSharp.Collections;
 using OSharp.Core.Functions;
 using OSharp.Data;
-using OSharp.Dependency;
 using OSharp.Entity;
 using OSharp.Reflection;
-
 
 namespace OSharp.Core.Modules
 {
@@ -36,8 +34,8 @@ namespace OSharp.Core.Modules
         /// </summary>
         protected ModuleInfoPickerBase(IServiceProvider serviceProvider)
         {
-            Logger = serviceProvider.GetLogger(GetType());
-            FunctionHandler = serviceProvider.GetService<IFunctionHandler>();
+            this.Logger = serviceProvider.GetLogger(this.GetType());
+            this.FunctionHandler = serviceProvider.GetService<IFunctionHandler>();
         }
 
         /// <summary>
@@ -55,9 +53,9 @@ namespace OSharp.Core.Modules
         /// </summary>
         public ModuleInfo[] Pickup()
         {
-            Check.NotNull(FunctionHandler, nameof(FunctionHandler));
-            Type[] moduleTypes = FunctionHandler.FunctionTypeFinder.Find(type => type.HasAttribute<ModuleInfoAttribute>());
-            ModuleInfo[] modules = GetModules(moduleTypes);
+            Check.NotNull(this.FunctionHandler, nameof(this.FunctionHandler));
+            Type[] moduleTypes = this.FunctionHandler.FunctionTypeFinder.Find(type => type.HasAttribute<ModuleInfoAttribute>());
+            ModuleInfo[] modules = this.GetModules(moduleTypes);
             return modules;
         }
 
@@ -72,22 +70,25 @@ namespace OSharp.Core.Modules
             foreach (Type moduleType in moduleTypes)
             {
                 string[] existPaths = infos.Select(m => $"{m.Position}.{m.Code}").ToArray();
-                ModuleInfo[] typeInfos = GetModules(moduleType, existPaths);
+                ModuleInfo[] typeInfos = this.GetModules(moduleType, existPaths);
                 foreach (ModuleInfo info in typeInfos)
                 {
                     if (info.Order == 0)
                     {
                         info.Order = infos.Count(m => m.Position == info.Position) + 1;
                     }
+
                     infos.AddIfNotExist(info);
                 }
-                MethodInfo[] methods = FunctionHandler.MethodInfoFinder.Find(moduleType, type => type.HasAttribute<ModuleInfoAttribute>());
+
+                MethodInfo[] methods = this.FunctionHandler.MethodInfoFinder.Find(moduleType, type => type.HasAttribute<ModuleInfoAttribute>());
                 for (int index = 0; index < methods.Length; index++)
                 {
-                    ModuleInfo methodInfo = GetModule(methods[index], typeInfos.Last(), index);
+                    ModuleInfo methodInfo = this.GetModule(methods[index], typeInfos.Last(), index);
                     infos.AddIfNotNull(methodInfo);
                 }
             }
+
             return infos.ToArray();
         }
 

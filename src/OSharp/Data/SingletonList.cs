@@ -1,13 +1,4 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="SingletonList.cs" company="OSharp开源团队">
-//      Copyright (c) 2014 OSharp. All rights reserved.
-//  </copyright>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2014-07-18 17:56</last-date>
-// -----------------------------------------------------------------------
-
-using System.Collections.Generic;
-
+﻿using System.Collections.Generic;
 
 namespace OSharp.Data
 {
@@ -25,6 +16,9 @@ namespace OSharp.Data
         /// <summary>
         /// 获取指定类型的列表的单例实例
         /// </summary>
-        public new static IList<T> Instance { get { return Singleton<IList<T>>.Instance; } }
+        public new static IList<T> Instance
+        {
+            get { return Singleton<IList<T>>.Instance; }
+        }
     }
 }

@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using OSharp.Core.Packs;
 using OSharp.EventBuses;
 
-
 namespace OSharp.Entity
 {
     /// <summary>
@@ -50,7 +49,7 @@ namespace OSharp.Entity
         {
             IEntityManager manager = provider.GetService<IEntityManager>();
             manager?.Initialize();
-            IsEnabled = true;
+            this.IsEnabled = true;
         }
     }
 }

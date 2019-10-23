@@ -9,7 +9,6 @@
 
 using System.ComponentModel;
 
-
 namespace OSharp.Exceptionless
 {
     /// <summary>
@@ -17,5 +16,6 @@ namespace OSharp.Exceptionless
     /// </summary>
     [Description("Exceptionless分布式异常日志模块")]
     public class ExceptionlessPack : ExceptionlessPackCore
-    { }
+    {
+    }
 }

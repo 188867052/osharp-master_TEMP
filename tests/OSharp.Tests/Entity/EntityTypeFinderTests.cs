@@ -6,7 +6,6 @@ using Shouldly;
 
 using Xunit;
 
-
 namespace OSharp.Entity.Tests
 {
     public class EntityTypeFinderTests
@@ -19,6 +18,8 @@ namespace OSharp.Entity.Tests
             entityTypes.ShouldContain(typeof(TestEntity));
         }
 
-        private class TestEntity : EntityBase<int> { }
+        private class TestEntity : EntityBase<int>
+        {
+        }
     }
 }

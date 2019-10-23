@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Identity;
 
-
 namespace OSharp.Identity
 {
     /// <summary>
@@ -36,6 +35,7 @@ namespace OSharp.Identity
             {
                 result = new IdentityResult().Failed($"昵称为“{user.NickName}”的用户已存在，请更换昵称重试");
             }
+
             return Task.FromResult(result);
         }
     }

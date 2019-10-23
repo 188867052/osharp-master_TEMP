@@ -1,20 +1,9 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="ScopedDictionary.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2018 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2018-08-01 21:17</last-date>
-// -----------------------------------------------------------------------
-
+﻿using System;
+using System.Collections.Concurrent;
+using System.Security.Claims;
 using Microsoft.Extensions.DependencyInjection;
 using OSharp.Audits;
 using OSharp.Core.Functions;
-using OSharp.Entity;
-using System;
-using System.Collections.Concurrent;
-using System.Security.Claims;
-
 
 namespace OSharp.Dependency
 {
@@ -47,9 +36,9 @@ namespace OSharp.Dependency
         /// <summary>释放资源.</summary>
         public void Dispose()
         {
-            Function = null;
-            AuditOperation = null;
-            Identity = null;
+            this.Function = null;
+            this.AuditOperation = null;
+            this.Identity = null;
             this.Clear();
         }
     }

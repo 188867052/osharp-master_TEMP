@@ -9,7 +9,6 @@
 
 using System.ComponentModel;
 
-
 namespace OSharp.Core.Functions
 {
     /// <summary>
@@ -17,5 +16,6 @@ namespace OSharp.Core.Functions
     /// </summary>
     [Description("功能信息")]
     public class Function : FunctionBase
-    { }
+    {
+    }
 }

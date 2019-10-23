@@ -108,6 +108,5 @@ namespace OSharp.Collections
 
             return source.ThenBy(sortCondition.SortField, sortCondition.ListSortDirection);
         }
-
     }
 }

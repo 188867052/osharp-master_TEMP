@@ -14,7 +14,6 @@ using Liuliu.Demo.Security.Entities;
 
 using OSharp.Security;
 
-
 namespace Liuliu.Demo.Security
 {
     /// <summary>
@@ -27,6 +26,7 @@ namespace Liuliu.Demo.Security
         /// </summary>
         public ModuleHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
-        { }
+        {
+        }
     }
 }

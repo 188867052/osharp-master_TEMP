@@ -17,6 +17,7 @@ namespace OSharp.Develop.Tests
                 {
                     sum++;
                 }
+
                 Console.WriteLine(sum);
             });
         }

@@ -13,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.Dependency;
 
-
 namespace OSharp.EventBuses.Internal
 {
     /// <summary>
@@ -31,8 +30,8 @@ namespace OSharp.EventBuses.Internal
         /// <param name="handlerType">事件处理器类型</param>
         public IocEventHandlerFactory(IHybridServiceScopeFactory serviceScopeFactory, Type handlerType)
         {
-            _serviceScopeFactory = serviceScopeFactory;
-            _handlerType = handlerType;
+            this._serviceScopeFactory = serviceScopeFactory;
+            this._handlerType = handlerType;
         }
 
         /// <summary>
@@ -41,8 +40,8 @@ namespace OSharp.EventBuses.Internal
         /// <returns></returns>
         public EventHandlerDisposeWrapper GetHandler()
         {
-            IServiceScope scope = _serviceScopeFactory.CreateScope();
-            return new EventHandlerDisposeWrapper((IEventHandler)scope.ServiceProvider.GetService(_handlerType), () => scope.Dispose());
+            IServiceScope scope = this._serviceScopeFactory.CreateScope();
+            return new EventHandlerDisposeWrapper((IEventHandler)scope.ServiceProvider.GetService(this._handlerType), () => scope.Dispose());
         }
     }
 }

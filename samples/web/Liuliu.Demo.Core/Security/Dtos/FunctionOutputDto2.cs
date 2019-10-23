@@ -13,7 +13,6 @@ using OSharp.Core.Functions;
 using OSharp.Entity;
 using OSharp.Mapping;
 
-
 namespace Liuliu.Demo.Security.Dtos
 {
     /// <summary>

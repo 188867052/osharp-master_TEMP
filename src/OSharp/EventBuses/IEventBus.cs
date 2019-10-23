@@ -14,6 +14,5 @@ namespace OSharp.EventBuses
     /// </summary>
     public interface IEventBus : IEventSubscriber, IEventPublisher
     {
-        
     }
 }

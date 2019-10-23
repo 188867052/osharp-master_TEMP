@@ -22,7 +22,6 @@ using log4net.Repository;
 using log4net.Repository.Hierarchy;
 using Microsoft.Extensions.Logging;
 
-
 namespace OSharp.Log4Net
 {
     /// <summary>
@@ -38,7 +37,8 @@ namespace OSharp.Log4Net
         /// 初始化一个<see cref="Log4NetLoggerProvider"/>类型的新实例
         /// </summary>
         public Log4NetLoggerProvider() : this(DefaultLog4NetFileName)
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="Log4NetLoggerProvider"/>类型的新实例
@@ -47,13 +47,14 @@ namespace OSharp.Log4Net
         {
             string file = log4NetConfigFile ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DefaultLog4NetFileName);
             Assembly assembly = Assembly.GetEntryAssembly() ?? GetCallingAssemblyFromStartup();
-            _loggerRepository = LogManager.CreateRepository(assembly, typeof(Hierarchy));
+            this._loggerRepository = LogManager.CreateRepository(assembly, typeof(Hierarchy));
 
             if (File.Exists(file))
             {
-                XmlConfigurator.ConfigureAndWatch(_loggerRepository, new FileInfo(file));
+                XmlConfigurator.ConfigureAndWatch(this._loggerRepository, new FileInfo(file));
                 return;
             }
+
             RollingFileAppender appender = new RollingFileAppender
             {
                 Name = "root",
@@ -64,11 +65,11 @@ namespace OSharp.Log4Net
                 DatePattern = "yyyyMMdd-HH\".log\"",
                 StaticLogFileName = false,
                 MaxSizeRollBackups = 10,
-                Layout = new PatternLayout("[%d{HH:mm:ss.fff}] %-5p %c T%t %n%m%n")
+                Layout = new PatternLayout("[%d{HH:mm:ss.fff}] %-5p %c T%t %n%m%n"),
             };
             appender.ClearFilters();
             appender.AddFilter(new LevelMatchFilter() { LevelToMatch = Level.Debug });
-            BasicConfigurator.Configure(_loggerRepository, appender);
+            BasicConfigurator.Configure(this._loggerRepository, appender);
             appender.ActivateOptions();
         }
 
@@ -79,7 +80,7 @@ namespace OSharp.Log4Net
         /// <returns>日志实例</returns>
         public Microsoft.Extensions.Logging.ILogger CreateLogger(string categoryName)
         {
-            return _loggers.GetOrAdd(categoryName, key => new Log4NetLogger(_loggerRepository.Name, key));
+            return this._loggers.GetOrAdd(categoryName, key => new Log4NetLogger(this._loggerRepository.Name, key));
         }
 
         private static Assembly GetCallingAssemblyFromStartup()
@@ -95,6 +96,7 @@ namespace OSharp.Log4Net
                     return type?.Assembly;
                 }
             }
+
             return null;
         }
 
@@ -104,13 +106,14 @@ namespace OSharp.Log4Net
             {
                 return;
             }
-            _loggers.Clear();
+
+            this._loggers.Clear();
         }
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
     }

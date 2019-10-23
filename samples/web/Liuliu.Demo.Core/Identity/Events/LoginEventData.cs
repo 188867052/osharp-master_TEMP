@@ -12,7 +12,6 @@ using Liuliu.Demo.Identity.Entities;
 
 using OSharp.EventBuses;
 
-
 namespace Liuliu.Demo.Identity.Events
 {
     /// <summary>

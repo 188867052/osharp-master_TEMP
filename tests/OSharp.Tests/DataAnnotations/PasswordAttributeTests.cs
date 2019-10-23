@@ -10,13 +10,11 @@ using Shouldly;
 
 using Xunit;
 
-
 namespace OSharp.DataAnnotations.Tests
 {
-    
     public class PasswordAttributeTests
     {
-        [Fact()]
+        [Fact]
         public void IsValidTest()
         {
             PasswordAttribute attr = new PasswordAttribute()
@@ -25,7 +23,7 @@ namespace OSharp.DataAnnotations.Tests
                 CanOnlyDigit = true,
                 RequiredDigit = false,
                 RequiredLowercase = false,
-                RequiredUppercase = false
+                RequiredUppercase = false,
             };
             string name = "name";
 
@@ -40,7 +38,7 @@ namespace OSharp.DataAnnotations.Tests
             attr.FormatErrorMessage(name).ShouldContain("必须包含数字");
             attr.IsValid("123456").ShouldBeTrue();
             attr.IsValid("abcabc").ShouldBeFalse();
-            
+
             attr.CanOnlyDigit = false;
             attr.IsValid("123456").ShouldBeFalse();
             attr.FormatErrorMessage(name).ShouldContain("不允许是全是数字");

@@ -11,7 +11,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-
 namespace OSharp.Threading.Asyncs
 {
     public class AsyncCountdownEvent
@@ -25,25 +24,26 @@ namespace OSharp.Threading.Asyncs
             {
                 throw new ArgumentOutOfRangeException("initialCount");
             }
-            _count = initialCount;
+
+            this._count = initialCount;
         }
 
         public Task WaitAsync()
         {
-            return _resetEvent.WaitAsync();
+            return this._resetEvent.WaitAsync();
         }
 
         public void Signal()
         {
-            if (_count <= 0)
+            if (this._count <= 0)
             {
                 throw new InvalidOperationException();
             }
 
-            int newCount = Interlocked.Decrement(ref _count);
+            int newCount = Interlocked.Decrement(ref this._count);
             if (newCount == 0)
             {
-                _resetEvent.Set();
+                this._resetEvent.Set();
             }
             else if (newCount < 0)
             {
@@ -53,8 +53,8 @@ namespace OSharp.Threading.Asyncs
 
         public Task SignalAndWait()
         {
-            Signal();
-            return WaitAsync();
+            this.Signal();
+            return this.WaitAsync();
         }
     }
 }

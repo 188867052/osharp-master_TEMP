@@ -13,7 +13,6 @@ using System.ComponentModel.DataAnnotations;
 
 using OSharp.Entity;
 
-
 namespace OSharp.Identity
 {
     /// <summary>
@@ -28,19 +27,21 @@ namespace OSharp.Identity
         /// </summary>
         protected UserBase()
         {
-            CreatedTime = DateTime.Now;
+            this.CreatedTime = DateTime.Now;
         }
 
         /// <summary>
         /// 获取或设置 用户名
         /// </summary>
-        [Required, DisplayName("用户名")]
+        [Required]
+        [DisplayName("用户名")]
         public string UserName { get; set; }
 
         /// <summary>
         /// 获取或设置 标准化的用户名
         /// </summary>
-        [Required, DisplayName("标准化的用户名")]
+        [Required]
+        [DisplayName("标准化的用户名")]
         public string NormalizedUserName { get; set; }
 
         /// <summary>
@@ -52,13 +53,15 @@ namespace OSharp.Identity
         /// <summary>
         /// 获取或设置 电子邮箱
         /// </summary>
-        [DisplayName("电子邮箱"), DataType(DataType.EmailAddress)]
+        [DisplayName("电子邮箱")]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         /// <summary>
         /// 获取或设置 标准化的电子邮箱
         /// </summary>
-        [DisplayName("标准化的电子邮箱"), DataType(DataType.EmailAddress)]
+        [DisplayName("标准化的电子邮箱")]
+        [DataType(DataType.EmailAddress)]
         public string NormalizeEmail { get; set; }
 
         /// <summary>
@@ -153,7 +156,7 @@ namespace OSharp.Identity
         /// <inheritdoc />
         public override string ToString()
         {
-            return UserName;
+            return this.UserName;
         }
     }
 }

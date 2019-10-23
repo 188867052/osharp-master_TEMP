@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.Core.Packs;
 
-
 namespace OSharp.AspNetCore
 {
     /// <summary>
@@ -43,7 +42,7 @@ namespace OSharp.AspNetCore
         {
             services.AddHttpContextAccessor();
 
-            //注入当前用户，替换Thread.CurrentPrincipal的作用
+            // 注入当前用户，替换Thread.CurrentPrincipal的作用
             services.AddTransient<IPrincipal>(provider =>
             {
                 IHttpContextAccessor accessor = provider.GetService<IHttpContextAccessor>();

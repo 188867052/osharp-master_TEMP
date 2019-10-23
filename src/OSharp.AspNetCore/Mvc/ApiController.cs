@@ -13,7 +13,6 @@ using Microsoft.Extensions.Logging;
 
 using OSharp.AspNetCore.Mvc.Filters;
 
-
 namespace OSharp.AspNetCore.Mvc
 {
     /// <summary>
@@ -27,6 +26,6 @@ namespace OSharp.AspNetCore.Mvc
         /// <summary>
         /// 获取或设置 日志对象
         /// </summary>
-        protected ILogger Logger => HttpContext.RequestServices.GetLogger(GetType());
+        protected ILogger Logger => this.HttpContext.RequestServices.GetLogger(this.GetType());
     }
 }

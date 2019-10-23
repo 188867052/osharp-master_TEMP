@@ -36,7 +36,7 @@ export class VersionComponent extends STComponentBase implements OnInit {
             },
             { title: '编号', index: 'Id', type: 'number' },
             { title: '版本名称', index: 'Name', sort: true, editable: true, ftype: 'string', filterable: true, className: 'max-100' },
-            { title: '是否锁定', index: 'IsLocked', sort: true, type: 'yn', editable: true, filterable: true },
+            { title: '是否已删除', index: 'IsLocked', sort: true, type: 'yn', editable: true, filterable: true },
             { title: '创建时间', index: 'CreatedTime', sort: true, type: 'date', filterable: true },
         ];
     }

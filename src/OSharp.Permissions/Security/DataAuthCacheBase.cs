@@ -22,7 +22,6 @@ using OSharp.Extensions;
 using OSharp.Filter;
 using OSharp.Identity;
 
-
 namespace OSharp.Security
 {
     /// <summary>
@@ -43,9 +42,9 @@ namespace OSharp.Security
         /// </summary>
         protected DataAuthCacheBase(IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
-            _cache = serviceProvider.GetService<IDistributedCache>();
-            _logger = serviceProvider.GetLogger(GetType());
+            this._serviceProvider = serviceProvider;
+            this._cache = serviceProvider.GetService<IDistributedCache>();
+            this._logger = serviceProvider.GetLogger(this.GetType());
         }
 
         /// <summary>
@@ -53,7 +52,7 @@ namespace OSharp.Security
         /// </summary>
         public virtual void BuildCaches()
         {
-            var entityRoles = _serviceProvider.ExecuteScopedWork(provider =>
+            var entityRoles = this._serviceProvider.ExecuteScopedWork(provider =>
             {
                 IRepository<TEntityRole, Guid> entityRoleRepository = provider.GetService<IRepository<TEntityRole, Guid>>();
                 IRepository<TRole, TRoleKey> roleRepository = provider.GetService<IRepository<TRole, TRoleKey>>();
@@ -63,7 +62,7 @@ namespace OSharp.Security
                     m.FilterGroupJson,
                     m.Operation,
                     RoleName = roleRepository.QueryAsNoTracking(null, false).Where(n => n.Id.Equals(m.RoleId)).Select(n => n.Name).FirstOrDefault(),
-                    EntityTypeFullName = entityInfoRepository.QueryAsNoTracking(null, false).Where(n => n.Id == m.EntityId).Select(n => n.TypeName).FirstOrDefault()
+                    EntityTypeFullName = entityInfoRepository.QueryAsNoTracking(null, false).Where(n => n.Id == m.EntityId).Select(n => n.TypeName).FirstOrDefault(),
                 }).ToArray();
             });
 
@@ -73,10 +72,11 @@ namespace OSharp.Security
                 string key = GetKey(entityRole.RoleName, entityRole.EntityTypeFullName, entityRole.Operation);
                 string name = GetName(entityRole.RoleName, entityRole.EntityTypeFullName, entityRole.Operation);
 
-                _cache.Set(key, filterGroup);
-                _logger.LogDebug($"创建{name}的数据权限规则缓存");
+                this._cache.Set(key, filterGroup);
+                this._logger.LogDebug($"创建{name}的数据权限规则缓存");
             }
-            _logger.LogInformation($"数据权限：创建{entityRoles.Length}个数据权限过滤规则缓存");
+
+            this._logger.LogInformation($"数据权限：创建{entityRoles.Length}个数据权限过滤规则缓存");
         }
 
         /// <summary>
@@ -88,8 +88,8 @@ namespace OSharp.Security
             string key = GetKey(item.RoleName, item.EntityTypeFullName, item.Operation);
             string name = GetName(item.RoleName, item.EntityTypeFullName, item.Operation);
 
-            _cache.Set(key, item.FilterGroup);
-            _logger.LogDebug($"创建{name}的数据权限规则缓存");
+            this._cache.Set(key, item.FilterGroup);
+            this._logger.LogDebug($"创建{name}的数据权限规则缓存");
         }
 
         /// <summary>
@@ -100,8 +100,8 @@ namespace OSharp.Security
         {
             string key = GetKey(item.RoleName, item.EntityTypeFullName, item.Operation);
             string name = GetName(item.RoleName, item.EntityTypeFullName, item.Operation);
-            _cache.Remove(key);
-            _logger.LogDebug($"移除{name}的数据权限规则缓存");
+            this._cache.Remove(key);
+            this._logger.LogDebug($"移除{name}的数据权限规则缓存");
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace OSharp.Security
         public virtual FilterGroup GetFilterGroup(string roleName, string entityTypeFullName, DataAuthOperation operation)
         {
             string key = GetKey(roleName, entityTypeFullName, operation);
-            return _cache.Get<FilterGroup>(key);
+            return this._cache.Get<FilterGroup>(key);
         }
 
         private static string GetKey(string roleName, string entityTypeFullName, DataAuthOperation operation)

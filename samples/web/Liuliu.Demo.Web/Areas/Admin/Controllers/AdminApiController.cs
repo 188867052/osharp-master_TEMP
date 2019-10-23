@@ -7,16 +7,14 @@
 //  <last-date>2018-06-27 4:50</last-date>
 // -----------------------------------------------------------------------
 
-using Microsoft.AspNetCore.Mvc;
-
 using OSharp.AspNetCore.Mvc;
 using OSharp.Core;
-
 
 namespace Liuliu.Demo.Web.Areas.Admin.Controllers
 {
     [AreaInfo("Admin", Display = "管理")]
     [RoleLimit]
     public abstract class AdminApiController : AreaApiController
-    { }
+    {
+    }
 }

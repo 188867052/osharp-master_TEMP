@@ -10,7 +10,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
@@ -18,11 +17,10 @@ using System.Reflection;
 using OSharp.Data;
 using OSharp.Reflection;
 
-
 namespace OSharp.Entity
 {
     /// <summary>
-    /// <see cref="IInputDto{TKey}"/>验证扩展 
+    /// <see cref="IInputDto{TKey}"/>验证扩展
     /// </summary>
     public static class InputDtoValidateExtensions
     {
@@ -58,10 +56,12 @@ namespace OSharp.Entity
                     _dict[type] = dict;
                     return;
                 }
+
                 foreach (var property in properties)
                 {
                     dict[property] = null;
                 }
+
                 _dict[type] = dict;
             }
 
@@ -72,10 +72,12 @@ namespace OSharp.Entity
                     attributes = property.GetAttributes<ValidationAttribute>();
                     dict[property] = attributes;
                 }
+
                 if (attributes.Length == 0)
                 {
                     continue;
                 }
+
                 object value = property.GetValue(dto);
                 foreach (ValidationAttribute attribute in attributes)
                 {

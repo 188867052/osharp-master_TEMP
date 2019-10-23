@@ -8,7 +8,6 @@ using OSharp.UnitTest.Infrastructure;
 
 using Xunit;
 
-
 namespace OSharp.Collections.Tests
 {
     public class EnumerableExtensionsTests
@@ -21,34 +20,37 @@ namespace OSharp.Collections.Tests
             Assert.NotEqual(source, result);
         }
 
-        [Fact()]
+        [Fact]
         public void ExpandAndToStringTest()
         {
             List<int> source = new List<int>();
-            //当为空集合时，返回null
+
+            // 当为空集合时，返回null
             Assert.Equal(source.ExpandAndToString(), string.Empty);
 
             source.AddRange(new List<int>() { 1, 2, 3, 4, 5, 6 });
-            //没有分隔符时，默认为逗号
+
+            // 没有分隔符时，默认为逗号
             Assert.Equal("1,2,3,4,5,6", source.ExpandAndToString());
             Assert.Equal("123456", source.ExpandAndToString(null));
             Assert.Equal("123456", source.ExpandAndToString(""));
             Assert.Equal("1|2|3|4|5|6", source.ExpandAndToString("|"));
         }
 
-        [Fact()]
+        [Fact]
         public void ExpandAndToStringTest2()
         {
             List<int> source = new List<int> { 1, 2, 3, 4, 5, 6 };
 
-            //转换委托不能为空
+            // 转换委托不能为空
             Assert.Throws<ArgumentNullException>(() => source.ExpandAndToString(itemFormatFunc: null));
-            //没有分隔符时，默认为逗号
+
+            // 没有分隔符时，默认为逗号
             Assert.Equal("2,3,4,5,6,7", source.ExpandAndToString(item => (item + 1).ToString()));
             Assert.Equal("2|3|4|5|6|7", source.ExpandAndToString(item => (item + 1).ToString(), "|"));
         }
 
-        [Fact()]
+        [Fact]
         public void IsEmptyTest()
         {
             List<int> source = new List<int>();
@@ -58,7 +60,7 @@ namespace OSharp.Collections.Tests
             Assert.False(source.IsEmpty());
         }
 
-        [Fact()]
+        [Fact]
         public void WhereIfTest()
         {
             List<int> source = new List<int> { 1, 2, 3, 4, 5, 6, 7 };
@@ -67,7 +69,7 @@ namespace OSharp.Collections.Tests
             Assert.Equal(source.WhereIf(m => m > 5, true).ToList(), actual);
         }
 
-        [Fact()]
+        [Fact]
         public void DistinctByTest()
         {
             List<int> source = new List<int> { 1, 2, 3, 3, 4, 4, 5, 6, 7, 7 };
@@ -75,7 +77,7 @@ namespace OSharp.Collections.Tests
             Assert.Equal(source.DistinctBy(m => m).ToList(), actual);
         }
 
-        [Fact()]
+        [Fact]
         public void OrderByTest()
         {
             IEnumerable<TestEntity> source = new List<TestEntity>
@@ -94,7 +96,7 @@ namespace OSharp.Collections.Tests
             Assert.Equal(1, source.OrderBy(new SortCondition("Name", ListSortDirection.Descending)).ToArray()[3].Id);
         }
 
-        [Fact()]
+        [Fact]
         public void ThenByTest()
         {
             IEnumerable<TestEntity> source = new List<TestEntity>
@@ -108,6 +110,5 @@ namespace OSharp.Collections.Tests
             Assert.Equal("hdg", source.OrderBy("IsDeleted", ListSortDirection.Descending).ThenBy("Id", ListSortDirection.Descending).ToArray()[2].Name);
             Assert.Equal("fda", source.OrderBy(new SortCondition("IsDeleted")).ThenBy(new SortCondition("Name")).ToArray()[2].Name);
         }
-
     }
 }

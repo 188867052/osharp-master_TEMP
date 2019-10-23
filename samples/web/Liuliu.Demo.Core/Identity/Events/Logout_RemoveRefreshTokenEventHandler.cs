@@ -11,7 +11,6 @@ using OSharp.EventBuses;
 using OSharp.Identity;
 using OSharp.Security.Claims;
 
-
 namespace Liuliu.Demo.Identity.Events
 {
     public class Logout_RemoveRefreshTokenEventHandler : EventHandlerBase<LogoutEventData>
@@ -24,8 +23,8 @@ namespace Liuliu.Demo.Identity.Events
         /// </summary>
         public Logout_RemoveRefreshTokenEventHandler(UserManager<User>userManager, IPrincipal principal)
         {
-            _userManager = userManager;
-            _principal = principal;
+            this._userManager = userManager;
+            this._principal = principal;
         }
 
         /// <summary>
@@ -34,7 +33,7 @@ namespace Liuliu.Demo.Identity.Events
         /// <param name="eventData">事件源数据</param>
         public override void Handle(LogoutEventData eventData)
         {
-            HandleAsync(eventData).GetAwaiter().GetResult();
+            this.HandleAsync(eventData).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -45,7 +44,7 @@ namespace Liuliu.Demo.Identity.Events
         /// <returns>是否成功</returns>
         public override async Task HandleAsync(LogoutEventData eventData, CancellationToken cancelToken = default(CancellationToken))
         {
-            ClaimsIdentity identity = _principal.Identity as ClaimsIdentity;
+            ClaimsIdentity identity = this._principal.Identity as ClaimsIdentity;
             if (identity?.IsAuthenticated != true)
             {
                 return;
@@ -57,7 +56,7 @@ namespace Liuliu.Demo.Identity.Events
                 return;
             }
 
-            await _userManager.RemoveRefreshToken(eventData.UserId.ToString(), clientId);
+            await this._userManager.RemoveRefreshToken(eventData.UserId.ToString(), clientId);
         }
     }
 }

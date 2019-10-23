@@ -7,15 +7,14 @@
 //  <last-date>2018-08-09 22:34</last-date>
 // -----------------------------------------------------------------------
 
+using System;
+using System.ComponentModel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using OSharp.Core.Packs;
 using OSharp.Exceptions;
-using System;
-using System.ComponentModel;
-
 
 namespace OSharp.AspNetCore
 {
@@ -45,7 +44,6 @@ namespace OSharp.AspNetCore
             }
 #endif
 
-
             base.UsePack(provider);
         }
 
@@ -59,7 +57,7 @@ namespace OSharp.AspNetCore
             logger.LogInformation("Osharp框架初始化开始");
             DateTime dtStart = DateTime.Now;
 
-            foreach (OsharpPack pack in LoadedPacks)
+            foreach (OsharpPack pack in this.LoadedPacks)
             {
                 if (pack is AspOsharpPack aspPack)
                 {

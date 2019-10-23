@@ -12,7 +12,6 @@ using System.ComponentModel;
 using OSharp.Core.Functions;
 using OSharp.Security;
 
-
 namespace Liuliu.Demo.Security.Entities
 {
     /// <summary>

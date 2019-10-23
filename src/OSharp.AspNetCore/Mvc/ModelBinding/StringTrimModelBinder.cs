@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 using OSharp.Data;
 
-
 namespace OSharp.AspNetCore.Mvc.ModelBinding
 {
     /// <summary>
@@ -47,6 +46,7 @@ namespace OSharp.AspNetCore.Mvc.ModelBinding
             {
                 return Task.CompletedTask;
             }
+
             Type underlyingOrModelType = bindingContext.ModelMetadata.UnderlyingOrModelType;
             bindingContext.ModelState.SetModelValue(bindingContext.ModelName, valueProviderResult);
 
@@ -64,8 +64,10 @@ namespace OSharp.AspNetCore.Mvc.ModelBinding
                     {
                         throw new MulticastNotSupportedException();
                     }
+
                     model = firstValue.Trim();
                 }
+
                 bindingContext.Result = ModelBindingResult.Success(model);
                 return Task.CompletedTask;
             }

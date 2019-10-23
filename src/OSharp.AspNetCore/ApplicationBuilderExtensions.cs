@@ -16,7 +16,6 @@ using OSharp.AspNetCore;
 using OSharp.Core.Packs;
 using OSharp.Exceptions;
 
-
 namespace Microsoft.AspNetCore.Builder
 {
     /// <summary>
@@ -34,6 +33,7 @@ namespace Microsoft.AspNetCore.Builder
             {
                 throw new OsharpException("接口 IOsharpPackManager 的注入类型不正确，该类型应同时实现接口 IAspUsePack");
             }
+
             aspPackManager.UsePack(app);
 
             return app;
@@ -50,6 +50,7 @@ namespace Microsoft.AspNetCore.Builder
                 {
                     builder.MapRoute("area", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                 }
+
                 builder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
         }

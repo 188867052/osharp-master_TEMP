@@ -14,7 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 using OSharp.Audits;
 using OSharp.Core.Packs;
 
-
 namespace Liuliu.Demo.Systems
 {
     /// <summary>

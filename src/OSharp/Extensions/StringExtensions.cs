@@ -21,7 +21,6 @@ using Newtonsoft.Json;
 using OSharp.Collections;
 using OSharp.Security;
 
-
 namespace OSharp.Extensions
 {
     /// <summary>
@@ -29,8 +28,6 @@ namespace OSharp.Extensions
     /// </summary>
     public static class StringExtensions
     {
-        #region 正则表达式
-
         /// <summary>
         /// 指示所指定的正则表达式在指定的输入字符串中是否找到了匹配项
         /// </summary>
@@ -44,6 +41,7 @@ namespace OSharp.Extensions
             {
                 return false;
             }
+
             return isContains
                 ? Regex.IsMatch(value, pattern)
                 : Regex.Match(value, pattern).Success;
@@ -61,6 +59,7 @@ namespace OSharp.Extensions
             {
                 return null;
             }
+
             return Regex.Match(value, pattern).Value;
         }
 
@@ -76,6 +75,7 @@ namespace OSharp.Extensions
             {
                 return new string[] { };
             }
+
             MatchCollection matches = Regex.Matches(value, pattern);
             return from Match match in matches select match.Value;
         }
@@ -90,6 +90,7 @@ namespace OSharp.Extensions
             {
                 return string.Empty;
             }
+
             return matches[0].Value;
         }
 
@@ -103,6 +104,7 @@ namespace OSharp.Extensions
             {
                 return string.Empty;
             }
+
             return matches[matches.Count - 1].Value;
         }
 
@@ -144,6 +146,7 @@ namespace OSharp.Extensions
             {
                 return string.Empty;
             }
+
             int startIndex = 0;
             if (!string.IsNullOrEmpty(startString))
             {
@@ -152,8 +155,10 @@ namespace OSharp.Extensions
                 {
                     throw new InvalidOperationException(string.Format("在源字符串中无法找到“{0}”的子串位置", startString));
                 }
+
                 startIndex = startIndex + startString.Length;
             }
+
             int endIndex = source.Length;
             endStrings = endStrings.OrderByDescending(m => m.Length).ToArray();
             foreach (string endString in endStrings)
@@ -163,13 +168,16 @@ namespace OSharp.Extensions
                     endIndex = source.Length;
                     break;
                 }
+
                 endIndex = source.IndexOf(endString, startIndex, StringComparison.OrdinalIgnoreCase);
                 if (endIndex < 0 || endIndex < startIndex)
                 {
                     continue;
                 }
+
                 break;
             }
+
             if (endIndex < 0 || endIndex < startIndex)
             {
                 throw new InvalidOperationException(string.Format("在源字符串中无法找到“{0}”的子串位置", endStrings.ExpandAndToString()));
@@ -196,6 +204,7 @@ namespace OSharp.Extensions
             {
                 return string.Empty;
             }
+
             string inner = containsEmpty ? "\\s\\S" : "\\S";
             string result = source.Match(string.Format("(?<={0})([{1}]+?)(?={2})", startString, inner, endString));
             return result.IsMissing() ? null : result;
@@ -248,6 +257,7 @@ namespace OSharp.Extensions
                 {
                     return false;
                 }
+
                 Uri uri = new Uri(value);
                 return true;
             }
@@ -269,6 +279,7 @@ namespace OSharp.Extensions
             {
                 return false;
             }
+
             Regex regex;
             string[] array;
             DateTime time;
@@ -279,20 +290,24 @@ namespace OSharp.Extensions
                 {
                     return false;
                 }
+
                 array = regex.Split(value);
                 return DateTime.TryParse(string.Format("{0}-{1}-{2}", "19" + array[2], array[3], array[4]), out time);
             }
+
             regex = new Regex(@"^(\d{6})(\d{4})(\d{2})(\d{2})(\d{3})([0-9Xx])$");
             if (!regex.Match(value).Success)
             {
                 return false;
             }
+
             array = regex.Split(value);
             if (!DateTime.TryParse(string.Format("{0}-{1}-{2}", array[2], array[3], array[4]), out time))
             {
                 return false;
             }
-            //校验最后一位
+
+            // 校验最后一位
             string[] chars = value.ToCharArray().Select(m => m.ToString()).ToArray();
             int[] weights = { 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 };
             int sum = 0;
@@ -301,8 +316,9 @@ namespace OSharp.Extensions
                 int num = int.Parse(chars[i]);
                 sum = sum + num * weights[i];
             }
+
             int mod = sum % 11;
-            string vCode = "10X98765432";//检验码字符串
+            string vCode = "10X98765432";// 检验码字符串
             string last = vCode.ToCharArray().ElementAt(mod).ToString();
             return chars.Last().ToUpper() == last;
         }
@@ -317,10 +333,6 @@ namespace OSharp.Extensions
             string pattern = isRestrict ? @"^[1][3-8]\d{9}$" : @"^[1]\d{10}$";
             return value.IsMatch(pattern);
         }
-
-        #endregion
-
-        #region 其他操作
 
         /// <summary>
         /// 指示指定的字符串是 null 或者 System.String.Empty 字符串
@@ -388,14 +400,17 @@ namespace OSharp.Extensions
             {
                 return plural1.Replace(word, "${keep}y");
             }
+
             if (plural2.IsMatch(word))
             {
                 return plural2.Replace(word, "${keep}");
             }
+
             if (plural3.IsMatch(word))
             {
                 return plural3.Replace(word, "${keep}");
             }
+
             if (plural4.IsMatch(word))
             {
                 return plural4.Replace(word, "${keep}");
@@ -420,14 +435,17 @@ namespace OSharp.Extensions
             {
                 return plural1.Replace(word, "${keep}ies");
             }
+
             if (plural2.IsMatch(word))
             {
                 return plural2.Replace(word, "${keep}s");
             }
+
             if (plural3.IsMatch(word))
             {
                 return plural3.Replace(word, "${keep}es");
             }
+
             if (plural4.IsMatch(word))
             {
                 return plural4.Replace(word, "${keep}s");
@@ -445,18 +463,20 @@ namespace OSharp.Extensions
             {
                 return false;
             }
+
             byte[] fileData = File.ReadAllBytes(filename);
             if (fileData.Length == 0)
             {
                 return false;
             }
+
             ushort code = BitConverter.ToUInt16(fileData, 0);
             switch (code)
             {
-                case 0x4D42: //bmp
-                case 0xD8FF: //jpg
-                case 0x4947: //gif
-                case 0x5089: //png
+                case 0x4D42: // bmp
+                case 0xD8FF: // jpg
+                case 0x4947: // gif
+                case 0x5089: // png
                     return true;
                 default:
                     return false;
@@ -504,6 +524,7 @@ namespace OSharp.Extensions
                     tempLen += 1;
                 }
             }
+
             return tempLen;
         }
 
@@ -550,6 +571,7 @@ namespace OSharp.Extensions
 
                 url = url + query;
             }
+
             return url;
         }
 
@@ -564,6 +586,7 @@ namespace OSharp.Extensions
             {
                 return string.Empty;
             }
+
             query = query.TrimStart('?');
             var dict = (from m in query.Split("&", true)
                         let strs = m.Split("=")
@@ -573,6 +596,7 @@ namespace OSharp.Extensions
             {
                 return dict[key];
             }
+
             return string.Empty;
         }
 
@@ -601,6 +625,7 @@ namespace OSharp.Extensions
             {
                 encoding = Encoding.UTF8;
             }
+
             return encoding.GetBytes(value);
         }
 
@@ -613,6 +638,7 @@ namespace OSharp.Extensions
             {
                 encoding = Encoding.UTF8;
             }
+
             return encoding.GetString(bytes);
         }
 
@@ -636,6 +662,7 @@ namespace OSharp.Extensions
             {
                 encoding = Encoding.UTF8;
             }
+
             return Convert.ToBase64String(encoding.GetBytes(source));
         }
 
@@ -651,6 +678,7 @@ namespace OSharp.Extensions
             {
                 encoding = Encoding.UTF8;
             }
+
             byte[] bytes = Convert.FromBase64String(base64String);
             return encoding.GetString(bytes);
         }
@@ -704,6 +732,7 @@ namespace OSharp.Extensions
             {
                 encoding = Encoding.UTF8;
             }
+
             byte[] bytes = encoding.GetBytes(source);
             return bytes.ToHexString();
         }
@@ -717,6 +746,7 @@ namespace OSharp.Extensions
             {
                 encoding = Encoding.UTF8;
             }
+
             byte[] bytes = hexString.ToHexBytes();
             return encoding.GetString(bytes);
         }
@@ -745,6 +775,7 @@ namespace OSharp.Extensions
             {
                 bytes[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
             }
+
             return bytes;
         }
 
@@ -772,6 +803,7 @@ namespace OSharp.Extensions
                     {
                         return "" + (char)s;
                     }
+
                     return m.Value;
                 });
         }
@@ -787,6 +819,7 @@ namespace OSharp.Extensions
             {
                 return str;
             }
+
             List<string> words = new List<string>();
             while (str.Length > 0)
             {
@@ -796,20 +829,24 @@ namespace OSharp.Extensions
                     words.Add(str);
                     break;
                 }
+
                 int upperIndex = str.IndexOf(c);
-                if (upperIndex < 0) //admin
+                if (upperIndex < 0) // admin
                 {
                     return str;
                 }
-                if (upperIndex > 0) //adminAdmin
+
+                if (upperIndex > 0) // adminAdmin
                 {
                     string first = str.Substring(0, upperIndex);
                     words.Add(first);
                     str = str.Substring(upperIndex, str.Length - upperIndex);
                     continue;
                 }
+
                 str = char.ToLower(str[0]) + str.Substring(1, str.Length - 1);
             }
+
             return words.ExpandAndToString("-");
         }
 
@@ -822,10 +859,12 @@ namespace OSharp.Extensions
             {
                 return str;
             }
+
             if (str.Length == 1)
             {
                 return char.ToLower(str[0]).ToString();
             }
+
             return char.ToLower(str[0]) + str.Substring(1, str.Length - 1);
         }
 
@@ -838,10 +877,12 @@ namespace OSharp.Extensions
             {
                 return str;
             }
+
             if (str.Length == 1)
             {
                 return char.ToUpper(str[0]).ToString();
             }
+
             return char.ToUpper(str[0]) + str.Substring(1, str.Length - 1);
         }
 
@@ -862,9 +903,11 @@ namespace OSharp.Extensions
                     similarity = 1;
                     return 0;
                 }
+
                 similarity = 0;
                 return target.Length;
             }
+
             if (string.IsNullOrEmpty(target))
             {
                 similarity = 0;
@@ -889,10 +932,12 @@ namespace OSharp.Extensions
             {
                 mn[i, 0] = i;
             }
+
             for (int j = 1; j <= n; j++)
             {
                 mn[0, j] = j;
             }
+
             for (int i = 1; i <= m; i++)
             {
                 char c = from[i - 1];
@@ -928,18 +973,18 @@ namespace OSharp.Extensions
             {
                 return 1;
             }
+
             if (string.IsNullOrEmpty(source) || string.IsNullOrEmpty(target))
             {
                 return 0;
             }
+
             const double kq = 2, kr = 1, ks = 1;
             char[] sourceChars = source.ToCharArray(), targetChars = target.ToCharArray();
 
-            //获取交集数量
+            // 获取交集数量
             int q = sourceChars.Intersect(targetChars).Count(), s = sourceChars.Length - q, r = targetChars.Length - q;
             return kq * q / (kq * q + kr * r + ks * s);
         }
-
-        #endregion
     }
 }

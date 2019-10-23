@@ -10,7 +10,6 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-
 namespace OSharp.Identity.JwtBearer
 {
     /// <summary>

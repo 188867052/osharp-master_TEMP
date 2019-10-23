@@ -14,7 +14,6 @@ using Liuliu.Demo.Identity.Entities;
 using OSharp.Core.EntityInfos;
 using OSharp.Security;
 
-
 namespace Liuliu.Demo.Security.Entities
 {
     /// <summary>

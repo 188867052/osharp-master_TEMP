@@ -16,7 +16,6 @@ using System.Linq;
 using OSharp.Entity;
 using OSharp.Extensions;
 
-
 namespace OSharp.Security
 {
     /// <summary>
@@ -28,7 +27,8 @@ namespace OSharp.Security
         /// <summary>
         /// 获取或设置 模块名称
         /// </summary>
-        [Required, DisplayName("模块名称")]
+        [Required]
+        [DisplayName("模块名称")]
         public string Name { get; set; }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace OSharp.Security
         {
             get
             {
-                return TreePathString?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                return this.TreePathString?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(m => m.Trim('$').CastTo<TModuleKey>()).ToArray() ?? new TModuleKey[0];
             }
         }

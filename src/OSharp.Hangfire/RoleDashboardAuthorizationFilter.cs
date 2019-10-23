@@ -16,7 +16,6 @@ using Microsoft.AspNetCore.Http;
 
 using OSharp.Security.Claims;
 
-
 namespace OSharp.Hangfire
 {
     /// <summary>
@@ -31,7 +30,7 @@ namespace OSharp.Hangfire
         /// </summary>
         public RoleDashboardAuthorizationFilter(string[] roles)
         {
-            _roles = roles;
+            this._roles = roles;
         }
 
         public bool Authorize(DashboardContext context)
@@ -45,7 +44,7 @@ namespace OSharp.Hangfire
             }
 
             string[] roles = identity.GetRoles();
-            return _roles.Intersect(roles).Any();
+            return this._roles.Intersect(roles).Any();
         }
     }
 }

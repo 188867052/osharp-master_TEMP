@@ -12,7 +12,6 @@ using System.Linq;
 using OSharp.Finders;
 using OSharp.Reflection;
 
-
 namespace OSharp.EventBuses
 {
     /// <summary>
@@ -27,7 +26,7 @@ namespace OSharp.EventBuses
         /// </summary>
         public EventHandlerTypeFinder(IAllAssemblyFinder allAssemblyFinder)
         {
-            _allAssemblyFinder = allAssemblyFinder;
+            this._allAssemblyFinder = allAssemblyFinder;
         }
 
         /// <summary>
@@ -37,7 +36,7 @@ namespace OSharp.EventBuses
         protected override Type[] FindAllItems()
         {
             Type baseType = typeof(IEventHandler<>);
-            return _allAssemblyFinder.FindAll(true).SelectMany(assembly => assembly.GetTypes())
+            return this._allAssemblyFinder.FindAll(true).SelectMany(assembly => assembly.GetTypes())
                 .Where(type => type.IsDeriveClassFrom(baseType)).Distinct().ToArray();
         }
     }

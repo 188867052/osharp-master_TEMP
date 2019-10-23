@@ -13,7 +13,6 @@ using System.Linq.Expressions;
 using OSharp.Data;
 using OSharp.Security;
 
-
 namespace OSharp.Filter
 {
     /// <summary>

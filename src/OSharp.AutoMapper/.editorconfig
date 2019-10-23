@@ -1,0 +1,13 @@
+﻿[*.cs]
+
+# SA1200: Using directives should be placed correctly
+dotnet_diagnostic.SA1200.severity = none
+
+# SA1638: File header file name documentation should match file name
+dotnet_diagnostic.SA1638.severity = none
+
+# SA1629: Documentation text should end with a period
+dotnet_diagnostic.SA1629.severity = none
+
+# SA1636: File header copyright text should match
+dotnet_diagnostic.SA1636.severity = none

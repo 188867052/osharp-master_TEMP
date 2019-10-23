@@ -10,10 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-
-using OSharp.Data;
 using OSharp.Extensions;
-
 
 namespace OSharp.Linq
 {
@@ -53,7 +50,7 @@ namespace OSharp.Linq
         {
             return ifExp ? first.Compose(second, Expression.AndAlso) : first;
         }
-        
+
         /// <summary>
         /// 以 Expression.OrElse 组合两个Expression表达式
         /// </summary>
@@ -66,7 +63,6 @@ namespace OSharp.Linq
         {
             return ifExp ? first.Compose(second, Expression.OrElse) : first;
         }
-        
 
         private class ParameterRebinder : ExpressionVisitor
         {
@@ -74,7 +70,7 @@ namespace OSharp.Linq
 
             private ParameterRebinder(Dictionary<ParameterExpression, ParameterExpression> map)
             {
-                _map = map ?? new Dictionary<ParameterExpression, ParameterExpression>();
+                this._map = map ?? new Dictionary<ParameterExpression, ParameterExpression>();
             }
 
             public static Expression ReplaceParameters(Dictionary<ParameterExpression, ParameterExpression> map, Expression exp)
@@ -85,10 +81,11 @@ namespace OSharp.Linq
             protected override Expression VisitParameter(ParameterExpression node)
             {
                 ParameterExpression replacement;
-                if (_map.TryGetValue(node, out replacement))
+                if (this._map.TryGetValue(node, out replacement))
                 {
                     node = replacement;
                 }
+
                 return base.VisitParameter(node);
             }
         }

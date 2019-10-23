@@ -9,7 +9,8 @@
 
 namespace OSharp.Identity.OAuth2.QQ
 {
-    //http://wiki.connect.qq.com/%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C_oauth2-0 QQ互联 oauth2.0文档
+    // http://wiki.connect.qq.com/%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C_oauth2-0 QQ互联 oauth2.0文档
+
     /// <summary>
     /// QQ认证使用的默认值。
     /// </summary>

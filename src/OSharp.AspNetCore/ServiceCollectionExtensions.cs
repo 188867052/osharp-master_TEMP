@@ -12,7 +12,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.Dependency;
 
-
 namespace OSharp.AspNetCore
 {
     /// <summary>

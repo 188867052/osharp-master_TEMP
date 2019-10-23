@@ -19,7 +19,6 @@ using OSharp.AspNetCore;
 using OSharp.CodeGenerator;
 using OSharp.Core.Packs;
 
-
 namespace Liuliu.Demo.Web.Startups
 {
     /// <summary>
@@ -54,6 +53,7 @@ namespace Liuliu.Demo.Web.Startups
             {
                 services.AddSingleton<ITypeMetadataHandler, TypeMetadataHandler>();
             }
+
             return services;
         }
 
@@ -70,7 +70,7 @@ namespace Liuliu.Demo.Web.Startups
 #endif
             if (environment.IsDevelopment())
             {
-                IsEnabled = true;
+                this.IsEnabled = true;
             }
         }
     }

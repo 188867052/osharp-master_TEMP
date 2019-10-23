@@ -28,7 +28,6 @@ using OSharp.AspNetCore.Mvc.Filters;
 using OSharp.AspNetCore.UI;
 using OSharp.Caching;
 using OSharp.Collections;
-using OSharp.Core;
 using OSharp.Core.Functions;
 using OSharp.Core.Modules;
 using OSharp.Data;
@@ -36,7 +35,6 @@ using OSharp.Entity;
 using OSharp.Filter;
 using OSharp.Identity;
 using OSharp.Mapping;
-
 
 namespace Liuliu.Demo.Web.Areas.Admin.Controllers
 {
@@ -56,11 +54,11 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             ICacheService cacheService,
             IFilterService filterService)
         {
-            _roleManager = roleManager;
-            _securityManager = securityManager;
-            _identityContract = identityContract;
-            _cacheService = cacheService;
-            _filterService = filterService;
+            this._roleManager = roleManager;
+            this._securityManager = securityManager;
+            this._identityContract = identityContract;
+            this._cacheService = cacheService;
+            this._filterService = filterService;
         }
 
         /// <summary>
@@ -75,8 +73,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             Check.NotNull(request, nameof(request));
             IFunction function = this.GetExecuteFunction();
 
-            Expression<Func<Role, bool>> predicate = _filterService.GetExpression<Role>(request.FilterGroup);
-            var page = _cacheService.ToPageCache<Role, RoleOutputDto>(_roleManager.Roles, predicate, request.PageCondition, function);
+            Expression<Func<Role, bool>> predicate = this._filterService.GetExpression<Role>(request.FilterGroup);
+            var page = this._cacheService.ToPageCache<Role, RoleOutputDto>(this._roleManager.Roles, predicate, request.PageCondition, function);
 
             return page.ToPageData();
         }
@@ -93,10 +91,10 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             IFunction function = this.GetExecuteFunction();
             Expression<Func<Role, bool>> exp = m => !m.IsLocked;
 
-            RoleNode[] nodes = _cacheService.ToCacheArray(_roleManager.Roles, exp, m => new RoleNode()
+            RoleNode[] nodes = this._cacheService.ToCacheArray(this._roleManager.Roles, exp, m => new RoleNode()
             {
                 RoleId = m.Id,
-                RoleName = m.Name
+                RoleName = m.Name,
             }, function);
             return nodes;
         }
@@ -112,8 +110,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         {
             Check.GreaterThan(userId, nameof(userId), 0);
 
-            int[] checkRoleIds = _identityContract.UserRoles.Where(m => m.UserId == userId).Select(m => m.RoleId).Distinct().ToArray();
-            List<UserRoleNode> nodes = _identityContract.Roles.Where(m => !m.IsLocked)
+            int[] checkRoleIds = this._identityContract.UserRoles.Where(m => m.UserId == userId).Select(m => m.RoleId).Distinct().ToArray();
+            List<UserRoleNode> nodes = this._identityContract.Roles.Where(m => !m.IsLocked)
                 .OrderByDescending(m => m.IsAdmin).ThenBy(m => m.Id).ToOutput<Role, UserRoleNode>().ToList();
             nodes.ForEach(m => m.IsChecked = checkRoleIds.Contains(m.Id));
             return nodes;
@@ -136,13 +134,15 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             foreach (RoleInputDto dto in dtos)
             {
                 Role role = dto.MapTo<Role>();
-                IdentityResult result = await _roleManager.CreateAsync(role);
+                IdentityResult result = await this._roleManager.CreateAsync(role);
                 if (!result.Succeeded)
                 {
                     return result.ToOperationResult().ToAjaxResult();
                 }
+
                 names.Add(role.Name);
             }
+
             return new AjaxResult($"角色“{names.ExpandAndToString()}”创建成功");
         }
 
@@ -162,15 +162,17 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             List<string> names = new List<string>();
             foreach (RoleInputDto dto in dtos)
             {
-                Role role = await _roleManager.FindByIdAsync(dto.Id.ToString());
+                Role role = await this._roleManager.FindByIdAsync(dto.Id.ToString());
                 role = dto.MapTo(role);
-                IdentityResult result = await _roleManager.UpdateAsync(role);
+                IdentityResult result = await this._roleManager.UpdateAsync(role);
                 if (!result.Succeeded)
                 {
                     return result.ToOperationResult().ToAjaxResult();
                 }
+
                 names.Add(role.Name);
             }
+
             return new AjaxResult($"角色“{names.ExpandAndToString()}”更新成功");
         }
 
@@ -190,14 +192,16 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             List<string> names = new List<string>();
             foreach (int id in ids)
             {
-                Role role = await _roleManager.FindByIdAsync(id.ToString());
-                IdentityResult result = await _roleManager.DeleteAsync(role);
+                Role role = await this._roleManager.FindByIdAsync(id.ToString());
+                IdentityResult result = await this._roleManager.DeleteAsync(role);
                 if (!result.Succeeded)
                 {
                     return result.ToOperationResult().ToAjaxResult();
                 }
+
                 names.Add(role.Name);
             }
+
             return new AjaxResult($"角色“{names.ExpandAndToString()}”删除成功");
         }
 
@@ -214,8 +218,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         [Description("设置模块")]
         public async Task<ActionResult> SetModules(RoleSetModuleDto dto)
         {
-            OperationResult result = await _securityManager.SetRoleModules(dto.RoleId, dto.ModuleIds);
-            return Json(result.ToAjaxResult());
+            OperationResult result = await this._securityManager.SetRoleModules(dto.RoleId, dto.ModuleIds);
+            return this.Json(result.ToAjaxResult());
         }
     }
 }

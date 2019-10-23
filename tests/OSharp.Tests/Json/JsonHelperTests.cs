@@ -7,7 +7,7 @@ namespace OSharp.Json.Tests
 {
     public class JsonHelperTests
     {
-        [Fact()]
+        [Fact]
         public void ToJsonTest()
         {
             object value = null;

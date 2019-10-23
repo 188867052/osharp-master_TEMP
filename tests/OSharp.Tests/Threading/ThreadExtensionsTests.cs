@@ -2,12 +2,11 @@
 
 using Xunit;
 
-
 namespace OSharp.Threading.Tests
 {
     public class ThreadExtensionsTests
     {
-        [Fact()]
+        [Fact]
         public void CancelSleepTest()
         {
             var thread = new Thread(() =>

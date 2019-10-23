@@ -11,7 +11,6 @@ using System;
 
 using OSharp.EventBuses;
 
-
 namespace OSharp.Security.Events
 {
     /// <summary>
@@ -24,8 +23,8 @@ namespace OSharp.Security.Events
         /// </summary>
         public FunctionAuthCacheRefreshEventData()
         {
-            FunctionIds = new Guid[0];
-            UserNames = new string[0];
+            this.FunctionIds = new Guid[0];
+            this.UserNames = new string[0];
         }
 
         /// <summary>

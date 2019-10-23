@@ -4,7 +4,6 @@ using Shouldly;
 
 using Xunit;
 
-
 namespace OSharp.Entity.Tests
 {
     public class EntityBaseTests
@@ -27,9 +26,12 @@ namespace OSharp.Entity.Tests
             entity2.GetHashCode().ShouldBe(entity1.GetHashCode());
         }
 
-        private class GuidKeyEntity : EntityBase<Guid> { }
+        private class GuidKeyEntity : EntityBase<Guid>
+        {
+        }
 
-
-        private class TestEntity1 : EntityBase<int> { }
+        private class TestEntity1 : EntityBase<int>
+        {
+        }
     }
 }

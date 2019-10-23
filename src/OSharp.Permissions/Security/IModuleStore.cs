@@ -16,7 +16,6 @@ using OSharp.Data;
 using OSharp.Dependency;
 using OSharp.Entity;
 
-
 namespace OSharp.Security
 {
     /// <summary>
@@ -28,8 +27,6 @@ namespace OSharp.Security
         where TModuleInputDto : ModuleInputDtoBase<TModuleKey>
         where TModuleKey : struct, IEquatable<TModuleKey>
     {
-        #region 模块信息业务
-
         /// <summary>
         /// 获取 模块信息查询数据集
         /// </summary>
@@ -70,7 +67,5 @@ namespace OSharp.Security
         /// <param name="rootIds">树节点</param>
         /// <returns>模块编号集合</returns>
         TModuleKey[] GetModuleTreeIds(params TModuleKey[] rootIds);
-
-        #endregion
     }
 }

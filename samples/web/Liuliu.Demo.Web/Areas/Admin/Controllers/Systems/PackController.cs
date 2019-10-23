@@ -25,7 +25,6 @@ using OSharp.Core.Packs;
 using OSharp.Filter;
 using OSharp.Reflection;
 
-
 namespace Liuliu.Demo.Web.Areas.Admin.Controllers
 {
     [ModuleInfo(Order = 4, Position = "Systems", PositionName = "系统管理模块")]
@@ -41,8 +40,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         public PackController(ICacheService cacheService,
             IFilterService filterService)
         {
-            _cacheService = cacheService;
-            _filterService = filterService;
+            this._cacheService = cacheService;
+            this._filterService = filterService;
         }
 
         /// <summary>
@@ -60,10 +59,10 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
                 new SortCondition("Order")
             );
             IFunction function = this.GetExecuteFunction();
-            Expression<Func<OsharpPack, bool>> exp = _filterService.GetExpression<OsharpPack>(request.FilterGroup);
-            IServiceProvider provider = HttpContext.RequestServices;
+            Expression<Func<OsharpPack, bool>> exp = this._filterService.GetExpression<OsharpPack>(request.FilterGroup);
+            IServiceProvider provider = this.HttpContext.RequestServices;
             IOsharpPackManager manager = provider.GetService<IOsharpPackManager>();
-            return _cacheService.ToPageCache(manager.SourcePacks.AsQueryable(), exp,
+            return this._cacheService.ToPageCache(manager.SourcePacks.AsQueryable(), exp,
                 request.PageCondition,
                 m => new PackOutputDto()
                 {
@@ -72,7 +71,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
                     Class = m.GetType().FullName,
                     Level = m.Level,
                     Order = m.Order,
-                    IsEnabled = m.IsEnabled
+                    IsEnabled = m.IsEnabled,
                 },
                 function).ToPageData();
         }

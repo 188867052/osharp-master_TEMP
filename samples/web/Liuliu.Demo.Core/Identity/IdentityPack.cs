@@ -1,20 +1,9 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="IdentityPack.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2018 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2018-06-27 4:44</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using System.Threading.Tasks;
-
 using Liuliu.Demo.Identity.Entities;
-
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -24,13 +13,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
-
 using OSharp.Core.Options;
 using OSharp.Exceptions;
 using OSharp.Extensions;
 using OSharp.Identity;
 using OSharp.Identity.JwtBearer;
-
 
 namespace Liuliu.Demo.Identity
 {
@@ -66,14 +53,17 @@ namespace Liuliu.Demo.Identity
         {
             return options =>
             {
-                //登录
+                // 登录
                 options.SignIn.RequireConfirmedEmail = false;
-                //密码
+
+                // 密码
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
-                //用户
+
+                // 用户
                 options.User.RequireUniqueEmail = false;
-                //锁定
+
+                // 锁定
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
             };
         }
@@ -123,7 +113,7 @@ namespace Liuliu.Demo.Identity
                     ValidIssuer = configuration["OSharp:Jwt:Issuer"] ?? "osharp identity",
                     ValidAudience = configuration["OSharp:Jwt:Audience"] ?? "osharp client",
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
-                    LifetimeValidator = (nbf, exp, token, param) => exp > DateTime.UtcNow
+                    LifetimeValidator = (nbf, exp, token, param) => exp > DateTime.UtcNow,
                 };
 
                 jwt.Events = new JwtBearerEvents()
@@ -137,6 +127,7 @@ namespace Liuliu.Demo.Identity
                         {
                             context.Token = token;
                         }
+
                         return Task.CompletedTask;
                     },
                     OnAuthenticationFailed = context =>
@@ -145,8 +136,9 @@ namespace Liuliu.Demo.Identity
                         {
                             context.Response.Headers.Add("Token-Expired", "true");
                         }
+
                         return Task.CompletedTask;
-                    }
+                    },
                 };
             });
 
@@ -157,6 +149,7 @@ namespace Liuliu.Demo.Identity
             {
                 return;
             }
+
             foreach (KeyValuePair<string, OAuth2Options> pair in dict)
             {
                 OAuth2Options value = pair.Value;
@@ -164,10 +157,12 @@ namespace Liuliu.Demo.Identity
                 {
                     continue;
                 }
+
                 if (string.IsNullOrEmpty(value.ClientId))
                 {
                     throw new OsharpException($"配置文件中OSharp:OAuth2配置的{pair.Key}节点的ClientId不能为空");
                 }
+
                 if (string.IsNullOrEmpty(value.ClientSecret))
                 {
                     throw new OsharpException($"配置文件中OSharp:OAuth2配置的{pair.Key}节点的ClientSecret不能为空");
@@ -207,8 +202,8 @@ namespace Liuliu.Demo.Identity
         /// <returns></returns>
         protected override IdentityBuilder OnIdentityBuild(IdentityBuilder builder)
         {
-            //如需要昵称唯一，启用下面这个验证码
-            //builder.AddUserValidator<UserNickNameValidator<User, int>>();
+            // 如需要昵称唯一，启用下面这个验证码
+            // builder.AddUserValidator<UserNickNameValidator<User, int>>();
             return builder.AddDefaultTokenProviders();
         }
 
@@ -220,7 +215,7 @@ namespace Liuliu.Demo.Identity
         {
             app.UseAuthentication();
 
-            IsEnabled = true;
+            this.IsEnabled = true;
         }
     }
 }

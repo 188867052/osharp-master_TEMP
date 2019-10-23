@@ -22,7 +22,6 @@ using OSharp.Mapping;
 
 using IMapper = OSharp.Mapping.IMapper;
 
-
 namespace OSharp.AutoMapper
 {
     /// <summary>
@@ -47,7 +46,7 @@ namespace OSharp.AutoMapper
 
             return services;
         }
-        
+
         /// <summary>
         /// 应用模块服务
         /// </summary>
@@ -56,7 +55,7 @@ namespace OSharp.AutoMapper
         {
             MapperConfigurationExpression cfg = provider.GetService<MapperConfigurationExpression>();
 
-            //获取已注册到IoC的所有Profile
+            // 获取已注册到IoC的所有Profile
             IMapTuple[] tuples = provider.GetServices<IMapTuple>().ToArray();
             foreach (IMapTuple mapTuple in tuples)
             {
@@ -64,7 +63,7 @@ namespace OSharp.AutoMapper
                 cfg.AddProfile(mapTuple as Profile);
             }
 
-            //各个模块DTO的 IAutoMapperConfiguration 映射实现类
+            // 各个模块DTO的 IAutoMapperConfiguration 映射实现类
             IAutoMapperConfiguration[] configs = provider.GetServices<IAutoMapperConfiguration>().ToArray();
             foreach (IAutoMapperConfiguration config in configs)
             {
@@ -76,7 +75,7 @@ namespace OSharp.AutoMapper
             IMapper mapper = new AutoMapperMapper(configuration);
             MapperExtensions.SetMapper(mapper);
 
-            IsEnabled = true;
+            this.IsEnabled = true;
         }
     }
 }

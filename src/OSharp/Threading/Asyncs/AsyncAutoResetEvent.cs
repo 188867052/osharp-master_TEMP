@@ -10,7 +10,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-
 namespace OSharp.Threading.Asyncs
 {
     /// <summary>
@@ -23,42 +22,43 @@ namespace OSharp.Threading.Asyncs
         private bool _signaled;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         public Task WaitAsync()
         {
-            lock (_waits)
+            lock (this._waits)
             {
-                if (_signaled)
+                if (this._signaled)
                 {
-                    _signaled = false;
+                    this._signaled = false;
                     return Completed;
                 }
 
                 TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
-                _waits.Enqueue(tcs);
+                this._waits.Enqueue(tcs);
                 return tcs.Task;
             }
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public void Set()
         {
             TaskCompletionSource<bool> toRelease = null;
-            lock (_waits)
+            lock (this._waits)
             {
-                if (_waits.Count > 0)
+                if (this._waits.Count > 0)
                 {
-                    toRelease = _waits.Dequeue();
+                    toRelease = this._waits.Dequeue();
                 }
-                else if (!_signaled)
+                else if (!this._signaled)
                 {
-                    _signaled = true;
+                    this._signaled = true;
                 }
             }
+
             if (toRelease != null)
             {
                 toRelease.SetResult(true);

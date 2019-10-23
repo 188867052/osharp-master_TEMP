@@ -13,7 +13,6 @@ using System.Linq;
 
 using OSharp.Data;
 
-
 namespace OSharp.Collections
 {
     /// <summary>

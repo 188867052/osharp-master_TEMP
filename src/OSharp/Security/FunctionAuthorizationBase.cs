@@ -16,7 +16,6 @@ using OSharp.Core.Functions;
 using OSharp.Data;
 using OSharp.Security.Claims;
 
-
 namespace OSharp.Security
 {
     /// <summary>
@@ -29,8 +28,8 @@ namespace OSharp.Security
         /// </summary>
         protected FunctionAuthorizationBase(IFunctionAuthCache functionAuthCache)
         {
-            FunctionAuthCache = functionAuthCache;
-            SuperRoleName = "系统管理员";
+            this.FunctionAuthCache = functionAuthCache;
+            this.SuperRoleName = "系统管理员";
         }
 
         /// <summary>
@@ -51,7 +50,7 @@ namespace OSharp.Security
         /// <returns>功能权限检查结果</returns>
         public AuthorizationResult Authorize(IFunction function, IPrincipal principal)
         {
-            return AuthorizeCore(function, principal);
+            return this.AuthorizeCore(function, principal);
         }
 
         /// <summary>
@@ -70,10 +69,11 @@ namespace OSharp.Security
             string[] userRoles = principal.Identity.GetRoles();
             if (function.AccessType != FunctionAccessType.RoleLimit)
             {
-                //不是角色限制的功能，允许用户的所有角色
+                // 不是角色限制的功能，允许用户的所有角色
                 return userRoles;
             }
-            string[] functionRoles = FunctionAuthCache.GetFunctionRoles(function.Id);
+
+            string[] functionRoles = this.FunctionAuthCache.GetFunctionRoles(function.Id);
 
             return userRoles.Intersect(functionRoles).ToArray();
         }
@@ -90,25 +90,30 @@ namespace OSharp.Security
             {
                 return new AuthorizationResult(AuthorizationStatus.NoFound);
             }
+
             if (function.IsLocked)
             {
                 return new AuthorizationResult(AuthorizationStatus.Locked, $"功能“{function.Name}”已被禁用，无法执行");
             }
+
             if (function.AccessType == FunctionAccessType.Anonymous)
             {
                 return AuthorizationResult.OK;
             }
-            //未登录
+
+            // 未登录
             if (principal == null || !principal.Identity.IsAuthenticated)
             {
                 return new AuthorizationResult(AuthorizationStatus.Unauthorized);
             }
-            //已登录，无角色限制
+
+            // 已登录，无角色限制
             if (function.AccessType == FunctionAccessType.LoggedIn)
             {
                 return AuthorizationResult.OK;
             }
-            return AuthorizeRoleLimit(function, principal);
+
+            return this.AuthorizeRoleLimit(function, principal);
         }
 
         /// <summary>
@@ -119,19 +124,21 @@ namespace OSharp.Security
         /// <returns>功能权限验证结果</returns>
         protected virtual AuthorizationResult AuthorizeRoleLimit(IFunction function, IPrincipal principal)
         {
-            //角色限制
+            // 角色限制
             if (!(principal.Identity is ClaimsIdentity identity))
             {
                 return new AuthorizationResult(AuthorizationStatus.Error, "当前用户标识IIdentity格式不正确，仅支持ClaimsIdentity类型的用户标识");
             }
-            //检查角色-功能的权限
+
+            // 检查角色-功能的权限
             string[] userRoleNames = identity.GetRoles().ToArray();
-            AuthorizationResult result = AuthorizeRoleNames(function, userRoleNames);
+            AuthorizationResult result = this.AuthorizeRoleNames(function, userRoleNames);
             if (result.IsOk)
             {
                 return result;
             }
-            result = AuthorizeUserName(function, principal.Identity.GetUserName());
+
+            result = this.AuthorizeUserName(function, principal.Identity.GetUserName());
             return result;
         }
 
@@ -149,15 +156,18 @@ namespace OSharp.Security
             {
                 return new AuthorizationResult(AuthorizationStatus.Forbidden);
             }
-            if (function.AccessType != FunctionAccessType.RoleLimit || roleNames.Contains(SuperRoleName))
+
+            if (function.AccessType != FunctionAccessType.RoleLimit || roleNames.Contains(this.SuperRoleName))
             {
                 return AuthorizationResult.OK;
             }
-            string[] functionRoleNames = FunctionAuthCache.GetFunctionRoles(function.Id);
+
+            string[] functionRoleNames = this.FunctionAuthCache.GetFunctionRoles(function.Id);
             if (roleNames.Intersect(functionRoleNames).Any())
             {
                 return AuthorizationResult.OK;
             }
+
             return new AuthorizationResult(AuthorizationStatus.Forbidden);
         }
 
@@ -174,11 +184,12 @@ namespace OSharp.Security
                 return AuthorizationResult.OK;
             }
 
-            Guid[] functionIds = FunctionAuthCache.GetUserFunctions(userName);
+            Guid[] functionIds = this.FunctionAuthCache.GetUserFunctions(userName);
             if (functionIds.Contains(function.Id))
             {
                 return AuthorizationResult.OK;
             }
+
             return new AuthorizationResult(AuthorizationStatus.Forbidden);
         }
     }

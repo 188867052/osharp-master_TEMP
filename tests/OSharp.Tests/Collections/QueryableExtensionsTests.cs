@@ -11,7 +11,7 @@ namespace OSharp.Tests.Collections
 {
     public class QueryableExtensionsTests
     {
-        [Fact()]
+        [Fact]
         public void WhereIfTest_IQueryable()
         {
             IQueryable<int> source = new List<int> { 1, 2, 3, 4, 5, 6, 7 }.AsQueryable();
@@ -21,7 +21,7 @@ namespace OSharp.Tests.Collections
             Assert.Equal(source.WhereIf(m => m > 5, true).ToList(), actual);
         }
 
-        [Fact()]
+        [Fact]
         public void OrderByTest_IQueryable()
         {
             IQueryable<TestEntity> source = new List<TestEntity>
@@ -40,7 +40,7 @@ namespace OSharp.Tests.Collections
             Assert.Equal(1, source.OrderBy(new SortCondition("Name", ListSortDirection.Descending)).ToArray()[3].Id);
         }
 
-        [Fact()]
+        [Fact]
         public void ThenByTest_IQueryable()
         {
             IQueryable<TestEntity> source = new List<TestEntity>

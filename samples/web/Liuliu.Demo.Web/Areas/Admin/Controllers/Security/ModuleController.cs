@@ -25,7 +25,6 @@ using OSharp.Data;
 using OSharp.Entity;
 using OSharp.Filter;
 
-
 namespace Liuliu.Demo.Web.Areas.Admin.Controllers
 {
     [ModuleInfo(Order = 1, Position = "Security", PositionName = "权限安全模块")]
@@ -37,8 +36,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
 
         public ModuleController(SecurityManager securityManager, IFilterService filterService)
         {
-            _securityManager = securityManager;
-            _filterService = filterService;
+            this._securityManager = securityManager;
+            this._filterService = filterService;
         }
 
         /// <summary>
@@ -51,7 +50,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         public List<ModuleOutputDto> Read()
         {
             Expression<Func<Module, bool>> predicate = m => true;
-            List<ModuleOutputDto> modules = _securityManager.Modules.Where(predicate).OrderBy(m => m.OrderCode).ToOutput<Module, ModuleOutputDto>().ToList();
+            List<ModuleOutputDto> modules = this._securityManager.Modules.Where(predicate).OrderBy(m => m.OrderCode).ToOutput<Module, ModuleOutputDto>().ToList();
             return modules;
         }
 
@@ -65,10 +64,10 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         public List<object> ReadUserModules(int userId)
         {
             Check.GreaterThan(userId, nameof(userId), 0);
-            int[] checkedModuleIds = _securityManager.ModuleUsers.Where(m => m.UserId == userId).Select(m => m.ModuleId).ToArray();
+            int[] checkedModuleIds = this._securityManager.ModuleUsers.Where(m => m.UserId == userId).Select(m => m.ModuleId).ToArray();
 
-            int[] rootIds = _securityManager.Modules.Where(m => m.ParentId == null).OrderBy(m => m.OrderCode).Select(m => m.Id).ToArray();
-            var result = GetModulesWithChecked(rootIds, checkedModuleIds);
+            int[] rootIds = this._securityManager.Modules.Where(m => m.ParentId == null).OrderBy(m => m.OrderCode).Select(m => m.Id).ToArray();
+            var result = this.GetModulesWithChecked(rootIds, checkedModuleIds);
             return result;
         }
 
@@ -82,30 +81,31 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         public List<object> ReadRoleModules(int roleId)
         {
             Check.GreaterThan(roleId, nameof(roleId), 0);
-            int[] checkedModuleIds = _securityManager.ModuleRoles.Where(m => m.RoleId == roleId).Select(m => m.ModuleId).ToArray();
+            int[] checkedModuleIds = this._securityManager.ModuleRoles.Where(m => m.RoleId == roleId).Select(m => m.ModuleId).ToArray();
 
-            int[] rootIds = _securityManager.Modules.Where(m => m.ParentId == null).OrderBy(m => m.OrderCode).Select(m => m.Id).ToArray();
-            var result = GetModulesWithChecked(rootIds, checkedModuleIds);
+            int[] rootIds = this._securityManager.Modules.Where(m => m.ParentId == null).OrderBy(m => m.OrderCode).Select(m => m.Id).ToArray();
+            var result = this.GetModulesWithChecked(rootIds, checkedModuleIds);
             return result;
         }
-        
+
         private List<object> GetModulesWithChecked(int[] rootIds, int[] checkedModuleIds)
         {
-            var modules = _securityManager.Modules.Where(m => rootIds.Contains(m.Id)).OrderBy(m => m.OrderCode).Select(m => new
+            var modules = this._securityManager.Modules.Where(m => rootIds.Contains(m.Id)).OrderBy(m => m.OrderCode).Select(m => new
             {
                 m.Id,
                 m.Name,
                 m.OrderCode,
                 m.Remark,
-                ChildIds = _securityManager.Modules.Where(n => n.ParentId == m.Id).OrderBy(n => n.OrderCode).Select(n => n.Id).ToList()
+                ChildIds = this._securityManager.Modules.Where(n => n.ParentId == m.Id).OrderBy(n => n.OrderCode).Select(n => n.Id).ToList(),
             }).ToList();
             List<object> nodes = new List<object>();
             foreach (var item in modules)
             {
-                if (item.ChildIds.Count == 0 && !IsRoleLimit(item.Id))
+                if (item.ChildIds.Count == 0 && !this.IsRoleLimit(item.Id))
                 {
                     continue;
                 }
+
                 var node = new
                 {
                     item.Id,
@@ -114,23 +114,24 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
                     IsChecked = checkedModuleIds.Contains(item.Id),
                     HasChildren = item.ChildIds.Count > 0,
                     item.Remark,
-                    Children = item.ChildIds.Count > 0 ? GetModulesWithChecked(item.ChildIds.ToArray(), checkedModuleIds) : new List<object>()
+                    Children = item.ChildIds.Count > 0 ? this.GetModulesWithChecked(item.ChildIds.ToArray(), checkedModuleIds) : new List<object>(),
                 };
 
-                if (node.Children.Count == 0 && !IsRoleLimit(node.Id))
+                if (node.Children.Count == 0 && !this.IsRoleLimit(node.Id))
                 {
                     continue;
                 }
 
                 nodes.Add(node);
             }
+
             return nodes;
         }
 
         private bool IsRoleLimit(int moduleId)
         {
-            return _securityManager.Functions
-                .Where(m => _securityManager.ModuleFunctions.Where(n => n.ModuleId == moduleId).Select(n => n.FunctionId).Contains(m.Id))
+            return this._securityManager.Functions
+                .Where(m => this._securityManager.ModuleFunctions.Where(n => n.ModuleId == moduleId).Select(n => n.FunctionId).Contains(m.Id))
                 .Any(m => m.AccessType == FunctionAccessType.RoleLimit);
         }
 
@@ -148,25 +149,28 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             {
                 return new PageData<FunctionOutputDto2>();
             }
-            Expression<Func<Module, bool>> moduleExp = _filterService.GetExpression<Module>(request.FilterGroup);
-            int[] moduleIds = _securityManager.Modules.Where(moduleExp).Select(m => m.Id).ToArray();
-            Guid[] functionIds = _securityManager.ModuleFunctions.Where(m => moduleIds.Contains(m.ModuleId))
+
+            Expression<Func<Module, bool>> moduleExp = this._filterService.GetExpression<Module>(request.FilterGroup);
+            int[] moduleIds = this._securityManager.Modules.Where(moduleExp).Select(m => m.Id).ToArray();
+            Guid[] functionIds = this._securityManager.ModuleFunctions.Where(m => moduleIds.Contains(m.ModuleId))
                 .Select(m => m.FunctionId).Distinct().ToArray();
             if (functionIds.Length == 0)
             {
                 return new PageData<FunctionOutputDto2>();
             }
+
             if (request.PageCondition.SortConditions.Length == 0)
             {
                 request.PageCondition.SortConditions = new[] { new SortCondition("Area"), new SortCondition("Controller") };
             }
-            var page = _securityManager.Functions.ToPage(m => functionIds.Contains(m.Id),
+
+            var page = this._securityManager.Functions.ToPage(m => functionIds.Contains(m.Id),
                 request.PageCondition,
                 m => new FunctionOutputDto2() { Id = m.Id, Name = m.Name, AccessType = m.AccessType, Area = m.Area, Controller = m.Controller });
             return page.ToPageData();
         }
 
-        //模块暂时不需要CUD操作
+        // 模块暂时不需要CUD操作
         /*
         /// <summary>
         /// 新增模块子节点

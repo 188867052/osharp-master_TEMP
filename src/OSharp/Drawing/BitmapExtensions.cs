@@ -1,13 +1,4 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="BitmapExtensions.cs" company="柳柳软件">
-//      Copyright (c) 2016-2018 66SOFT. All rights reserved.
-//  </copyright>
-//  <site>http://www.66soft.net</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2018-10-02 2:42</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -16,10 +7,8 @@ using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-
 using OSharp.Collections;
 using OSharp.Extensions;
-
 
 namespace OSharp.Drawing
 {
@@ -28,8 +17,6 @@ namespace OSharp.Drawing
     /// </summary>
     public static class BitmapExtensions
     {
-        #region Byte[,]图像处理扩展
-
         /// <summary>
         /// 将图像转换为 Color[,]颜色值二维数组
         /// </summary>
@@ -49,8 +36,10 @@ namespace OSharp.Drawing
                         pixels[x, y] = Color.FromArgb(ptr[2], ptr[1], ptr[0]);
                         ptr += 3;
                     }
+
                     ptr += offset;
                 }
+
                 return pixels;
             }
         }
@@ -74,8 +63,10 @@ namespace OSharp.Drawing
                         grayBytes[x, y] = GetGrayValue(ptr[2], ptr[1], ptr[0]);
                         ptr += 3;
                     }
+
                     ptr += offset;
                 }
+
                 bmp.UnlockBits(data);
                 return grayBytes;
             }
@@ -95,6 +86,7 @@ namespace OSharp.Drawing
                     grayBytes[x, y] = GetGrayValue(pixels[x, y]);
                 }
             }
+
             return grayBytes;
         }
 
@@ -120,8 +112,10 @@ namespace OSharp.Drawing
                         ptr[0] = pixel.B;
                         ptr += 3;
                     }
+
                     ptr += offset;
                 }
+
                 bmp.UnlockBits(data);
                 return bmp;
             }
@@ -146,8 +140,10 @@ namespace OSharp.Drawing
                         ptr[2] = ptr[1] = ptr[0] = grayBytes[x, y];
                         ptr += 3;
                     }
+
                     ptr += offset;
                 }
+
                 bmp.UnlockBits(data);
                 return bmp;
             }
@@ -166,6 +162,7 @@ namespace OSharp.Drawing
                     grayBytes[x, y] = (byte)(grayBytes[x, y] > gray ? 255 : 0);
                 }
             }
+
             return grayBytes;
         }
 
@@ -185,6 +182,7 @@ namespace OSharp.Drawing
                     }
                 }
             }
+
             return grayBytes;
         }
 
@@ -199,12 +197,14 @@ namespace OSharp.Drawing
                 for (int x = 0; x < width; x++)
                 {
                     byte value = binBytes[x, y];
-                    //背景，边框
+
+                    // 背景，边框
                     if (value > gray || (x == 0 || y == 0 || x == width - 1 || y == height - 1))
                     {
                         binBytes[x, y] = 255;
                         continue;
                     }
+
                     int count = 0;
                     if (binBytes[x - 1, y - 1] < gray) count++;
                     if (binBytes[x, y - 1] < gray) count++;
@@ -214,13 +214,15 @@ namespace OSharp.Drawing
                     if (binBytes[x - 1, y + 1] < gray) count++;
                     if (binBytes[x, y + 1] < gray) count++;
                     if (binBytes[x + 1, y + 1] < gray) count++;
-                    //如果周边有效点数小于指定阈值，则清除该点
+
+                    // 如果周边有效点数小于指定阈值，则清除该点
                     if (count < maxNearPoints)
                     {
                         binBytes[x, y] = 255;
                     }
                 }
             }
+
             return binBytes;
         }
 
@@ -231,7 +233,8 @@ namespace OSharp.Drawing
         {
             int width = binBytes.GetLength(0), height = binBytes.GetLength(1);
             byte[,] newBinBytes = binBytes.Copy();
-            //遍历所有点，是黑点0，把与黑点连通的所有点灰度都改为1，下一个连通区域改为2，直到所有连通区域都标记完毕
+
+            // 遍历所有点，是黑点0，把与黑点连通的所有点灰度都改为1，下一个连通区域改为2，直到所有连通区域都标记完毕
             Dictionary<byte, Point[]> areaPointDict = new Dictionary<byte, Point[]>();
             byte setGray = 1;
             for (int y = 0; y < height; y++)
@@ -251,7 +254,8 @@ namespace OSharp.Drawing
                     }
                 }
             }
-            //筛选出区域点数小于阈值的区域，将原图相应点设置为白色
+
+            // 筛选出区域点数小于阈值的区域，将原图相应点设置为白色
             List<Point[]> pointsList = areaPointDict.Where(m => m.Value.Length < minAreaPoints).Select(m => m.Value).ToList();
             foreach (Point[] points in pointsList)
             {
@@ -281,6 +285,7 @@ namespace OSharp.Drawing
                 {
                     continue;
                 }
+
                 if (binBytes[p.X, p.Y] == gray)
                 {
                     binBytes[p.X, p.Y] = replacementGray;
@@ -313,6 +318,7 @@ namespace OSharp.Drawing
                 {
                     continue;
                 }
+
                 if (binBytes[p.X, p.Y] == gray)
                 {
                     binBytes[p.X, p.Y] = replacementGray;
@@ -345,6 +351,7 @@ namespace OSharp.Drawing
                     }
                 }
             }
+
             return grayBytes;
         }
 
@@ -365,6 +372,7 @@ namespace OSharp.Drawing
                     }
                 }
             }
+
             newBytes = grayBytes.DrawTo(newBytes, border, border);
             return newBytes;
         }
@@ -386,6 +394,7 @@ namespace OSharp.Drawing
                     }
                 }
             }
+
             return grayBytes;
         }
 
@@ -395,7 +404,8 @@ namespace OSharp.Drawing
         public static byte[,] ToValid(this byte[,] binBytes, byte gray = 200)
         {
             int width = binBytes.GetLength(0), height = binBytes.GetLength(1);
-            //有效矩形的左上/右下角坐标，左上坐标从右下开始拉，右下坐标从左上开始拉，所以初始值为
+
+            // 有效矩形的左上/右下角坐标，左上坐标从右下开始拉，右下坐标从左上开始拉，所以初始值为
             int x1 = width, y1 = height, x2 = 0, y2 = 0;
             for (int y = 0; y < height; y++)
             {
@@ -406,13 +416,15 @@ namespace OSharp.Drawing
                     {
                         continue;
                     }
+
                     if (x1 > x) x1 = x;
                     if (y1 > y) y1 = y;
                     if (x2 < x) x2 = x;
                     if (y2 < y) y2 = y;
                 }
             }
-            //创建新矩阵，复制原数据到新矩阵
+
+            // 创建新矩阵，复制原数据到新矩阵
             int newWidth = x2 - x1 + 1, newHeight = y2 - y1 + 1;
             byte[,] newBytes = binBytes.Clone(x1, y1, newWidth, newHeight);
             return newBytes;
@@ -428,10 +440,12 @@ namespace OSharp.Drawing
             {
                 throw new ArgumentException("要截取的宽度超出界限");
             }
+
             if (newHeight - y1 < height)
             {
                 throw new ArgumentException("要截取的高度超出界限");
             }
+
             byte[,] newBytes = new byte[width, height];
             for (int y = 0; y < height; y++)
             {
@@ -440,6 +454,7 @@ namespace OSharp.Drawing
                     newBytes[x, y] = sourceBytes[x1 + x, y1 + y];
                 }
             }
+
             return newBytes;
         }
 
@@ -456,10 +471,12 @@ namespace OSharp.Drawing
             {
                 throw new ArgumentException("大图矩阵宽度无法装下小矩阵宽度");
             }
+
             if (y1 + smallHeight > bigHeight)
             {
                 throw new ArgumentException("大图矩阵高度无法装下小矩阵高度");
             }
+
             for (int y = 0; y < smallHeight; y++)
             {
                 for (int x = 0; x < smallWidth; x++)
@@ -488,6 +505,7 @@ namespace OSharp.Drawing
                     }
                 }
             }
+
             return nums;
         }
 
@@ -508,6 +526,7 @@ namespace OSharp.Drawing
                     }
                 }
             }
+
             return nums;
         }
 
@@ -566,17 +585,15 @@ namespace OSharp.Drawing
                 {
                     code += binBytes[x, y] < gray ? 1 : 0;
                 }
+
                 if (breakLine)
                 {
                     code += "\r\n";
                 }
             }
+
             return code;
         }
-
-        #endregion
-
-        #region Image
 
         /// <summary>
         /// 将Bitmap转换为Byte[]
@@ -594,6 +611,7 @@ namespace OSharp.Drawing
                     {
                         format = ImageFormat.Bmp;
                     }
+
                     newBmp.Save(ms, format);
                     return ms.GetBuffer();
                 }
@@ -610,40 +628,41 @@ namespace OSharp.Drawing
         {
             angle = angle % 360;
 
-            //弧度转换
+            // 弧度转换
             double radian = angle * Math.PI / 180.0;
             double cos = Math.Cos(radian);
             double sin = Math.Sin(radian);
 
-            //原图的宽和高
+            // 原图的宽和高
             int w1 = bmp.Width;
             int h1 = bmp.Height;
-            //旋转后的宽和高
+
+            // 旋转后的宽和高
             int w2 = (int)Math.Max(Math.Abs(w1 * cos - h1 * sin), Math.Abs(w1 * cos + h1 * sin));
             int h2 = (int)Math.Max(Math.Abs(w1 * sin - h1 * cos), Math.Abs(w1 * sin + h1 * cos));
 
             Bitmap newBmp = new Bitmap(w2, h2);
             using (Graphics graphics = Graphics.FromImage(newBmp))
             {
-                //目标位图
+                // 目标位图
                 graphics.InterpolationMode = InterpolationMode.Bilinear;
                 graphics.SmoothingMode = SmoothingMode.HighQuality;
 
-                //计算偏移量
+                // 计算偏移量
                 Point offset = new Point((w2 - w1) / 2, (h2 - h1) / 2);
 
-                //构造图像显示区域：使原始图像与目标图像中心点一致
+                // 构造图像显示区域：使原始图像与目标图像中心点一致
                 Rectangle rect = new Rectangle(offset.X, offset.Y, w1, h1);
                 Point center = new Point(rect.X + rect.Width / 2, rect.Y + rect.Height / 2);
 
                 graphics.TranslateTransform(center.X, center.Y);
                 graphics.RotateTransform(360 - angle);
 
-                //恢复图像在水平和垂直方向的平移
+                // 恢复图像在水平和垂直方向的平移
                 graphics.TranslateTransform(-center.X, -center.Y);
                 graphics.DrawImage(bmp, rect);
 
-                //重置绘图的所有变换
+                // 重置绘图的所有变换
                 graphics.ResetTransform();
                 graphics.Save();
                 graphics.Dispose();
@@ -658,7 +677,7 @@ namespace OSharp.Drawing
         {
             angle = angle % 360;
 
-            //弧度转换
+            // 弧度转换
             double radian = angle * Math.PI / 180.0;
             double cos = Math.Cos(radian), sin = Math.Sin(radian);
 
@@ -718,6 +737,7 @@ namespace OSharp.Drawing
                     newBmp.SetPixel(x, y, Color.FromArgb(value, value, value));
                 }
             }
+
             return newBmp;
         }
 
@@ -740,10 +760,13 @@ namespace OSharp.Drawing
                         ptr[0] = ptr[1] = ptr[2] = GetGrayValue(ptr[2], ptr[1], ptr[0]);
                         ptr += 3;
                     }
+
                     ptr += offset;
                 }
+
                 newBmp.UnlockBits(data);
             }
+
             return newBmp;
         }
 
@@ -767,6 +790,7 @@ namespace OSharp.Drawing
                     }
                 }
             }
+
             return newBmp;
         }
 
@@ -785,12 +809,14 @@ namespace OSharp.Drawing
                 for (int y = 0; y < bmp.Height; y++)
                 {
                     Color pixel = bmp.GetPixel(x, y);
-                    //背景，边框
+
+                    // 背景，边框
                     if (pixel.R >= gray || (x == 0 || x == bmp.Width - 1 || y == 0 || y == bmp.Height - 1))
                     {
                         bmp.SetPixel(x, y, Color.White);
                         continue;
                     }
+
                     int count = 0;
                     if (bmp.GetPixel(x - 1, y - 1).R < gray) count++;
                     if (bmp.GetPixel(x, y - 1).R < gray) count++;
@@ -800,13 +826,15 @@ namespace OSharp.Drawing
                     if (bmp.GetPixel(x - 1, y + 1).R < gray) count++;
                     if (bmp.GetPixel(x, y + 1).R < gray) count++;
                     if (bmp.GetPixel(x + 1, y + 1).R < gray) count++;
-                    //如果周边有效点数小于指定阈值，则清除该点
+
+                    // 如果周边有效点数小于指定阈值，则清除该点
                     if (count < maxNearPoints)
                     {
                         bmp.SetPixel(x, y, Color.White);
                     }
                 }
             }
+
             return bmp.Clone(new Rectangle(0, 0, bmp.Width, bmp.Height), bmp.PixelFormat);
         }
 
@@ -840,13 +868,16 @@ namespace OSharp.Drawing
                             {
                                 p[i] = (byte)Math.Max(0, pix);
                             }
+
                             if (value > 0)
                             {
                                 p[i] = (byte)Math.Min(255, pix);
                             }
                         } // i
+
                         p += 3;
                     } // x
+
                     p += offset;
                 } // y
             }
@@ -887,11 +918,14 @@ namespace OSharp.Drawing
                             pixel = pixel > 255 ? 255 : pixel;
                             p[i] = (byte)pixel;
                         } // i
+
                         p += 3;
                     } // x
+
                     p += offset;
                 } // y
             }
+
             newBmp.UnlockBits(bmpData);
             return newBmp;
         }
@@ -908,6 +942,7 @@ namespace OSharp.Drawing
             {
                 return bmp;
             }
+
             Bitmap newBmp = new Bitmap(bmp.Width, bmp.Height);
             using (Graphics graphics = Graphics.FromImage(newBmp))
             {
@@ -985,6 +1020,7 @@ namespace OSharp.Drawing
                     newBmp.SetPixel(i, j, Color.FromArgb(r, g, b));
                 }
             }
+
             return newBmp;
         }
 
@@ -1015,6 +1051,7 @@ namespace OSharp.Drawing
                     newBmp.SetPixel(i, j, Color.FromArgb(r, g, b));
                 }
             }
+
             return newBmp;
         }
 
@@ -1027,7 +1064,8 @@ namespace OSharp.Drawing
         {
             int width = bmp.Width, height = bmp.Height;
             Bitmap newBmp = new Bitmap(width, height);
-            //高斯模板
+
+            // 高斯模板
             int[] gauss = { 1, 2, 1, 2, 4, 2, 1, 2, 1 };
             for (int j = 0; j < height; j++)
             {
@@ -1046,10 +1084,12 @@ namespace OSharp.Drawing
                             index++;
                         }
                     }
+
                     r /= 16;
                     g /= 16;
                     b /= 16;
-                    //处理颜色值溢出
+
+                    // 处理颜色值溢出
                     r = r > 255 ? 255 : r;
                     r = r < 0 ? 0 : r;
                     g = g > 255 ? 255 : g;
@@ -1059,6 +1099,7 @@ namespace OSharp.Drawing
                     newBmp.SetPixel(i - 1, j - 1, Color.FromArgb(r, g, b));
                 }
             }
+
             return newBmp;
         }
 
@@ -1071,7 +1112,8 @@ namespace OSharp.Drawing
         {
             int width = bmp.Width, height = bmp.Height;
             Bitmap newBmp = new Bitmap(width, height);
-            //拉普拉斯模板
+
+            // 拉普拉斯模板
             int[] laplace = { -1, -1, -1, -1, 9, -1, -1, -1, -1 };
             for (int j = 0; j < height; j++)
             {
@@ -1090,10 +1132,12 @@ namespace OSharp.Drawing
                             index++;
                         }
                     }
+
                     r /= 16;
                     g /= 16;
                     b /= 16;
-                    //处理颜色值溢出
+
+                    // 处理颜色值溢出
                     r = r > 255 ? 255 : r;
                     r = r < 0 ? 0 : r;
                     g = g > 255 ? 255 : g;
@@ -1103,6 +1147,7 @@ namespace OSharp.Drawing
                     newBmp.SetPixel(i - 1, j - 1, Color.FromArgb(r, g, b));
                 }
             }
+
             return newBmp;
         }
 
@@ -1121,21 +1166,25 @@ namespace OSharp.Drawing
                 {
                     Random rnd = new Random();
                     int k = rnd.Next(123456);
-                    //像素块大小
+
+                    // 像素块大小
                     int dx = i + k % 19;
                     int dy = j + k % 19;
                     if (dx >= width)
                     {
                         dx = width - 1;
                     }
+
                     if (dy >= height)
                     {
                         dy = height - 1;
                     }
+
                     Color pixel = bmp.GetPixel(dx, dy);
                     newBmp.SetPixel(i, j, pixel);
                 }
             }
+
             return newBmp;
         }
 
@@ -1158,8 +1207,10 @@ namespace OSharp.Drawing
                         scan[i / 8] |= (byte)(0x80 >> (i % 8));
                     }
                 }
+
                 Marshal.Copy(scan, 0, (IntPtr)((int)data.Scan0 + data.Stride * j), scan.Length);
             }
+
             newBmp.UnlockBits(data);
             return newBmp;
         }
@@ -1176,7 +1227,7 @@ namespace OSharp.Drawing
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
             unsafe
             {
-                //将原始图片变成灰度二维数组
+                // 将原始图片变成灰度二维数组
                 byte* ptr = (byte*)data.Scan0;
                 byte[,] source = new byte[width, height];
                 int offset = data.Stride - width * 3;
@@ -1187,10 +1238,13 @@ namespace OSharp.Drawing
                         source[x, y] = GetGrayValue(ptr[2], ptr[1], ptr[0]);
                         ptr += 3;
                     }
+
                     ptr += offset;
                 }
+
                 bmp.UnlockBits(data);
-                //将灰度二位数组转换为二值图像
+
+                // 将灰度二位数组转换为二值图像
                 Bitmap newBmp = new Bitmap(width, height, PixelFormat.Format24bppRgb);
                 BitmapData newData = newBmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
                 ptr = (byte*)newData.Scan0;
@@ -1202,8 +1256,10 @@ namespace OSharp.Drawing
                         ptr[0] = ptr[1] = ptr[2] = GetAverageColor(source, i, j, width, height) > threshold ? (byte)255 : (byte)0;
                         ptr += 3;
                     }
+
                     ptr += offset;
                 }
+
                 newBmp.UnlockBits(newData);
                 return newBmp;
             }
@@ -1230,19 +1286,23 @@ namespace OSharp.Drawing
                         hist[p[0]]++;
                         p += 4;
                     }
+
                     p += offset;
                 }
+
                 bmp.UnlockBits(data);
             }
 
             double allSum = 0, smallSum = 0;
             int allPixelNumber = 0, smallPixelNumber = 0;
-            //计算灰度为I的像素出现的概率
+
+            // 计算灰度为I的像素出现的概率
             for (int i = 0; i < 256; i++)
             {
                 allSum += i * hist[i];
                 allPixelNumber += hist[i];
             }
+
             double maxValue = -1.0;
             for (int i = 0; i < 256; i++)
             {
@@ -1252,6 +1312,7 @@ namespace OSharp.Drawing
                 {
                     break;
                 }
+
                 smallSum += i * hist[i];
                 double bigSum = allSum - smallSum;
                 double smallProbability = smallSum / smallPixelNumber;
@@ -1263,6 +1324,7 @@ namespace OSharp.Drawing
                     threshold = (byte)i;
                 }
             }
+
             return Threshoding(bmp, threshold);
         }
 
@@ -1294,10 +1356,13 @@ namespace OSharp.Drawing
                         {
                             ptr[0] = ptr[1] = ptr[2] = 0;
                         }
+
                         ptr += 4;
                     }
+
                     ptr += offset;
                 }
+
                 newBmp.UnlockBits(data);
                 return newBmp;
             }
@@ -1316,17 +1381,18 @@ namespace OSharp.Drawing
             int posy1 = bmp.Height;
             int posx2 = 0;
             int posy2 = 0;
-            for (int i = 0; i < bmp.Height; i++) //找有效区
+            for (int i = 0; i < bmp.Height; i++) // 找有效区
             {
                 for (int j = 0; j < bmp.Width; j++)
                 {
                     int pixelValue = bmp.GetPixel(j, i).R;
-                    if (pixelValue < gray) //根据灰度值
+                    if (pixelValue < gray) // 根据灰度值
                     {
                         if (posx1 > j)
                         {
                             posx1 = j;
                         }
+
                         if (posy1 > i)
                         {
                             posy1 = i;
@@ -1336,6 +1402,7 @@ namespace OSharp.Drawing
                         {
                             posx2 = j;
                         }
+
                         if (posy2 < i)
                         {
                             posy2 = i;
@@ -1343,21 +1410,24 @@ namespace OSharp.Drawing
                     }
                 }
             }
+
             // 确保能整除
-            int span = charCount - (posx2 - posx1 + 1) % charCount; //可整除的差额数
+            int span = charCount - (posx2 - posx1 + 1) % charCount; // 可整除的差额数
             if (span < charCount)
             {
-                int leftSpan = span / 2; //分配到左边的空列 ，如span为单数,则右边比左边大1
+                int leftSpan = span / 2; // 分配到左边的空列 ，如span为单数,则右边比左边大1
                 if (posx1 > leftSpan)
                 {
                     posx1 = posx1 - leftSpan;
                 }
+
                 if (posx2 + span - leftSpan < bmp.Width)
                 {
                     posx2 = posx2 + span - leftSpan;
                 }
             }
-            //复制新图
+
+            // 复制新图
             Rectangle cloneRect = new Rectangle(posx1, posy1, posx2 - posx1 + 1, posy2 - posy1 + 1);
             Bitmap newBmp = bmp.Clone(cloneRect, bmp.PixelFormat);
             return newBmp;
@@ -1375,17 +1445,18 @@ namespace OSharp.Drawing
             int posy1 = bmp.Height;
             int posx2 = 0;
             int posy2 = 0;
-            for (int y = 0; y < bmp.Height; y++) //找有效区
+            for (int y = 0; y < bmp.Height; y++) // 找有效区
             {
                 for (int x = 0; x < bmp.Width; x++)
                 {
                     int pixelValue = bmp.GetPixel(x, y).R;
-                    if (pixelValue < gray) //根据灰度值
+                    if (pixelValue < gray) // 根据灰度值
                     {
                         if (posx1 > x)
                         {
                             posx1 = x;
                         }
+
                         if (posy1 > y)
                         {
                             posy1 = y;
@@ -1395,6 +1466,7 @@ namespace OSharp.Drawing
                         {
                             posx2 = x;
                         }
+
                         if (posy2 < y)
                         {
                             posy2 = y;
@@ -1402,7 +1474,8 @@ namespace OSharp.Drawing
                     }
                 }
             }
-            //复制新图
+
+            // 复制新图
             Rectangle cloneRect = new Rectangle(posx1, posy1, posx2 - posx1 + 1, posy2 - posy1 + 1);
             return bmp.Clone(cloneRect, bmp.PixelFormat);
         }
@@ -1420,6 +1493,7 @@ namespace OSharp.Drawing
             {
                 return null;
             }
+
             int singW = bmp.Width / rowNum;
             int singH = bmp.Height / colNum;
             Bitmap[] picArray = new Bitmap[rowNum * colNum];
@@ -1429,9 +1503,10 @@ namespace OSharp.Drawing
                 for (int j = 0; j < rowNum; j++)
                 {
                     Rectangle cloneRect = new Rectangle(j * singW, i * singH, singW, singH);
-                    picArray[i * rowNum + j] = bmp.Clone(cloneRect, bmp.PixelFormat); //复制小块图
+                    picArray[i * rowNum + j] = bmp.Clone(cloneRect, bmp.PixelFormat); // 复制小块图
                 }
             }
+
             return picArray;
         }
 
@@ -1459,11 +1534,13 @@ namespace OSharp.Drawing
                         code += "0";
                     }
                 }
+
                 if (lineBreak)
                 {
                     code += "\r\n";
                 }
             }
+
             return code;
         }
 
@@ -1500,7 +1577,5 @@ namespace OSharp.Drawing
         {
             return value == 255;
         }
-
-        #endregion
     }
 }

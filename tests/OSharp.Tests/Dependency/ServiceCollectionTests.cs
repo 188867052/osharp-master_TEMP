@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Xunit;
 
-
 namespace OSharp.Tests.Dependency
 {
     public class ServiceCollectionTests
@@ -19,13 +18,18 @@ namespace OSharp.Tests.Dependency
             IServiceProvider provider = services.BuildServiceProvider();
             ITestContract contract = provider.GetService<ITestContract>();
             Assert.NotNull(contract);
-            
         }
 
-        private interface ITestContract { }
+        private interface ITestContract
+        {
+        }
 
-        private class TestService1 : ITestContract { }
+        private class TestService1 : ITestContract
+        {
+        }
 
-        private class TestService2 : ITestContract { }
+        private class TestService2 : ITestContract
+        {
+        }
     }
 }

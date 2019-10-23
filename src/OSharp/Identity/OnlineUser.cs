@@ -11,7 +11,6 @@ using System.Collections.Generic;
 
 using OSharp.Identity.JwtBearer;
 
-
 namespace OSharp.Identity
 {
     /// <summary>
@@ -63,7 +62,7 @@ namespace OSharp.Identity
         /// 获取或设置 客户端刷新Token
         /// </summary>
         public IDictionary<string, RefreshToken> RefreshTokens { get; set; }
-        
+
         /// <summary>
         /// 获取 扩展数据字典
         /// </summary>

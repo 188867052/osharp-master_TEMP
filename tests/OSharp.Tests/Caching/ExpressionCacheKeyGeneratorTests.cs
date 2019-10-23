@@ -16,7 +16,6 @@ using Shouldly;
 
 using Xunit;
 
-
 namespace OSharp.Caching.Tests
 {
     public class ExpressionCacheKeyGeneratorTests

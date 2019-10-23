@@ -1,19 +1,8 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="EntityExtensions.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2017 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2017-08-19 22:15</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Security.Principal;
-
 using OSharp.Data;
 using OSharp.Reflection;
 using OSharp.Security.Claims;
-
 
 namespace OSharp.Entity
 {
@@ -56,12 +45,13 @@ namespace OSharp.Entity
             {
                 return entity;
             }
+
             ICreatedTime entity1 = (ICreatedTime)entity;
             if (entity1.CreatedTime == default(DateTime))
             {
                 entity1.CreatedTime = DateTime.Now;
             }
-            
+
             return (TEntity)entity1;
         }
 

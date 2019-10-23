@@ -8,24 +8,18 @@
 // -----------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading.Tasks;
-
-using Liuliu.Demo.Common;
-using Liuliu.Demo.Security;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyModel;
 
 using OSharp.AspNetCore;
 using OSharp.AspNetCore.Mvc;
@@ -41,7 +35,6 @@ using OSharp.Reflection;
 
 using AssemblyExtensions = OSharp.Reflection.AssemblyExtensions;
 
-
 namespace Liuliu.Demo.Web.Controllers
 {
     [Description("网站-通用")]
@@ -55,8 +48,8 @@ namespace Liuliu.Demo.Web.Controllers
             IVerifyCodeService verifyCodeService,
             IHostingEnvironment environment)
         {
-            _verifyCodeService = verifyCodeService;
-            _environment = environment;
+            this._verifyCodeService = verifyCodeService;
+            this._environment = environment;
         }
 
         /// <summary>
@@ -74,11 +67,11 @@ namespace Liuliu.Demo.Web.Controllers
                 RandomItalic = true,
                 RandomLineCount = 7,
                 RandomPointPercent = 10,
-                RandomPosition = true
+                RandomPosition = true,
             };
             Bitmap bitmap = coder.CreateImage(4, out string code);
-            _verifyCodeService.SetCode(code, out string id);
-            return _verifyCodeService.GetImageString(bitmap, id);
+            this._verifyCodeService.SetCode(code, out string id);
+            return this._verifyCodeService.GetImageString(bitmap, id);
         }
 
         /// <summary>
@@ -92,7 +85,7 @@ namespace Liuliu.Demo.Web.Controllers
         [Description("验证验证码的有效性")]
         public bool CheckVerifyCode(string code, string id)
         {
-            return _verifyCodeService.CheckCode(code, id, false);
+            return this._verifyCodeService.CheckCode(code, id, false);
         }
 
         /// <summary>
@@ -105,7 +98,7 @@ namespace Liuliu.Demo.Web.Controllers
         {
             string fileName = file.FileName;
             fileName = $"{Path.GetFileNameWithoutExtension(fileName)}-{DateTime.Now:MMddHHmmssff}{Path.GetExtension(fileName)}";
-            string dir = Path.Combine(_environment.WebRootPath, "upload-files");
+            string dir = Path.Combine(this._environment.WebRootPath, "upload-files");
             DirectoryHelper.CreateIfNotExists(dir);
             string filePath = dir + $"\\{fileName}";
             using (FileStream fs = new FileStream(filePath, FileMode.Create))
@@ -125,7 +118,7 @@ namespace Liuliu.Demo.Web.Controllers
         [Description("系统信息")]
         public object SystemInfo()
         {
-            IServiceProvider provider = HttpContext.RequestServices;
+            IServiceProvider provider = this.HttpContext.RequestServices;
 
             dynamic info = new ExpandoObject();
             IOsharpPackManager packManager = provider.GetService<IOsharpPackManager>();
@@ -135,7 +128,7 @@ namespace Liuliu.Demo.Web.Controllers
                 Class = m.GetType().FullName,
                 Level = m.Level.ToString(),
                 m.Order,
-                m.IsEnabled
+                m.IsEnabled,
             }).ToList();
 
             string cliVersion = AssemblyExtensions.GetCliVersion();
@@ -145,7 +138,7 @@ namespace Liuliu.Demo.Web.Controllers
             {
                 Message = "WebApi 数据服务已启动",
                 CliVersion = cliVersion,
-                OSharpVersion = osharpVersion
+                OSharpVersion = osharpVersion,
             };
 
             return info;
@@ -166,6 +159,7 @@ namespace Liuliu.Demo.Web.Controllers
             {
                 return new TypeMetadata[0];
             }
+
             switch (type?.ToLower())
             {
                 case "entity":
@@ -175,6 +169,7 @@ namespace Liuliu.Demo.Web.Controllers
                 case "outputdto":
                     return handler.GetOutputDtoMetadata();
             }
+
             return new TypeMetadata[0];
         }
 
@@ -193,11 +188,13 @@ namespace Liuliu.Demo.Web.Controllers
             {
                 return null;
             }
+
             Type type = Type.GetType(typeFullName);
             if (type == null)
             {
                 return null;
             }
+
             return handler.GetTypeMetadata(type);
         }
     }

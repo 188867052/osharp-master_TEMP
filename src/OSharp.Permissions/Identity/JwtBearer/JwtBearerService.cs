@@ -30,7 +30,6 @@ using OSharp.Extensions;
 using OSharp.Identity.Events;
 using OSharp.Timing;
 
-
 namespace OSharp.Identity.JwtBearer
 {
     /// <summary>
@@ -50,10 +49,11 @@ namespace OSharp.Identity.JwtBearer
         /// </summary>
         public JwtBearerService(IServiceProvider provider)
         {
-            _provider = provider;
-            _logger = provider.GetLogger(GetType());
-            _jwtOptions = _provider.GetOSharpOptions().Jwt;
+            this._provider = provider;
+            this._logger = provider.GetLogger(this.GetType());
+            this._jwtOptions = this._provider.GetOSharpOptions().Jwt;
         }
+
         /// <summary>
         /// 创建指定用户的JwtToken信息
         /// </summary>
@@ -72,11 +72,11 @@ namespace OSharp.Identity.JwtBearer
             {
                 new Claim(ClaimTypes.NameIdentifier, userId),
                 new Claim(ClaimTypes.Name, userName),
-                new Claim("clientId", clientId)
+                new Claim("clientId", clientId),
             };
-            var (token, expires) = CreateToken(claims, _jwtOptions, JwtTokenType.RefreshToken, refreshToken);
+            var (token, expires) = this.CreateToken(claims, this._jwtOptions, JwtTokenType.RefreshToken, refreshToken);
             string refreshTokenStr = token;
-            await _provider.ExecuteScopedWorkAsync(async provider =>
+            await this._provider.ExecuteScopedWorkAsync(async provider =>
                 {
                     UserManager<TUser> userManager = provider.GetService<UserManager<TUser>>();
                     refreshToken = new RefreshToken() { ClientId = clientId, Value = refreshTokenStr, EndUtcTime = expires };
@@ -85,26 +85,27 @@ namespace OSharp.Identity.JwtBearer
                     {
                         IUnitOfWork unitOfWork = provider.GetUnitOfWork<TUser, TUserKey>();
                         unitOfWork.Commit();
-                        IEventBus eventBus = _provider.GetService<IEventBus>();
+                        IEventBus eventBus = this._provider.GetService<IEventBus>();
                         OnlineUserCacheRemoveEventData eventData = new OnlineUserCacheRemoveEventData() { UserNames = new[] { userName } };
                         eventBus.Publish(eventData);
                     }
+
                     return result;
                 },
                 false);
 
             // New AccessToken
-            IAccessClaimsProvider claimsProvider = _provider.GetService<IAccessClaimsProvider>();
+            IAccessClaimsProvider claimsProvider = this._provider.GetService<IAccessClaimsProvider>();
             claims = await claimsProvider.CreateClaims(userId);
             List<Claim> claimList = claims.ToList();
             claimList.Add(new Claim("clientId", clientId));
-            (token, _) = CreateToken(claimList, _jwtOptions, JwtTokenType.AccessToken);
+            (token, _) = this.CreateToken(claimList, this._jwtOptions, JwtTokenType.AccessToken);
 
             return new JsonWebToken()
             {
                 AccessToken = token,
                 RefreshToken = refreshTokenStr,
-                RefreshUctExpires = expires.ToJsGetTime().CastTo<long>(0)
+                RefreshUctExpires = expires.ToJsGetTime().CastTo<long>(0),
             };
         }
 
@@ -118,30 +119,31 @@ namespace OSharp.Identity.JwtBearer
             Check.NotNull(refreshToken, nameof(refreshToken));
             TokenValidationParameters parameters = new TokenValidationParameters()
             {
-                ValidIssuer = _jwtOptions.Issuer ?? "osharp identity",
-                ValidAudience = _jwtOptions.Audience ?? "osharp client",
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Secret))
+                ValidIssuer = this._jwtOptions.Issuer ?? "osharp identity",
+                ValidAudience = this._jwtOptions.Audience ?? "osharp client",
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this._jwtOptions.Secret)),
             };
-            JwtSecurityToken jwtSecurityToken = _tokenHandler.ReadJwtToken(refreshToken);
+            JwtSecurityToken jwtSecurityToken = this._tokenHandler.ReadJwtToken(refreshToken);
             string clientId = jwtSecurityToken.Claims.FirstOrDefault(m => m.Type == "clientId")?.Value;
             if (clientId == null)
             {
                 throw new OsharpException("RefreshToken 中不包含 ClientId 声明");
             }
+
             string userId = jwtSecurityToken.Claims.FirstOrDefault(m => m.Type == "nameid")?.Value;
             if (userId == null)
             {
                 throw new OsharpException("RefreshToken 的数据中无法找到 UserId 声明");
             }
 
-            UserManager<TUser> userManager = _provider.GetService<UserManager<TUser>>();
+            UserManager<TUser> userManager = this._provider.GetService<UserManager<TUser>>();
             RefreshToken tokenModel = await userManager.GetRefreshToken(userId, clientId);
             if (tokenModel == null || tokenModel.Value != refreshToken || tokenModel.EndUtcTime <= DateTime.UtcNow)
             {
                 if (tokenModel != null && tokenModel.EndUtcTime <= DateTime.UtcNow)
                 {
-                    //删除过期的Token
-                    await _provider.ExecuteScopedWorkAsync(async provider =>
+                    // 删除过期的Token
+                    await this._provider.ExecuteScopedWorkAsync(async provider =>
                         {
                             userManager = provider.GetService<UserManager<TUser>>();
                             var result = await userManager.RemoveRefreshToken(userId, clientId);
@@ -155,10 +157,11 @@ namespace OSharp.Identity.JwtBearer
                         },
                         false);
                 }
+
                 throw new OsharpException("RefreshToken 不存在或已过期");
             }
 
-            ClaimsPrincipal principal = _tokenHandler.ValidateToken(refreshToken, parameters, out SecurityToken securityToken);
+            ClaimsPrincipal principal = this._tokenHandler.ValidateToken(refreshToken, parameters, out SecurityToken securityToken);
 
             string userName = principal.Claims.FirstOrDefault(m => m.Type == ClaimTypes.Name)?.Value;
             if (userName == null)
@@ -166,7 +169,7 @@ namespace OSharp.Identity.JwtBearer
                 throw new OsharpException("RefreshToken 的数据中无法找到 UserName 声明");
             }
 
-            JsonWebToken token = await CreateToken(userId, userName, tokenModel);
+            JsonWebToken token = await this.CreateToken(userId, userName, tokenModel);
             return token;
         }
 
@@ -187,7 +190,7 @@ namespace OSharp.Identity.JwtBearer
                     throw new OsharpException("创建 AccessToken 时不需要 refreshToken");
                 }
 
-                double minutes = options.AccessExpireMins > 0 ? options.AccessExpireMins : 5; //默认5分钟
+                double minutes = options.AccessExpireMins > 0 ? options.AccessExpireMins : 5; // 默认5分钟
                 expires = now.AddMinutes(minutes);
             }
             else
@@ -202,9 +205,10 @@ namespace OSharp.Identity.JwtBearer
                     expires = refreshToken.EndUtcTime;
                 }
             }
+
             SecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
             SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
-            
+
             SecurityTokenDescriptor descriptor = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(claims),
@@ -213,10 +217,10 @@ namespace OSharp.Identity.JwtBearer
                 SigningCredentials = credentials,
                 NotBefore = now,
                 IssuedAt = now,
-                Expires = expires
+                Expires = expires,
             };
-            SecurityToken token = _tokenHandler.CreateToken(descriptor);
-            string accessToken = _tokenHandler.WriteToken(token);
+            SecurityToken token = this._tokenHandler.CreateToken(descriptor);
+            string accessToken = this._tokenHandler.WriteToken(token);
             return (accessToken, expires);
         }
 
@@ -224,7 +228,7 @@ namespace OSharp.Identity.JwtBearer
         {
             AccessToken,
 
-            RefreshToken
+            RefreshToken,
         }
     }
 }

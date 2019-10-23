@@ -8,7 +8,6 @@
 
 using System;
 
-
 namespace OSharp.Filter
 {
     /// <summary>
@@ -21,7 +20,7 @@ namespace OSharp.Filter
         /// </summary>
         public OperateCodeAttribute(string code)
         {
-            Code = code;
+            this.Code = code;
         }
 
         /// <summary>

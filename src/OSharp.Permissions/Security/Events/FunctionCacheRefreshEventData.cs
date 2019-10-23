@@ -9,12 +9,12 @@
 
 using OSharp.EventBuses;
 
-
 namespace OSharp.Security.Events
 {
     /// <summary>
     /// 功能信息缓存刷新事件源
     /// </summary>
     public class FunctionCacheRefreshEventData : EventDataBase
-    { }
+    {
+    }
 }

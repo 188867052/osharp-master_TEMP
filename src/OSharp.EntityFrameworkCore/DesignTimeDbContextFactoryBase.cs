@@ -12,7 +12,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-
 namespace OSharp.Entity
 {
     /// <summary>
@@ -28,18 +27,20 @@ namespace OSharp.Entity
         /// <returns></returns>
         public virtual TDbContext CreateDbContext(string[] args)
         {
-            string connString = GetConnectionString();
+            string connString = this.GetConnectionString();
             if (connString == null)
             {
                 return null;
             }
-            IEntityManager entityManager = GetEntityManager();
+
+            IEntityManager entityManager = this.GetEntityManager();
             DbContextOptionsBuilder builder = new DbContextOptionsBuilder<TDbContext>();
-            if (LazyLoadingProxiesEnabled())
+            if (this.LazyLoadingProxiesEnabled())
             {
                 builder.UseLazyLoadingProxies();
             }
-            builder = UseSql(builder, connString);
+
+            builder = this.UseSql(builder, connString);
             return (TDbContext)Activator.CreateInstance(typeof(TDbContext), builder.Options, entityManager, null);
         }
 

@@ -14,7 +14,6 @@ using OSharp.Core.Systems;
 using OSharp.Entity;
 using OSharp.Mapping;
 
-
 namespace OSharp.Systems
 {
     /// <summary>

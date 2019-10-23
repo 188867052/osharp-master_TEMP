@@ -15,7 +15,6 @@ using Microsoft.Extensions.Caching.Distributed;
 using OSharp.Caching;
 using OSharp.Collections;
 
-
 namespace OSharp.AspNetCore.SignalR
 {
     /// <summary>
@@ -30,7 +29,7 @@ namespace OSharp.AspNetCore.SignalR
         /// </summary>
         public ConnectionUserCache(IDistributedCache cache)
         {
-            _cache = cache;
+            this._cache = cache;
         }
 
         /// <summary>
@@ -41,7 +40,7 @@ namespace OSharp.AspNetCore.SignalR
         public virtual async Task<ConnectionUser> GetUser(string userName)
         {
             string key = GetKey(userName);
-            return await _cache.GetAsync<ConnectionUser>(key);
+            return await this._cache.GetAsync<ConnectionUser>(key);
         }
 
         /// <summary>
@@ -51,7 +50,7 @@ namespace OSharp.AspNetCore.SignalR
         /// <returns></returns>
         public virtual async Task<string[]> GetConnectionIds(string userName)
         {
-            ConnectionUser user = await GetUser(userName);
+            ConnectionUser user = await this.GetUser(userName);
             return user?.ConnectionIds.ToArray() ?? new string[0];
         }
 
@@ -64,7 +63,7 @@ namespace OSharp.AspNetCore.SignalR
         public virtual async Task SetUser(string userName, ConnectionUser user)
         {
             string key = GetKey(userName);
-            await _cache.SetAsync(key, user);
+            await this._cache.SetAsync(key, user);
         }
 
         /// <summary>
@@ -75,9 +74,9 @@ namespace OSharp.AspNetCore.SignalR
         /// <returns></returns>
         public virtual async Task AddConnectionId(string userName, string connectionId)
         {
-            ConnectionUser user = await GetUser(userName) ?? new ConnectionUser() { UserName = userName };
+            ConnectionUser user = await this.GetUser(userName) ?? new ConnectionUser() { UserName = userName };
             user.ConnectionIds.AddIfNotExist(connectionId);
-            await SetUser(userName, user);
+            await this.SetUser(userName, user);
         }
 
         /// <summary>
@@ -88,18 +87,20 @@ namespace OSharp.AspNetCore.SignalR
         /// <returns></returns>
         public virtual async Task RemoveConnectionId(string userName, string connectionId)
         {
-            ConnectionUser user = await GetUser(userName);
+            ConnectionUser user = await this.GetUser(userName);
             if (user == null || !user.ConnectionIds.Contains(connectionId))
             {
                 return;
             }
+
             user.ConnectionIds.Remove(connectionId);
             if (user.ConnectionIds.Count == 0)
             {
-                await RemoveUser(userName);
+                await this.RemoveUser(userName);
                 return;
             }
-            await SetUser(userName, user);
+
+            await this.SetUser(userName, user);
         }
 
         /// <summary>
@@ -110,7 +111,7 @@ namespace OSharp.AspNetCore.SignalR
         public virtual async Task RemoveUser(string userName)
         {
             string key = GetKey(userName);
-            await _cache.RemoveAsync(key);
+            await this._cache.RemoveAsync(key);
         }
 
         private static string GetKey(string userName)

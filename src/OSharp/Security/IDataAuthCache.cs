@@ -9,7 +9,6 @@
 
 using OSharp.Filter;
 
-
 namespace OSharp.Security
 {
     /// <summary>

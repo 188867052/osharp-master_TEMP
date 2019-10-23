@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 
 using OSharp.Core.Packs;
 
-
 namespace OSharp.Log4Net
 {
     /// <summary>

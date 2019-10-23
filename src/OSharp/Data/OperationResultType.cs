@@ -8,7 +8,6 @@
 
 using System.ComponentModel;
 
-
 namespace OSharp.Data
 {
     /// <summary>
@@ -44,6 +43,6 @@ namespace OSharp.Data
         ///   操作引发错误
         /// </summary>
         [Description("操作引发错误。")]
-        Error
+        Error,
     }
 }

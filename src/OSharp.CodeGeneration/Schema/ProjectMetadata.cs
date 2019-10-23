@@ -9,7 +9,6 @@
 
 using System.Collections.Generic;
 
-
 namespace OSharp.CodeGeneration.Schema
 {
     /// <summary>

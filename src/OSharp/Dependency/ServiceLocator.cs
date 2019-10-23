@@ -1,25 +1,11 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="ServiceLocator.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2018 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2018-03-09 21:57</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Security.Principal;
-using System.Threading.Tasks;
-
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-
 using OSharp.Data;
-using OSharp.Exceptions;
-
 
 namespace OSharp.Dependency
 {
@@ -39,7 +25,8 @@ namespace OSharp.Dependency
         /// 初始化一个<see cref="ServiceLocator"/>类型的新实例
         /// </summary>
         private ServiceLocator()
-        { }
+        {
+        }
 
         /// <summary>
         /// 获取 服务器定位器实例
@@ -49,7 +36,7 @@ namespace OSharp.Dependency
         /// <summary>
         /// 获取 ServiceProvider是否为可用
         /// </summary>
-        public bool IsProviderEnabled => _provider != null;
+        public bool IsProviderEnabled => this._provider != null;
 
         /// <summary>
         /// 获取 <see cref="ServiceLifetime.Scoped"/>生命周期的服务提供者
@@ -58,7 +45,7 @@ namespace OSharp.Dependency
         {
             get
             {
-                IScopedServiceResolver scopedResolver = _provider.GetService<IScopedServiceResolver>();
+                IScopedServiceResolver scopedResolver = this._provider.GetService<IScopedServiceResolver>();
                 return scopedResolver != null && scopedResolver.ResolveEnabled
                     ? scopedResolver.ScopedProvider
                     : null;
@@ -80,7 +67,7 @@ namespace OSharp.Dependency
         internal void SetServiceCollection(IServiceCollection services)
         {
             Check.NotNull(services, nameof(services));
-            _services = services;
+            this._services = services;
         }
 
         /// <summary>
@@ -89,7 +76,7 @@ namespace OSharp.Dependency
         internal void SetApplicationServiceProvider(IServiceProvider provider)
         {
             Check.NotNull(provider, nameof(provider));
-            _provider = provider;
+            this._provider = provider;
         }
 
         /// <summary>
@@ -97,8 +84,8 @@ namespace OSharp.Dependency
         /// </summary>
         public IEnumerable<ServiceDescriptor> GetServiceDescriptors()
         {
-            Check.NotNull(_services, nameof(_services));
-            return _services;
+            Check.NotNull(this._services, nameof(this._services));
+            return this._services;
         }
 
         /// <summary>
@@ -106,15 +93,16 @@ namespace OSharp.Dependency
         /// </summary>
         public T GetService<T>()
         {
-            Check.NotNull(_services, nameof(_services));
-            Check.NotNull(_provider, nameof(_provider));
+            Check.NotNull(this._services, nameof(this._services));
+            Check.NotNull(this._provider, nameof(this._provider));
 
-            IScopedServiceResolver scopedResolver = _provider.GetService<IScopedServiceResolver>();
+            IScopedServiceResolver scopedResolver = this._provider.GetService<IScopedServiceResolver>();
             if (scopedResolver != null && scopedResolver.ResolveEnabled)
             {
                 return scopedResolver.GetService<T>();
             }
-            return _provider.GetService<T>();
+
+            return this._provider.GetService<T>();
         }
 
         /// <summary>
@@ -123,15 +111,16 @@ namespace OSharp.Dependency
         /// <param name="serviceType">服务类型</param>
         public object GetService(Type serviceType)
         {
-            Check.NotNull(_services, nameof(_services));
-            Check.NotNull(_provider, nameof(_provider));
+            Check.NotNull(this._services, nameof(this._services));
+            Check.NotNull(this._provider, nameof(this._provider));
 
-            IScopedServiceResolver scopedResolver = _provider.GetService<IScopedServiceResolver>();
+            IScopedServiceResolver scopedResolver = this._provider.GetService<IScopedServiceResolver>();
             if (scopedResolver != null && scopedResolver.ResolveEnabled)
             {
                 return scopedResolver.GetService(serviceType);
             }
-            return _provider.GetService(serviceType);
+
+            return this._provider.GetService(serviceType);
         }
 
         /// <summary>
@@ -139,15 +128,16 @@ namespace OSharp.Dependency
         /// </summary>
         public IEnumerable<T> GetServices<T>()
         {
-            Check.NotNull(_services, nameof(_services));
-            Check.NotNull(_provider, nameof(_provider));
+            Check.NotNull(this._services, nameof(this._services));
+            Check.NotNull(this._provider, nameof(this._provider));
 
-            IScopedServiceResolver scopedResolver = _provider.GetService<IScopedServiceResolver>();
+            IScopedServiceResolver scopedResolver = this._provider.GetService<IScopedServiceResolver>();
             if (scopedResolver != null && scopedResolver.ResolveEnabled)
             {
                 return scopedResolver.GetServices<T>();
             }
-            return _provider.GetServices<T>();
+
+            return this._provider.GetServices<T>();
         }
 
         /// <summary>
@@ -156,15 +146,16 @@ namespace OSharp.Dependency
         /// <param name="serviceType">服务类型</param>
         public IEnumerable<object> GetServices(Type serviceType)
         {
-            Check.NotNull(_services, nameof(_services));
-            Check.NotNull(_provider, nameof(_provider));
+            Check.NotNull(this._services, nameof(this._services));
+            Check.NotNull(this._provider, nameof(this._provider));
 
-            IScopedServiceResolver scopedResolver = _provider.GetService<IScopedServiceResolver>();
+            IScopedServiceResolver scopedResolver = this._provider.GetService<IScopedServiceResolver>();
             if (scopedResolver != null && scopedResolver.ResolveEnabled)
             {
                 return scopedResolver.GetServices(serviceType);
             }
-            return _provider.GetServices(serviceType);
+
+            return this._provider.GetServices(serviceType);
         }
 
         /// <summary>
@@ -174,7 +165,7 @@ namespace OSharp.Dependency
         /// <returns>日志对象</returns>
         public ILogger<T> GetLogger<T>()
         {
-            ILoggerFactory factory = GetService<ILoggerFactory>();
+            ILoggerFactory factory = this.GetService<ILoggerFactory>();
             return factory.CreateLogger<T>();
         }
 
@@ -185,7 +176,7 @@ namespace OSharp.Dependency
         /// <returns>日志对象</returns>
         public ILogger GetLogger(Type type)
         {
-            ILoggerFactory factory = GetService<ILoggerFactory>();
+            ILoggerFactory factory = this.GetService<ILoggerFactory>();
             return factory.CreateLogger(type);
         }
 
@@ -194,7 +185,7 @@ namespace OSharp.Dependency
         /// </summary>
         public ILogger GetLogger(string name)
         {
-            ILoggerFactory factory = GetService<ILoggerFactory>();
+            ILoggerFactory factory = this.GetService<ILoggerFactory>();
             return factory.CreateLogger(name);
         }
 
@@ -205,7 +196,7 @@ namespace OSharp.Dependency
         {
             try
             {
-                IPrincipal user = GetService<IPrincipal>();
+                IPrincipal user = this.GetService<IPrincipal>();
                 return user as ClaimsPrincipal;
             }
             catch (Exception)
@@ -219,15 +210,15 @@ namespace OSharp.Dependency
         /// </summary>
         public string GetConfiguration(string path)
         {
-            IConfiguration config = GetService<IConfiguration>() ?? _services.GetConfiguration();
+            IConfiguration config = this.GetService<IConfiguration>() ?? this._services.GetConfiguration();
             return config?[path];
         }
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         public void Dispose()
         {
-            _services = null;
-            _provider = null;
+            this._services = null;
+            this._provider = null;
         }
     }
 }

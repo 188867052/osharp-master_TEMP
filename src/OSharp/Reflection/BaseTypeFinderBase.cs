@@ -13,7 +13,6 @@ using System.Reflection;
 
 using OSharp.Finders;
 
-
 namespace OSharp.Reflection
 {
     /// <summary>
@@ -29,7 +28,7 @@ namespace OSharp.Reflection
         /// </summary>
         protected BaseTypeFinderBase(IAllAssemblyFinder allAssemblyFinder)
         {
-            _allAssemblyFinder = allAssemblyFinder;
+            this._allAssemblyFinder = allAssemblyFinder;
         }
 
         /// <summary>
@@ -38,7 +37,7 @@ namespace OSharp.Reflection
         /// <returns></returns>
         protected override Type[] FindAllItems()
         {
-            Assembly[] assemblies = _allAssemblyFinder.FindAll(true);
+            Assembly[] assemblies = this._allAssemblyFinder.FindAll(true);
             return assemblies.SelectMany(assembly => assembly.GetTypes())
                 .Where(type => type.IsDeriveClassFrom<TBaseType>()).Distinct().ToArray();
         }

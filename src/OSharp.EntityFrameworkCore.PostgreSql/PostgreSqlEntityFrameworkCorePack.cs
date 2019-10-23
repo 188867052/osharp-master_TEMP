@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.Core.Packs;
 
-
 namespace OSharp.Entity.PostgreSql
 {
     /// <summary>

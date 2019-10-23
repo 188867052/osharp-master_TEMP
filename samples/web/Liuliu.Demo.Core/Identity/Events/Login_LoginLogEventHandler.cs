@@ -16,7 +16,6 @@ using Liuliu.Demo.Identity.Entities;
 using OSharp.Entity;
 using OSharp.EventBuses;
 
-
 namespace Liuliu.Demo.Identity.Events
 {
     /// <summary>
@@ -31,7 +30,7 @@ namespace Liuliu.Demo.Identity.Events
         /// </summary>
         public LoginLoginLogEventHandler(IRepository<LoginLog, Guid> loginLogRepository)
         {
-            _loginLogRepository = loginLogRepository;
+            this._loginLogRepository = loginLogRepository;
         }
 
         /// <summary>
@@ -44,9 +43,9 @@ namespace Liuliu.Demo.Identity.Events
             {
                 Ip = eventData.LoginDto.Ip,
                 UserAgent = eventData.LoginDto.UserAgent,
-                UserId = eventData.User.Id
+                UserId = eventData.User.Id,
             };
-            _loginLogRepository.Insert(log);
+            this._loginLogRepository.Insert(log);
         }
 
         /// <summary>
@@ -61,9 +60,9 @@ namespace Liuliu.Demo.Identity.Events
             {
                 Ip = eventData.LoginDto.Ip,
                 UserAgent = eventData.LoginDto.UserAgent,
-                UserId = eventData.User.Id
+                UserId = eventData.User.Id,
             };
-            return _loginLogRepository.InsertAsync(log);
+            return this._loginLogRepository.InsertAsync(log);
         }
     }
 }

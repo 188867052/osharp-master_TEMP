@@ -35,20 +35,22 @@ namespace OSharp.Develop.T4
             {
                 return;
             }
-            Namespace = @namespace;
+
+            this.Namespace = @namespace;
             if (moduleNamePattern != null)
             {
-                ModuleName = @namespace.Match(moduleNamePattern);
+                this.ModuleName = @namespace.Match(moduleNamePattern);
             }
-            Name = modelType.Name;
-            Description = modelType.GetDescription();
-            Properties = modelType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            PropertyInfo property = Properties.FirstOrDefault(m => m.HasAttribute<KeyAttribute>())
-                ?? Properties.FirstOrDefault(m => m.Name.ToUpper() == "ID")
-                    ?? Properties.FirstOrDefault(m => m.Name.ToUpper().EndsWith("ID"));
+
+            this.Name = modelType.Name;
+            this.Description = modelType.GetDescription();
+            this.Properties = modelType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            PropertyInfo property = this.Properties.FirstOrDefault(m => m.HasAttribute<KeyAttribute>())
+                ?? this.Properties.FirstOrDefault(m => m.Name.ToUpper() == "ID")
+                    ?? this.Properties.FirstOrDefault(m => m.Name.ToUpper().EndsWith("ID"));
             if (property != null)
             {
-                KeyType = property.PropertyType;
+                this.KeyType = property.PropertyType;
             }
         }
 
@@ -56,7 +58,7 @@ namespace OSharp.Develop.T4
         /// 获取或设置 主键类型
         /// </summary>
         public Type KeyType { get; private set; }
-        
+
         /// <summary>
         /// 获取 模型所在模块名称
         /// </summary>

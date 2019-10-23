@@ -22,7 +22,6 @@ using JetBrains.Annotations;
 using OSharp.Data;
 using OSharp.Extensions;
 
-
 namespace OSharp.Reflection
 {
     /// <summary>
@@ -81,6 +80,7 @@ namespace OSharp.Reflection
                 NullableConverter nullableConverter = new NullableConverter(type);
                 return nullableConverter.UnderlyingType;
             }
+
             return type;
         }
 
@@ -109,16 +109,19 @@ namespace OSharp.Reflection
             {
                 return desc.Description;
             }
+
             DisplayNameAttribute displayName = member.GetAttribute<DisplayNameAttribute>(inherit);
             if (displayName != null)
             {
                 return displayName.DisplayName;
             }
+
             DisplayAttribute display = member.GetAttribute<DisplayAttribute>(inherit);
             if (display != null)
             {
                 return display.Name;
             }
+
             return member.Name;
         }
 
@@ -170,6 +173,7 @@ namespace OSharp.Reflection
             {
                 return false;
             }
+
             return typeof(IEnumerable).IsAssignableFrom(type);
         }
 
@@ -203,13 +207,16 @@ namespace OSharp.Reflection
                     {
                         cur = cur.GetGenericTypeDefinition();
                     }
+
                     if (cur.IsSubclassOf(genericType) || cur == genericType)
                     {
                         return true;
                     }
+
                     cur = cur.BaseType;
                 }
             }
+
             return false;
         }
 
@@ -234,6 +241,7 @@ namespace OSharp.Reflection
             {
                 return baseType.IsGenericAssignableFrom(type);
             }
+
             return baseType.IsAssignableFrom(type);
         }
 
@@ -275,8 +283,6 @@ namespace OSharp.Reflection
             return sb.ToString();
         }
 
-        #region 私有方法
-
         private static readonly Dictionary<Type, string> _builtInTypeNames = new Dictionary<Type, string>
         {
             { typeof(bool), "bool" },
@@ -294,7 +300,7 @@ namespace OSharp.Reflection
             { typeof(uint), "uint" },
             { typeof(ulong), "ulong" },
             { typeof(ushort), "ushort" },
-            { typeof(void), "void" }
+            { typeof(void), "void" },
         };
 
         private static void ProcessType(StringBuilder builder, Type type, bool fullName)
@@ -382,7 +388,5 @@ namespace OSharp.Reflection
 
             builder.Append('>');
         }
-
-        #endregion
     }
 }

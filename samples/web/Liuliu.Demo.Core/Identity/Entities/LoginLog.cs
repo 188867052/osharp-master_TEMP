@@ -13,7 +13,6 @@ using System.ComponentModel;
 using OSharp.Data;
 using OSharp.Entity;
 
-
 namespace Liuliu.Demo.Identity.Entities
 {
     /// <summary>
@@ -27,7 +26,7 @@ namespace Liuliu.Demo.Identity.Entities
         /// </summary>
         public LoginLog()
         {
-            Id = CombGuid.NewGuid();
+            this.Id = CombGuid.NewGuid();
         }
 
         /// <summary>

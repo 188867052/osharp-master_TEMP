@@ -15,7 +15,6 @@ using System.Security.Cryptography;
 using OSharp.Exceptions;
 using OSharp.Extensions;
 
-
 namespace OSharp.Security
 {
     /// <summary>
@@ -30,7 +29,8 @@ namespace OSharp.Security
         /// </summary>
         public AesHelper(bool needIV = false)
             : this(GetRandomKey(), needIV)
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="AesHelper"/>类型的新实例
@@ -39,8 +39,8 @@ namespace OSharp.Security
         /// <param name="needIV">是否需要向量</param>
         public AesHelper(string key, bool needIV = false)
         {
-            Key = key;
-            _needIV = needIV;
+            this.Key = key;
+            this._needIV = needIV;
         }
 
         /// <summary>
@@ -48,14 +48,12 @@ namespace OSharp.Security
         /// </summary>
         public string Key { get; }
 
-        #region 实例方法
-
         /// <summary>
         /// 加密字节数组
         /// </summary>
         public byte[] Encrypt(byte[] decodeBytes)
         {
-            return Encrypt(decodeBytes, Key, _needIV);
+            return Encrypt(decodeBytes, this.Key, this._needIV);
         }
 
         /// <summary>
@@ -63,7 +61,7 @@ namespace OSharp.Security
         /// </summary>
         public byte[] Decrypt(byte[] encodeBytes)
         {
-            return Decrypt(encodeBytes, Key, _needIV);
+            return Decrypt(encodeBytes, this.Key, this._needIV);
         }
 
         /// <summary>
@@ -71,7 +69,7 @@ namespace OSharp.Security
         /// </summary>
         public string Encrypt(string source)
         {
-            return Encrypt(source, Key, _needIV);
+            return Encrypt(source, this.Key, this._needIV);
         }
 
         /// <summary>
@@ -79,7 +77,7 @@ namespace OSharp.Security
         /// </summary>
         public string Decrypt(string source)
         {
-            return Decrypt(source, Key, _needIV);
+            return Decrypt(source, this.Key, this._needIV);
         }
 
         /// <summary>
@@ -87,7 +85,7 @@ namespace OSharp.Security
         /// </summary>
         public void EncryptFile(string sourceFile, string targetFile)
         {
-            EncryptFile(sourceFile, targetFile, Key, _needIV);
+            EncryptFile(sourceFile, targetFile, this.Key, this._needIV);
         }
 
         /// <summary>
@@ -95,12 +93,8 @@ namespace OSharp.Security
         /// </summary>
         public void DecryptFile(string sourceFile, string targetFile)
         {
-            DecryptFile(sourceFile, targetFile, Key, _needIV);
+            DecryptFile(sourceFile, targetFile, this.Key, this._needIV);
         }
-
-        #endregion
-
-        #region 静态方法
 
         /// <summary>
         /// 加密字节数组
@@ -114,6 +108,7 @@ namespace OSharp.Security
                 {
                     throw new OsharpException("AES加密时获取加密实例失败");
                 }
+
                 aes.Key = CheckKey(key);
                 aes.Padding = PaddingMode.PKCS7;
                 aes.Mode = CipherMode.ECB;
@@ -124,6 +119,7 @@ namespace OSharp.Security
                     aes.GenerateIV();
                     ivBytes = aes.IV;
                 }
+
                 using (ICryptoTransform encryptor = aes.CreateEncryptor())
                 {
                     byte[] encodeBytes = encryptor.TransformFinalBlock(decodeBytes, 0, decodeBytes.Length);
@@ -145,6 +141,7 @@ namespace OSharp.Security
                 {
                     throw new OsharpException("AES加密时获取加密实例失败");
                 }
+
                 aes.Key = CheckKey(key);
                 aes.Padding = PaddingMode.PKCS7;
                 aes.Mode = CipherMode.ECB;
@@ -158,6 +155,7 @@ namespace OSharp.Security
                     Array.Copy(encodeBytes, ivLength, newEncodeBytes, 0, newEncodeBytes.Length);
                     encodeBytes = newEncodeBytes;
                 }
+
                 using (ICryptoTransform decryptor = aes.CreateDecryptor())
                 {
                     byte[] decodeBytes = decryptor.TransformFinalBlock(encodeBytes, 0, encodeBytes.Length);
@@ -257,6 +255,7 @@ namespace OSharp.Security
             {
                 bytes = key.ToBytes();
             }
+
             if (bytes.Length < 32)
             {
                 Array.Copy(bytes, 0, keyBytes, 0, bytes.Length);
@@ -269,9 +268,8 @@ namespace OSharp.Security
             {
                 keyBytes = bytes;
             }
+
             return keyBytes;
         }
-
-        #endregion
     }
 }

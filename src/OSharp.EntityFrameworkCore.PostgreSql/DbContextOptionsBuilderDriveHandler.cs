@@ -14,7 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.Dependency;
 
-
 namespace OSharp.Entity.PostgreSql
 {
     /// <summary>
@@ -41,6 +40,7 @@ namespace OSharp.Entity.PostgreSql
             {
                 return builder.UseNpgsql(connectionString);
             }
+
             return builder.UseNpgsql(existingConnection);
         }
     }

@@ -13,7 +13,6 @@ using Liuliu.Demo.Security;
 
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace Liuliu.Demo.Web.Areas.Admin.Controllers
 {
     [Description("管理-主页")]
@@ -23,7 +22,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
 
         public HomeController(SecurityManager securityManager)
         {
-            _securityManager = securityManager;
+            this._securityManager = securityManager;
         }
 
         /// <summary>
@@ -34,9 +33,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         [Description("主菜单")]
         public ActionResult MainMenu()
         {
-            return Content("MainMenu");
+            return this.Content("MainMenu");
         }
-
-
     }
 }

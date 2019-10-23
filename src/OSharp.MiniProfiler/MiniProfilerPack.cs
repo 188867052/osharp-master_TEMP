@@ -9,7 +9,6 @@
 
 using System.ComponentModel;
 
-
 namespace OSharp.MiniProfiler
 {
     /// <summary>
@@ -17,5 +16,6 @@ namespace OSharp.MiniProfiler
     /// </summary>
     [Description("MiniProfiler模块")]
     public class MiniProfilerPack : MiniProfilerPackBase
-    { }
+    {
+    }
 }

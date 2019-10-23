@@ -10,7 +10,6 @@
 using System;
 using System.Linq;
 
-
 namespace OSharp.Timing
 {
     /// <summary>

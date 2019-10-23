@@ -16,7 +16,6 @@ using OSharp.Core.Functions;
 using OSharp.Entity;
 using OSharp.Filter;
 
-
 namespace OSharp.Caching
 {
     /// <summary>
@@ -230,8 +229,6 @@ namespace OSharp.Caching
         /// <returns>查询结果</returns>
         TSource[] ToCacheArray<TSource>(IQueryable<TSource> source, IFunction function, params object[] keyParams);
 
-        #region OutputDto
-
         /// <summary>
         /// 查询分页数据结果，如缓存存在，直接返回，否则从数据源查找分页结果，并存入缓存中再返回
         /// </summary>
@@ -379,7 +376,5 @@ namespace OSharp.Caching
         TOutputDto[] ToCacheArray<TSource, TOutputDto>(IQueryable<TSource> source,
             IFunction function,
             params object[] keyParams);
-
-        #endregion
     }
 }

@@ -13,7 +13,6 @@ using System.Reflection;
 using OSharp.Finders;
 using OSharp.Reflection;
 
-
 namespace OSharp.Entity
 {
     /// <summary>
@@ -28,7 +27,7 @@ namespace OSharp.Entity
         /// </summary>
         public InputDtoTypeFinder(IAllAssemblyFinder allAssemblyFinder)
         {
-            _allAssemblyFinder = allAssemblyFinder;
+            this._allAssemblyFinder = allAssemblyFinder;
         }
 
         /// <summary>
@@ -37,7 +36,7 @@ namespace OSharp.Entity
         /// <returns></returns>
         protected override Type[] FindAllItems()
         {
-            Assembly[] assemblies = _allAssemblyFinder.FindAll(true);
+            Assembly[] assemblies = this._allAssemblyFinder.FindAll(true);
             return assemblies.SelectMany(assembly => assembly.GetTypes())
                 .Where(type => type.IsDeriveClassFrom(typeof(IInputDto<>))).Distinct().ToArray();
         }

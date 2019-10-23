@@ -13,7 +13,6 @@ using System.Security.Claims;
 using System.Security.Principal;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +21,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using OSharp.AspNetCore;
 using OSharp.Core.Packs;
 using OSharp.EventBuses;
-
 
 namespace OSharp.Identity
 {
@@ -53,7 +51,7 @@ namespace OSharp.Identity
             services.AddScoped<IUserStore<TUser>, TUserStore>();
             services.AddScoped<IRoleStore<TRole>, TRoleStore>();
 
-            //在线用户缓存
+            // 在线用户缓存
             services.TryAddScoped<IOnlineUserProvider, OnlineUserProvider<TUser, TUserKey, TRole, TRoleKey>>();
 
             // 替换 IPrincipal ，设置用户主键类型，用以在Repository进行审计时注入正确用户主键类型
@@ -75,20 +73,20 @@ namespace OSharp.Identity
                 },
                 ServiceLifetime.Transient));
 
-            Action<IdentityOptions> identityOptionsAction = IdentityOptionsAction();
+            Action<IdentityOptions> identityOptionsAction = this.IdentityOptionsAction();
             IdentityBuilder builder = services.AddIdentity<TUser, TRole>(identityOptionsAction);
 
             services.Replace(new ServiceDescriptor(typeof(IdentityErrorDescriber), typeof(IdentityErrorDescriberZhHans), ServiceLifetime.Scoped));
 
-            OnIdentityBuild(builder);
+            this.OnIdentityBuild(builder);
 
-            Action<CookieAuthenticationOptions> cookieOptionsAction = CookieOptionsAction();
+            Action<CookieAuthenticationOptions> cookieOptionsAction = this.CookieOptionsAction();
             if (cookieOptionsAction != null)
             {
                 services.ConfigureApplicationCookie(cookieOptionsAction);
             }
 
-            AddAuthentication(services);
+            this.AddAuthentication(services);
 
             return services;
         }
@@ -116,7 +114,8 @@ namespace OSharp.Identity
         /// </summary>
         /// <param name="services">服务集合</param>
         protected virtual void AddAuthentication(IServiceCollection services)
-        { }
+        {
+        }
 
         /// <summary>
         /// 重写以实现 AddIdentity 之后的构建逻辑

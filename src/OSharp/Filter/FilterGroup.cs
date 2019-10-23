@@ -12,7 +12,6 @@ using System.Linq;
 
 using OSharp.Properties;
 
-
 namespace OSharp.Filter
 {
     /// <summary>
@@ -22,14 +21,13 @@ namespace OSharp.Filter
     {
         private FilterOperate _operate;
 
-        #region 构造函数
-
         /// <summary>
         /// 初始化一个<see cref="FilterGroup"/>的新实例
         /// </summary>
         public FilterGroup()
             : this(FilterOperate.And)
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="FilterGroup"/>类型的新实例
@@ -37,7 +35,8 @@ namespace OSharp.Filter
         /// <param name="operateCode">条件间操作方式的前台码</param>
         public FilterGroup(string operateCode)
             : this(FilterHelper.GetFilterOperate(operateCode))
-        { }
+        {
+        }
 
         /// <summary>
         /// 使用操作方式初始化一个<see cref="FilterGroup"/>的新实例
@@ -45,12 +44,10 @@ namespace OSharp.Filter
         /// <param name="operate">条件间操作方式</param>
         public FilterGroup(FilterOperate operate)
         {
-            Operate = operate;
-            Rules = new List<FilterRule>();
-            Groups = new List<FilterGroup>();
+            this.Operate = operate;
+            this.Rules = new List<FilterRule>();
+            this.Groups = new List<FilterGroup>();
         }
-
-        #endregion
 
         /// <summary>
         /// 获取或设置 条件集合
@@ -67,14 +64,15 @@ namespace OSharp.Filter
         /// </summary>
         public FilterOperate Operate
         {
-            get { return _operate; }
+            get { return this._operate; }
             set
             {
                 if (value != FilterOperate.And && value != FilterOperate.Or)
                 {
                     throw new InvalidOperationException(Resources.Filter_GroupOperateError);
                 }
-                _operate = value;
+
+                this._operate = value;
             }
         }
 
@@ -83,9 +81,9 @@ namespace OSharp.Filter
         /// </summary>
         public FilterGroup AddRule(FilterRule rule)
         {
-            if (Rules.All(m => !m.Equals(rule)))
+            if (this.Rules.All(m => !m.Equals(rule)))
             {
-                Rules.Add(rule);
+                this.Rules.Add(rule);
             }
 
             return this;
@@ -97,7 +95,7 @@ namespace OSharp.Filter
         public FilterGroup AddRule(string field, object value, FilterOperate operate = FilterOperate.Equal)
         {
             FilterRule rule = new FilterRule(field, value, operate);
-            return AddRule(rule);
+            return this.AddRule(rule);
         }
     }
 }

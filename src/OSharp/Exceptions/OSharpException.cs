@@ -9,7 +9,6 @@
 using System;
 using System.Runtime.Serialization;
 
-
 namespace OSharp.Exceptions
 {
     /// <summary>
@@ -22,7 +21,8 @@ namespace OSharp.Exceptions
         /// 初始化<see cref="OsharpException"/>类的新实例
         /// </summary>
         public OsharpException()
-        { }
+        {
+        }
 
         /// <summary>
         /// 使用指定错误消息初始化<see cref="OsharpException"/>类的新实例。
@@ -30,7 +30,8 @@ namespace OSharp.Exceptions
         /// <param name="message">描述错误的消息</param>
         public OsharpException(string message)
             : base(message)
-        { }
+        {
+        }
 
         /// <summary>
         /// 使用异常消息与一个内部异常实例化一个<see cref="OsharpException"/>类的新实例
@@ -39,7 +40,8 @@ namespace OSharp.Exceptions
         /// <param name="inner">用于封装在<see cref="OsharpException"/>内部的异常实例</param>
         public OsharpException(string message, Exception inner)
             : base(message, inner)
-        { }
+        {
+        }
 
         /// <summary>
         /// 使用可序列化数据实例化一个<see cref="OsharpException"/>类的新实例
@@ -48,6 +50,7 @@ namespace OSharp.Exceptions
         /// <param name="context">有关源或目标的上下文信息。</param>
         protected OsharpException(SerializationInfo info, StreamingContext context)
             : base(info, context)
-        { }
+        {
+        }
     }
 }

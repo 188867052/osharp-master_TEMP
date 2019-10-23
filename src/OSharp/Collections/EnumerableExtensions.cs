@@ -23,6 +23,7 @@ namespace OSharp.Collections
             {
                 throw new ArgumentNullException(nameof(source));
             }
+
             return source.OrderBy(m => Guid.NewGuid());
         }
 
@@ -53,6 +54,7 @@ namespace OSharp.Collections
             {
                 return string.Empty;
             }
+
             StringBuilder sb = new StringBuilder();
             int i = 0;
             int count = collection.Count();
@@ -66,8 +68,10 @@ namespace OSharp.Collections
                 {
                     sb.Append(itemFormatFunc(t) + separator);
                 }
+
                 i++;
             }
+
             return sb.ToString();
         }
 
@@ -112,6 +116,7 @@ namespace OSharp.Collections
                 all = all.Except(tmpList).ToList();
                 result.AddRange(tmpList);
             }
+
             result.AddRange(all);
             return result;
         }
@@ -204,6 +209,5 @@ namespace OSharp.Collections
 
             return source.ThenBy(sortCondition.SortField, sortCondition.ListSortDirection);
         }
-
     }
 }

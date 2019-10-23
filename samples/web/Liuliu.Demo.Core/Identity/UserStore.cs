@@ -15,7 +15,6 @@ using OSharp.Entity;
 using OSharp.EventBuses;
 using OSharp.Identity;
 
-
 namespace Liuliu.Demo.Identity
 {
     /// <summary>
@@ -41,6 +40,7 @@ namespace Liuliu.Demo.Identity
             IRepository<UserRole, Guid> userRoleRepository,
             IEventBus eventBus)
             : base(userRepository, userLoginRepository, userClaimRepository, userTokenRepository, roleRepository, userRoleRepository, eventBus)
-        { }
+        {
+        }
     }
 }

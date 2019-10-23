@@ -10,13 +10,11 @@ using System;
 
 using Xunit;
 
-
 namespace OSharp.Timing.Tests
 {
-
     public class DateTimeExtensionsTests
     {
-        [Fact()]
+        [Fact]
         public void IsWeekendTest()
         {
             DateTime dt = new DateTime(2015, 5, 2);
@@ -30,7 +28,7 @@ namespace OSharp.Timing.Tests
             }
         }
 
-        [Fact()]
+        [Fact]
         public void IsWeekdayTest()
         {
             DateTime dt = new DateTime(2015, 5, 2);
@@ -44,7 +42,7 @@ namespace OSharp.Timing.Tests
             }
         }
 
-        [Fact()]
+        [Fact]
         public void ToUniqueStringTest()
         {
             DateTime now = new DateTime(2015, 11, 4, 15, 10, 25);
@@ -52,7 +50,7 @@ namespace OSharp.Timing.Tests
             Assert.Equal("1530854625000", now.ToUniqueString(true));
         }
 
-        [Fact()]
+        [Fact]
         public void ToJsGetTimeTest()
         {
             string ts = DateTime.Now.ToJsGetTime();

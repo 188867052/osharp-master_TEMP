@@ -8,7 +8,7 @@ namespace OSharp.Data.Tests
 {
     public class CompressionTests
     {
-        [Fact()]
+        [Fact]
         public void CompressTest()
         {
             string value = "admin";

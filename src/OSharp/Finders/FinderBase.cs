@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-
 namespace OSharp.Finders
 {
     /// <summary>
@@ -39,7 +38,7 @@ namespace OSharp.Finders
         /// <returns></returns>
         public virtual TItem[] Find(Func<TItem, bool> predicate, bool fromCache = false)
         {
-            return FindAll(fromCache).Where(predicate).ToArray();
+            return this.FindAll(fromCache).Where(predicate).ToArray();
         }
 
         /// <summary>
@@ -49,16 +48,17 @@ namespace OSharp.Finders
         /// <returns></returns>
         public virtual TItem[] FindAll(bool fromCache = false)
         {
-            lock (_lockObj)
+            lock (this._lockObj)
             {
-                if (fromCache && Found)
+                if (fromCache && this.Found)
                 {
-                    return ItemsCache.ToArray();
+                    return this.ItemsCache.ToArray();
                 }
-                TItem[] items = FindAllItems();
-                Found = true;
-                ItemsCache.Clear();
-                ItemsCache.AddRange(items);
+
+                TItem[] items = this.FindAllItems();
+                this.Found = true;
+                this.ItemsCache.Clear();
+                this.ItemsCache.AddRange(items);
                 return items;
             }
         }

@@ -13,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.Dependency;
 
-
 namespace OSharp.Core.EntityInfos
 {
     /// <summary>
@@ -27,6 +26,7 @@ namespace OSharp.Core.EntityInfos
         /// </summary>
         public EntityInfoHandler(IServiceProvider serviceProvider)
             : base(serviceProvider)
-        { }
+        {
+        }
     }
 }

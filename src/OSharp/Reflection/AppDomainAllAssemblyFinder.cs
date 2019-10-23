@@ -31,7 +31,7 @@ namespace OSharp.Reflection
         /// </summary>
         public AppDomainAllAssemblyFinder(bool filterNetAssembly = true)
         {
-            _filterNetAssembly = filterNetAssembly;
+            this._filterNetAssembly = filterNetAssembly;
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace OSharp.Reflection
                     names = (from name in dllNames
                              let i = name.LastIndexOf('/') + 1
                              select name.Substring(i, name.Length - i)).Distinct()
-                        .WhereIf(name => !filters.Any(name.StartsWith), _filterNetAssembly)
+                        .WhereIf(name => !filters.Any(name.StartsWith), this._filterNetAssembly)
                         .OrderBy(m => m).ToList();
                 }
                 else
@@ -70,14 +70,16 @@ namespace OSharp.Reflection
                     foreach (CompilationLibrary library in context.CompileLibraries)
                     {
                         string name = library.Name;
-                        if (_filterNetAssembly && filters.Any(name.StartsWith))
+                        if (this._filterNetAssembly && filters.Any(name.StartsWith))
                         {
                             continue;
                         }
+
                         if (name == "OSharpNS")
                         {
                             continue;
                         }
+
                         if (name == "OSharpNS.Core")
                         {
                             name = "OSharp";
@@ -86,16 +88,18 @@ namespace OSharp.Reflection
                         {
                             name = name.Replace("OSharpNS.", "OSharp.");
                         }
+
                         if (!names.Contains(name))
                         {
                             names.Add(name);
                         }
                     }
                 }
+
                 return LoadFiles(names);
             }
 
-            //遍历文件夹的方式，用于传统.netfx
+            // 遍历文件夹的方式，用于传统.netfx
             string path = Directory.GetCurrentDirectory();
             string[] files = Directory.GetFiles(path, "*.dll", SearchOption.TopDirectoryOnly)
                 .Concat(Directory.GetFiles(path, "*.exe", SearchOption.TopDirectoryOnly))
@@ -117,6 +121,7 @@ namespace OSharp.Reflection
                 catch (FileNotFoundException)
                 { }
             }
+
             return assemblies.ToArray();
         }
     }

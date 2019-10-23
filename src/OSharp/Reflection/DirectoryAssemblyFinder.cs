@@ -13,7 +13,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-
 namespace OSharp.Reflection
 {
     /// <summary>
@@ -23,13 +22,13 @@ namespace OSharp.Reflection
     {
         private static readonly ConcurrentDictionary<string, Assembly[]> CacheDict = new ConcurrentDictionary<string, Assembly[]>();
         private readonly string _path;
-        
+
         /// <summary>
         /// 初始化一个<see cref="DirectoryAssemblyFinder"/>类型的新实例
         /// </summary>
         public DirectoryAssemblyFinder(string path)
         {
-            _path = path;
+            this._path = path;
         }
 
         /// <summary>
@@ -40,7 +39,7 @@ namespace OSharp.Reflection
         /// <returns></returns>
         public Assembly[] Find(Func<Assembly, bool> predicate, bool fromCache = false)
         {
-            return FindAll(fromCache).Where(predicate).ToArray();
+            return this.FindAll(fromCache).Where(predicate).ToArray();
         }
 
         /// <summary>
@@ -49,17 +48,17 @@ namespace OSharp.Reflection
         /// <returns></returns>
         public Assembly[] FindAll(bool fromCache = false)
         {
-            if (fromCache && CacheDict.ContainsKey(_path))
+            if (fromCache && CacheDict.ContainsKey(this._path))
             {
-                return CacheDict[_path];
+                return CacheDict[this._path];
             }
-            string[] files = Directory.GetFiles(_path, "*.dll", SearchOption.TopDirectoryOnly)
-                .Concat(Directory.GetFiles(_path, "*.exe", SearchOption.TopDirectoryOnly))
+
+            string[] files = Directory.GetFiles(this._path, "*.dll", SearchOption.TopDirectoryOnly)
+                .Concat(Directory.GetFiles(this._path, "*.exe", SearchOption.TopDirectoryOnly))
                 .ToArray();
             Assembly[] assemblies = files.Select(Assembly.LoadFrom).Distinct().ToArray();
-            CacheDict[_path] = assemblies;
+            CacheDict[this._path] = assemblies;
             return assemblies;
         }
-
     }
 }

@@ -8,10 +8,8 @@
 // -----------------------------------------------------------------------
 
 using System;
-using System.Data.Common;
 
 using OSharp.Entity;
-
 
 namespace OSharp.Core.Options
 {
@@ -25,15 +23,15 @@ namespace OSharp.Core.Options
         /// </summary>
         public OsharpDbContextOptions()
         {
-            LazyLoadingProxiesEnabled = false;
-            AuditEntityEnabled = false;
-            AutoMigrationEnabled = false;
+            this.LazyLoadingProxiesEnabled = false;
+            this.AuditEntityEnabled = false;
+            this.AutoMigrationEnabled = false;
         }
 
         /// <summary>
         /// 获取 上下文类型
         /// </summary>
-        public Type DbContextType => string.IsNullOrEmpty(DbContextTypeName) ? null : Type.GetType(DbContextTypeName);
+        public Type DbContextType => string.IsNullOrEmpty(this.DbContextTypeName) ? null : Type.GetType(this.DbContextTypeName);
 
         /// <summary>
         /// 获取或设置 上下文类型全名

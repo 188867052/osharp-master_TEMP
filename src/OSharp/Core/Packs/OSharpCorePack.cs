@@ -18,7 +18,6 @@ using OSharp.Core.Options;
 using OSharp.Entity;
 using OSharp.Filter;
 
-
 namespace OSharp.Core.Packs
 {
     /// <summary>

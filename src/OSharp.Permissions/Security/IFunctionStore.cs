@@ -16,7 +16,6 @@ using OSharp.Core.Functions;
 using OSharp.Data;
 using OSharp.Dependency;
 
-
 namespace OSharp.Security
 {
     /// <summary>
@@ -48,6 +47,5 @@ namespace OSharp.Security
         /// <param name="dtos">包含更新信息的功能信息DTO信息</param>
         /// <returns>业务操作结果</returns>
         Task<OperationResult> UpdateFunctions(params TFunctionInputDto[] dtos);
-
     }
 }

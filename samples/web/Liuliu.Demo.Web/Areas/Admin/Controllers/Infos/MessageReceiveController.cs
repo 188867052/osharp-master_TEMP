@@ -11,12 +11,8 @@
 //  <last-editor>郭明锋</last-editor>
 // -----------------------------------------------------------------------
 
-using System;
-
-using OSharp.Filter;
-
 using Liuliu.Demo.Infos;
-
+using OSharp.Filter;
 
 namespace Liuliu.Demo.Web.Areas.Admin.Controllers
 {
@@ -31,6 +27,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         public MessageReceiveController(IInfosContract infosContract,
             IFilterService filterService)
             : base(infosContract, filterService)
-        { }
+        {
+        }
     }
 }

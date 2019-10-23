@@ -10,8 +10,6 @@
 using System.Collections.Generic;
 
 using OSharp.EventBuses;
-using OSharp.Security;
-
 
 namespace OSharp.Security.Events
 {
@@ -35,7 +33,7 @@ namespace OSharp.Security.Events
         /// </summary>
         public bool HasData()
         {
-            return SetItems.Count > 0 || RemoveItems.Count > 0;
+            return this.SetItems.Count > 0 || this.RemoveItems.Count > 0;
         }
     }
 }

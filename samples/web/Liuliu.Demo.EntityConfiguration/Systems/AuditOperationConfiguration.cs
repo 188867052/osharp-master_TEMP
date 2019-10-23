@@ -15,7 +15,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using OSharp.Entity;
 
-
 namespace Liuliu.Demo.EntityConfiguration.Systems
 {
     public class AuditOperationConfiguration : EntityTypeConfigurationBase<AuditOperation, Guid>
@@ -25,6 +24,7 @@ namespace Liuliu.Demo.EntityConfiguration.Systems
         /// </summary>
         /// <param name="builder">实体类型创建器</param>
         public override void Configure(EntityTypeBuilder<AuditOperation> builder)
-        { }
+        {
+        }
     }
 }

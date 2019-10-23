@@ -19,7 +19,6 @@ using OSharp.Core.Builders;
 using OSharp.Dependency;
 using OSharp.Exceptions;
 
-
 namespace OSharp.Core.Packs
 {
     /// <summary>
@@ -34,14 +33,14 @@ namespace OSharp.Core.Packs
         /// </summary>
         public OsharpPackManager()
         {
-            _sourcePacks = new List<OsharpPack>();
-            LoadedPacks = new List<OsharpPack>();
+            this._sourcePacks = new List<OsharpPack>();
+            this.LoadedPacks = new List<OsharpPack>();
         }
 
         /// <summary>
         /// 获取 自动检索到的所有模块信息
         /// </summary>
-        public IEnumerable<OsharpPack> SourcePacks => _sourcePacks;
+        public IEnumerable<OsharpPack> SourcePacks => this._sourcePacks;
 
         /// <summary>
         /// 获取 最终加载的模块信息集合
@@ -58,15 +57,15 @@ namespace OSharp.Core.Packs
             IOsharpPackTypeFinder packTypeFinder =
                 services.GetOrAddTypeFinder<IOsharpPackTypeFinder>(assemblyFinder => new OsharpPackTypeFinder(assemblyFinder));
             Type[] packTypes = packTypeFinder.FindAll();
-            _sourcePacks.Clear();
-            _sourcePacks.AddRange(packTypes.Select(m => (OsharpPack)Activator.CreateInstance(m)));
+            this._sourcePacks.Clear();
+            this._sourcePacks.AddRange(packTypes.Select(m => (OsharpPack)Activator.CreateInstance(m)));
 
             IOsharpBuilder builder = services.GetSingletonInstance<IOsharpBuilder>();
             List<OsharpPack> packs;
             if (builder.AddPacks.Any())
             {
-                packs = _sourcePacks.Where(m => m.Level == PackLevel.Core)
-                    .Union(_sourcePacks.Where(m => builder.AddPacks.Contains(m.GetType()))).Distinct()
+                packs = this._sourcePacks.Where(m => m.Level == PackLevel.Core)
+                    .Union(this._sourcePacks.Where(m => builder.AddPacks.Contains(m.GetType()))).Distinct()
                     .OrderBy(m => m.Level).ThenBy(m => m.Order).ToList();
                 List<OsharpPack> dependPacks = new List<OsharpPack>();
                 foreach (OsharpPack pack in packs)
@@ -74,26 +73,28 @@ namespace OSharp.Core.Packs
                     Type[] dependPackTypes = pack.GetDependPackTypes();
                     foreach (Type dependPackType in dependPackTypes)
                     {
-                        OsharpPack dependPack = _sourcePacks.Find(m => m.GetType() == dependPackType);
+                        OsharpPack dependPack = this._sourcePacks.Find(m => m.GetType() == dependPackType);
                         if (dependPack == null)
                         {
                             throw new OsharpException($"加载模块{pack.GetType().FullName}时无法找到依赖模块{dependPackType.FullName}");
                         }
+
                         dependPacks.AddIfNotExist(dependPack);
                     }
                 }
+
                 packs = packs.Union(dependPacks).Distinct().ToList();
             }
             else
             {
-                packs = _sourcePacks.ToList();
+                packs = this._sourcePacks.ToList();
                 packs.RemoveAll(m => builder.ExceptPacks.Contains(m.GetType()));
             }
 
             // 按先层级后顺序的规则进行排序
             packs = packs.OrderBy(m => m.Level).ThenBy(m => m.Order).ToList();
-            LoadedPacks = packs;
-            foreach (OsharpPack pack in LoadedPacks)
+            this.LoadedPacks = packs;
+            foreach (OsharpPack pack in this.LoadedPacks)
             {
                 services = pack.AddServices(services);
             }
@@ -111,7 +112,7 @@ namespace OSharp.Core.Packs
             logger.LogInformation("OSharp框架初始化开始");
             DateTime dtStart = DateTime.Now;
 
-            foreach (OsharpPack pack in LoadedPacks)
+            foreach (OsharpPack pack in this.LoadedPacks)
             {
                 pack.UsePack(provider);
                 logger.LogInformation($"模块{pack.GetType()}加载成功");

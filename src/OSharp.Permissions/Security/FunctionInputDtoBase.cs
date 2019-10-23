@@ -13,7 +13,6 @@ using System.ComponentModel;
 using OSharp.Core.Functions;
 using OSharp.Entity;
 
-
 namespace OSharp.Security
 {
     /// <summary>
@@ -62,6 +61,5 @@ namespace OSharp.Security
         /// </summary>
         [DisplayName("是否锁定")]
         public bool IsLocked { get; set; }
-
     }
 }

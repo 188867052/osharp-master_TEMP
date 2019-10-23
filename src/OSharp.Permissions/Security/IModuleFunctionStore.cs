@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 using OSharp.Data;
 using OSharp.Dependency;
 
-
 namespace OSharp.Security
 {
     /// <summary>
@@ -24,8 +23,6 @@ namespace OSharp.Security
     [IgnoreDependency]
     public interface IModuleFunctionStore<TModuleFunction, in TModuleKey>
     {
-        #region 模块功能信息业务
-
         /// <summary>
         /// 获取 模块功能信息查询数据集
         /// </summary>
@@ -46,7 +43,5 @@ namespace OSharp.Security
         /// <param name="functionIds">要设置的功能编号</param>
         /// <returns>业务操作结果</returns>
         Task<OperationResult> SetModuleFunctions(TModuleKey moduleId, Guid[] functionIds);
-
-        #endregion
     }
 }

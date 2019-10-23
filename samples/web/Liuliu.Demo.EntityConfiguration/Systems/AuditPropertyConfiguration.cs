@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 using Liuliu.Demo.Systems.Entities;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using OSharp.Entity;
-
 
 namespace Liuliu.Demo.EntityConfiguration.Systems
 {

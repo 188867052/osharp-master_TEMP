@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-
 namespace OSharp.Threading.Asyncs
 {
     /// <summary>
@@ -29,38 +28,38 @@ namespace OSharp.Threading.Asyncs
 
         public AsyncReaderWriterLock()
         {
-            _readerReleaser = Task.FromResult(new Releaser(this, false));
-            _writerReleaser = Task.FromResult(new Releaser(this, true));
+            this._readerReleaser = Task.FromResult(new Releaser(this, false));
+            this._writerReleaser = Task.FromResult(new Releaser(this, true));
         }
 
         public Task<Releaser> ReaderLockAsync()
         {
-            lock (_waitingWriters)
+            lock (this._waitingWriters)
             {
-                if (_status >= 0 && _waitingWriters.Count == 0)
+                if (this._status >= 0 && this._waitingWriters.Count == 0)
                 {
-                    ++_status;
-                    return _readerReleaser;
+                    ++this._status;
+                    return this._readerReleaser;
                 }
 
-                ++_readersWaiting;
-                return _waitingReader.Task.ContinueWith(t => t.Result);
+                ++this._readersWaiting;
+                return this._waitingReader.Task.ContinueWith(t => t.Result);
             }
         }
 
         public Task<Releaser> WriterLockAsync()
         {
-            lock (_waitingWriters)
+            lock (this._waitingWriters)
             {
-                if (_status == 0)
+                if (this._status == 0)
                 {
-                    _status = -1;
-                    return _writerReleaser;
+                    this._status = -1;
+                    return this._writerReleaser;
                 }
                 else
                 {
                     var waiter = new TaskCompletionSource<Releaser>();
-                    _waitingWriters.Enqueue(waiter);
+                    this._waitingWriters.Enqueue(waiter);
                     return waiter.Task;
                 }
             }
@@ -70,13 +69,13 @@ namespace OSharp.Threading.Asyncs
         {
             TaskCompletionSource<Releaser> toWake = null;
 
-            lock (_waitingWriters)
+            lock (this._waitingWriters)
             {
-                --_status;
-                if (_status == 0 && _waitingWriters.Count > 0)
+                --this._status;
+                if (this._status == 0 && this._waitingWriters.Count > 0)
                 {
-                    _status = -1;
-                    toWake = _waitingWriters.Dequeue();
+                    this._status = -1;
+                    toWake = this._waitingWriters.Dequeue();
                 }
             }
 
@@ -91,23 +90,23 @@ namespace OSharp.Threading.Asyncs
             TaskCompletionSource<Releaser> toWake = null;
             bool toWakeIsWriter = false;
 
-            lock (_waitingWriters)
+            lock (this._waitingWriters)
             {
-                if (_waitingWriters.Count > 0)
+                if (this._waitingWriters.Count > 0)
                 {
-                    toWake = _waitingWriters.Dequeue();
+                    toWake = this._waitingWriters.Dequeue();
                     toWakeIsWriter = true;
                 }
-                else if (_readersWaiting > 0)
+                else if (this._readersWaiting > 0)
                 {
-                    toWake = _waitingReader;
-                    _status = _readersWaiting;
-                    _readersWaiting = 0;
-                    _waitingReader = new TaskCompletionSource<Releaser>();
+                    toWake = this._waitingReader;
+                    this._status = this._readersWaiting;
+                    this._readersWaiting = 0;
+                    this._waitingReader = new TaskCompletionSource<Releaser>();
                 }
                 else
                 {
-                    _status = 0;
+                    this._status = 0;
                 }
             }
 
@@ -117,7 +116,6 @@ namespace OSharp.Threading.Asyncs
             }
         }
 
-
         public struct Releaser : IDisposable
         {
             private readonly AsyncReaderWriterLock _toRelease;
@@ -125,21 +123,21 @@ namespace OSharp.Threading.Asyncs
 
             internal Releaser(AsyncReaderWriterLock toRelease, bool writer)
             {
-                _toRelease = toRelease;
-                _writer = writer;
+                this._toRelease = toRelease;
+                this._writer = writer;
             }
 
             public void Dispose()
             {
-                if (_toRelease != null)
+                if (this._toRelease != null)
                 {
-                    if (_writer)
+                    if (this._writer)
                     {
-                        _toRelease.WriterRelease();
+                        this._toRelease.WriterRelease();
                     }
                     else
                     {
-                        _toRelease.ReaderRelease();
+                        this._toRelease.ReaderRelease();
                     }
                 }
             }

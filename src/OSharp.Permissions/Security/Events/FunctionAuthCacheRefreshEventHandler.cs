@@ -12,10 +12,7 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.AspNetCore;
-using OSharp.Dependency;
 using OSharp.EventBuses;
-using OSharp.Security;
-
 
 namespace OSharp.Security.Events
 {
@@ -31,7 +28,7 @@ namespace OSharp.Security.Events
         /// </summary>
         public FunctionAuthCacheRefreshEventHandler(IServiceProvider provider)
         {
-            _provider = provider;
+            this._provider = provider;
         }
 
         /// <summary>
@@ -40,11 +37,12 @@ namespace OSharp.Security.Events
         /// <param name="eventData">事件源数据</param>
         public override void Handle(FunctionAuthCacheRefreshEventData eventData)
         {
-            if (!_provider.InHttpRequest())
+            if (!this._provider.InHttpRequest())
             {
                 return;
             }
-            IFunctionAuthCache cache = _provider.GetService<IFunctionAuthCache>();
+
+            IFunctionAuthCache cache = this._provider.GetService<IFunctionAuthCache>();
             if (eventData.FunctionIds.Length > 0)
             {
                 cache.RemoveFunctionCaches(eventData.FunctionIds);
@@ -53,6 +51,7 @@ namespace OSharp.Security.Events
                     cache.GetFunctionRoles(functionId);
                 }
             }
+
             if (eventData.UserNames.Length > 0)
             {
                 cache.RemoveUserCaches(eventData.UserNames);

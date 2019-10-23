@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 using Exceptionless;
 
 using Microsoft.Extensions.Logging;
-
 
 namespace OSharp.Exceptionless
 {
@@ -19,7 +16,7 @@ namespace OSharp.Exceptionless
         /// <param name="formatter">Function to create a <c>string</c> message of the <paramref name="state" /> and <paramref name="exception" />.</param>
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
-            if (!IsEnabled(logLevel) || exception == null)
+            if (!this.IsEnabled(logLevel) || exception == null)
             {
                 return;
             }

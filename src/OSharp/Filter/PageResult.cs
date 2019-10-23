@@ -9,7 +9,6 @@
 
 using System;
 
-
 namespace OSharp.Filter
 {
     /// <summary>
@@ -22,15 +21,16 @@ namespace OSharp.Filter
         /// </summary>
         public PageResult()
             : this(new T[0], 0)
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="PageResult{T}"/>类型的新实例
         /// </summary>
         public PageResult(T[] data, int total)
         {
-            Data = data;
-            Total = total;
+            this.Data = data;
+            this.Total = total;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace OSharp.Filter
         /// </summary>
         public PageData<T> ToPageData()
         {
-            return new PageData<T>(Data, Total);
+            return new PageData<T>(this.Data, this.Total);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace OSharp.Filter
         /// <returns>页结果</returns>
         public PageResult<TResult> ToPageResult<TResult>(Func<T[], TResult[]> func)
         {
-            return new PageResult<TResult>(func(Data), Total);
+            return new PageResult<TResult>(func(this.Data), this.Total);
         }
     }
 }

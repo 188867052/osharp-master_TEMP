@@ -13,7 +13,6 @@ using System.ComponentModel;
 
 using OSharp.Entity;
 
-
 namespace OSharp.CodeGeneration.Entities
 {
     /// <summary>
@@ -50,6 +49,6 @@ namespace OSharp.CodeGeneration.Entities
         /// <summary>
         /// 获取 模块命名空间，由“项目命名空间前缀.模块名称”组成
         /// </summary>
-        public string Namespace => $"{(Project == null ? "" : Project.NamespacePrefix + ".")}{Name}";
+        public string Namespace => $"{(this.Project == null ? "" : this.Project.NamespacePrefix + ".")}{this.Name}";
     }
 }

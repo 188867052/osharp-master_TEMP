@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Http;
 
-
 namespace OSharp.Identity.OAuth2.QQ
 {
     /// <summary>
@@ -26,19 +25,19 @@ namespace OSharp.Identity.OAuth2.QQ
         /// </summary>
         public QQOptions()
         {
-            CallbackPath = new PathString("/signin-qq");
-            AuthorizationEndpoint = QQDefaults.AuthorizationEndpoint;
-            TokenEndpoint = QQDefaults.TokenEndpoint;
-            UserInformationEndpoint = QQDefaults.UserInformationEndpoint;
-            OpenIdEndpoint = QQDefaults.OpenIdEndpoint;
+            this.CallbackPath = new PathString("/signin-qq");
+            this.AuthorizationEndpoint = QQDefaults.AuthorizationEndpoint;
+            this.TokenEndpoint = QQDefaults.TokenEndpoint;
+            this.UserInformationEndpoint = QQDefaults.UserInformationEndpoint;
+            this.OpenIdEndpoint = QQDefaults.OpenIdEndpoint;
 
-            //StateDataFormat = 
-            //Scope 表示用户授权时向用户显示的可进行授权的列表。
-            Scope.Add("get_user_info"); //默认只请求对get_user_info进行授权
+            // StateDataFormat =
+            // Scope 表示用户授权时向用户显示的可进行授权的列表。
+            this.Scope.Add("get_user_info"); // 默认只请求对get_user_info进行授权
 
-            ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "openid");
-            ClaimActions.MapJsonKey(ClaimTypes.Name, "nickname");
-            ClaimActions.MapJsonKey("urn:qq:figure", "figureurl_qq_1");
+            this.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "openid");
+            this.ClaimActions.MapJsonKey(ClaimTypes.Name, "nickname");
+            this.ClaimActions.MapJsonKey("urn:qq:figure", "figureurl_qq_1");
         }
 
         /// <summary>
@@ -51,8 +50,8 @@ namespace OSharp.Identity.OAuth2.QQ
         /// </summary>
         public string AppId
         {
-            get { return ClientId; }
-            set { ClientId = value; }
+            get { return this.ClientId; }
+            set { this.ClientId = value; }
         }
 
         /// <summary>
@@ -60,8 +59,8 @@ namespace OSharp.Identity.OAuth2.QQ
         /// </summary>
         public string AppKey
         {
-            get { return ClientSecret; }
-            set { ClientSecret = value; }
+            get { return this.ClientSecret; }
+            set { this.ClientSecret = value; }
         }
     }
 }

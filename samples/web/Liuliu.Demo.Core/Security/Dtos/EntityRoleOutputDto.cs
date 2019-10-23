@@ -17,7 +17,6 @@ using OSharp.Filter;
 using OSharp.Mapping;
 using OSharp.Security;
 
-
 namespace Liuliu.Demo.Security.Dtos
 {
     /// <summary>
@@ -30,20 +29,21 @@ namespace Liuliu.Demo.Security.Dtos
         /// 初始化一个<see cref="EntityRoleOutputDto"/>类型的新实例
         /// </summary>
         public EntityRoleOutputDto()
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="EntityRoleOutputDto"/>类型的新实例
         /// </summary>
         public EntityRoleOutputDto(EntityRole entityRole)
         {
-            Id = entityRole.Id;
-            RoleId = entityRole.RoleId;
-            EntityId = entityRole.EntityId;
-            IsLocked = entityRole.IsLocked;
-            Operation = entityRole.Operation;
-            CreatedTime = entityRole.CreatedTime;
-            FilterGroup = entityRole.FilterGroupJson.FromJsonString<FilterGroup>();
+            this.Id = entityRole.Id;
+            this.RoleId = entityRole.RoleId;
+            this.EntityId = entityRole.EntityId;
+            this.IsLocked = entityRole.IsLocked;
+            this.Operation = entityRole.Operation;
+            this.CreatedTime = entityRole.CreatedTime;
+            this.FilterGroup = entityRole.FilterGroupJson.FromJsonString<FilterGroup>();
         }
 
         /// <summary>
@@ -96,8 +96,6 @@ namespace Liuliu.Demo.Security.Dtos
         /// </summary>
         public DateTime CreatedTime { get; set; }
 
-        #region Implementation of IDataAuthEnabled
-
         /// <summary>
         /// 获取或设置 是否可更新的数据权限状态
         /// </summary>
@@ -107,7 +105,5 @@ namespace Liuliu.Demo.Security.Dtos
         /// 获取或设置 是否可删除的数据权限状态
         /// </summary>
         public bool Deletable { get; set; }
-
-        #endregion
     }
 }

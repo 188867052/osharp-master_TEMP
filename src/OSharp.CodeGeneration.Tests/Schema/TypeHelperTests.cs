@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 using OSharp.CodeGeneration.Schema;
 
 using Shouldly;
 
 using Xunit;
-
 
 namespace OSharp.CodeGeneration.Tests.Schema
 {

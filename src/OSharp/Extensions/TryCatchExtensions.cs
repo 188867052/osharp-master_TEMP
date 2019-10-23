@@ -8,7 +8,6 @@
 
 using System;
 
-
 namespace OSharp.Extensions
 {
     /// <summary>
@@ -39,6 +38,7 @@ namespace OSharp.Extensions
                 failureAction(obj);
                 result = false;
             }
+
             return result;
         }
 
@@ -83,6 +83,7 @@ namespace OSharp.Extensions
                 failureAction(obj);
                 result = default(TResult);
             }
+
             return result;
         }
 

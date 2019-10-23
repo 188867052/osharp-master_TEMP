@@ -13,7 +13,6 @@ using System.Data.SqlClient;
 using Microsoft.Data.SqlClient;
 #endif
 
-
 namespace OSharp.Entity.SqlServer
 {
     /// <summary>
@@ -28,7 +27,8 @@ namespace OSharp.Entity.SqlServer
         /// </summary>
         public SqlServerDapperSqlExecutor(IUnitOfWorkManager unitOfWorkManager)
             : base(unitOfWorkManager)
-        { }
+        {
+        }
 
         /// <summary>
         /// 获取 数据库类型

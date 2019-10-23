@@ -11,7 +11,6 @@ using System.Data.Common;
 
 using Microsoft.EntityFrameworkCore;
 
-
 namespace OSharp.Entity
 {
     /// <summary>

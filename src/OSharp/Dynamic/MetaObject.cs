@@ -1,34 +1,7 @@
-﻿// Author:
-// Leszek Ciesielski (skolima@gmail.com)
-// Manuel Josupeit-Walter (josupeit-walter@cis-gmbh.de)
-//
-// (C) 2013 Cognifide
-//
-// Permission is hereby granted, free of charge, to any person obtaining
-// a copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to
-// permit persons to whom the Software is furnished to do so, subject to
-// the following conditions:
-//
-// The above copyright notice and this permission notice shall be
-// included in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-
-using System;
+﻿using System;
 using System.Dynamic;
 using System.Linq.Expressions;
 using System.Reflection;
-
 
 namespace OSharp.Dynamic
 {
@@ -54,10 +27,9 @@ namespace OSharp.Dynamic
         /// <param name="staticBind">
         /// Should this MetaObject bind to <see langword="static"/> or instance methods and fields.
         /// </param>
-        public MetaObject(Expression expression, object value, bool staticBind) :
-            base(expression, BindingRestrictions.Empty, value)
+        public MetaObject(Expression expression, object value, bool staticBind) : base(expression, BindingRestrictions.Empty, value)
         {
-            isStatic = staticBind;
+            this.isStatic = staticBind;
         }
 
         /// <summary>
@@ -77,8 +49,8 @@ namespace OSharp.Dynamic
         /// </exception>
         public override DynamicMetaObject BindInvokeMember(InvokeMemberBinder binder, DynamicMetaObject[] args)
         {
-            var self = Expression;
-            var exposed = (Exposed)Value;
+            var self = this.Expression;
+            var exposed = (Exposed)this.Value;
 
             var argTypes = new Type[args.Length];
             var argExps = new Expression[args.Length];
@@ -94,7 +66,7 @@ namespace OSharp.Dynamic
             MethodInfo method;
             do
             {
-                method = declaringType.GetMethod(binder.Name, GetBindingFlags(), null, argTypes, null);
+                method = declaringType.GetMethod(binder.Name, this.GetBindingFlags(), null, argTypes, null);
             }
             while (method == null && (declaringType = declaringType.BaseType) != null);
 
@@ -103,7 +75,7 @@ namespace OSharp.Dynamic
                 throw new MissingMemberException(type.FullName, binder.Name);
             }
 
-            var @this = isStatic
+            var @this = this.isStatic
                             ? null
                             : Expression.Convert(Expression.Field(Expression.Convert(self, typeof(Exposed)), "value"), type);
 
@@ -124,9 +96,9 @@ namespace OSharp.Dynamic
         /// </returns>
         public override DynamicMetaObject BindGetMember(GetMemberBinder binder)
         {
-            var self = Expression;
+            var self = this.Expression;
 
-            var memberExpression = GetMemberExpression(self, binder.Name);
+            var memberExpression = this.GetMemberExpression(self, binder.Name);
 
             var target = Expression.Convert(memberExpression, binder.ReturnType);
             var restrictions = BindingRestrictions.GetTypeRestriction(self, typeof(Exposed));
@@ -148,9 +120,9 @@ namespace OSharp.Dynamic
         /// </returns>
         public override DynamicMetaObject BindSetMember(SetMemberBinder binder, DynamicMetaObject value)
         {
-            var self = Expression;
+            var self = this.Expression;
 
-            var memberExpression = GetMemberExpression(self, binder.Name);
+            var memberExpression = this.GetMemberExpression(self, binder.Name);
 
             var target =
                 Expression.Convert(
@@ -178,22 +150,22 @@ namespace OSharp.Dynamic
         private MemberExpression GetMemberExpression(Expression self, string memberName)
         {
             MemberExpression memberExpression = null;
-            var type = ((Exposed)Value).SubjectType;
-            var @this = isStatic
+            var type = ((Exposed)this.Value).SubjectType;
+            var @this = this.isStatic
                             ? null
                             : Expression.Convert(Expression.Field(Expression.Convert(self, typeof(Exposed)), "value"), type);
             var declaringType = type;
 
             do
             {
-                var property = declaringType.GetProperty(memberName, GetBindingFlags());
+                var property = declaringType.GetProperty(memberName, this.GetBindingFlags());
                 if (property != null)
                 {
                     memberExpression = Expression.Property(@this, property);
                 }
                 else
                 {
-                    var field = declaringType.GetField(memberName, GetBindingFlags());
+                    var field = declaringType.GetField(memberName, this.GetBindingFlags());
                     if (field != null)
                     {
                         memberExpression = Expression.Field(@this, field);
@@ -223,14 +195,17 @@ namespace OSharp.Dynamic
             {
                 return target;
             }
+
             if (target.Type == typeof(void))
             {
                 return Expression.Block(target, Expression.Default(expectedType));
             }
+
             if (expectedType == typeof(void))
             {
                 return Expression.Block(target, Expression.Empty());
             }
+
             return Expression.Convert(target, expectedType);
         }
 
@@ -242,7 +217,7 @@ namespace OSharp.Dynamic
         /// </returns>
         private BindingFlags GetBindingFlags()
         {
-            return isStatic
+            return this.isStatic
                        ? BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic
                        : BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         }

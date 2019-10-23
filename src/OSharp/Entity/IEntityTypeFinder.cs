@@ -9,12 +9,12 @@
 
 using OSharp.Reflection;
 
-
 namespace OSharp.Entity
 {
     /// <summary>
     /// 定义实体类型查找器
     /// </summary>
     public interface IEntityTypeFinder : ITypeFinder
-    { }
+    {
+    }
 }

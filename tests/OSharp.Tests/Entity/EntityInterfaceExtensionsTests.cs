@@ -15,7 +15,7 @@ namespace OSharp.Entity.Tests
             {
                 ((Type)null).IsEntityType();
             });
-            GetType().IsEntityType().ShouldBeFalse();
+            this.GetType().IsEntityType().ShouldBeFalse();
             typeof(TestEntity).IsEntityType().ShouldBeTrue();
         }
 

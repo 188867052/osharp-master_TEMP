@@ -20,7 +20,6 @@ using OSharp.Dependency;
 using OSharp.Mapping;
 using OSharp.Reflection;
 
-
 namespace OSharp.AutoMapper
 {
     /// <summary>
@@ -41,9 +40,9 @@ namespace OSharp.AutoMapper
             IMapToAttributeTypeFinder mapToAttributeTypeFinder,
             ILoggerFactory loggerFactory)
         {
-            _mapFromAttributeTypeFinder = mapFromAttributeTypeFinder;
-            _mapToAttributeTypeFinder = mapToAttributeTypeFinder;
-            _logger = loggerFactory.CreateLogger<MapTupleProfile>();
+            this._mapFromAttributeTypeFinder = mapFromAttributeTypeFinder;
+            this._mapToAttributeTypeFinder = mapToAttributeTypeFinder;
+            this._logger = loggerFactory.CreateLogger<MapTupleProfile>();
         }
 
         /// <summary>
@@ -53,7 +52,7 @@ namespace OSharp.AutoMapper
         {
             List<(Type Source, Type Target)> tuples = new List<(Type Source, Type Target)>();
 
-            Type[] types = _mapFromAttributeTypeFinder.FindAll(true);
+            Type[] types = this._mapFromAttributeTypeFinder.FindAll(true);
             foreach (Type targetType in types)
             {
                 MapFromAttribute attribute = targetType.GetAttribute<MapFromAttribute>(true);
@@ -64,7 +63,7 @@ namespace OSharp.AutoMapper
                 }
             }
 
-            types = _mapToAttributeTypeFinder.FindAll(true);
+            types = this._mapToAttributeTypeFinder.FindAll(true);
             foreach (Type sourceType in types)
             {
                 MapToAttribute attribute = sourceType.GetAttribute<MapToAttribute>(true);
@@ -77,10 +76,11 @@ namespace OSharp.AutoMapper
 
             foreach ((Type Source, Type Target) tuple in tuples)
             {
-                CreateMap(tuple.Source, tuple.Target);
-                _logger.LogDebug($"创建“{tuple.Source}”到“{tuple.Target}”的对象映射关系");
+                this.CreateMap(tuple.Source, tuple.Target);
+                this._logger.LogDebug($"创建“{tuple.Source}”到“{tuple.Target}”的对象映射关系");
             }
-            _logger.LogInformation($"创建{tuples.Count}个对象映射关系");
+
+            this._logger.LogInformation($"创建{tuples.Count}个对象映射关系");
         }
     }
 }

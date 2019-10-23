@@ -13,7 +13,6 @@ using Microsoft.Extensions.Configuration;
 
 using OSharp.Extensions;
 
-
 namespace OSharp.Core.Options
 {
     /// <summary>
@@ -54,6 +53,7 @@ namespace OSharp.Core.Options
             {
                 return default(T);
             }
+
             return json.FromJsonString<T>();
         }
     }

@@ -13,8 +13,7 @@ using Microsoft.Extensions.Logging;
 
 using OSharp.Logging.RollingFile;
 
-
-//power by https://github.com/andrewlock/NetEscapades.Extensions.Logging
+// power by https://github.com/andrewlock/NetEscapades.Extensions.Logging
 namespace Microsoft.Extensions.DependencyInjection
 {
     /// <summary>
@@ -57,6 +56,7 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 throw new ArgumentNullException(nameof(configure));
             }
+
             builder.AddFile();
             builder.Services.Configure(configure);
 

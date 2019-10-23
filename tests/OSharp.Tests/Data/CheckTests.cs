@@ -4,7 +4,6 @@ using System.IO;
 
 using Xunit;
 
-
 namespace OSharp.Data.Tests
 {
     public class CheckTests

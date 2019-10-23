@@ -8,15 +8,12 @@
 // -----------------------------------------------------------------------
 
 using System;
-
-using Liuliu.Demo.Identity.Entities;
 using Liuliu.Demo.Security.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using OSharp.Entity;
-
 
 namespace Liuliu.Demo.EntityConfiguration.Security
 {
@@ -33,8 +30,8 @@ namespace Liuliu.Demo.EntityConfiguration.Security
         {
             builder.HasIndex(m => new { m.ModuleId, m.UserId }).HasName("ModuleUserIndex").IsUnique();
 
-            builder.HasOne<Module>(mu => mu.Module).WithMany().HasForeignKey(m => m.ModuleId);
-            builder.HasOne<User>(mu => mu.User).WithMany().HasForeignKey(m => m.UserId);
+            builder.HasOne(mu => mu.Module).WithMany().HasForeignKey(m => m.ModuleId);
+            builder.HasOne(mu => mu.User).WithMany().HasForeignKey(m => m.UserId);
         }
     }
 }

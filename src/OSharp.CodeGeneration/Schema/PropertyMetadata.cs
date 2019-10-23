@@ -7,9 +7,7 @@
 //  <last-date>2018-08-06 12:31</last-date>
 // -----------------------------------------------------------------------
 
-
 using OSharp.Collections;
-
 
 namespace OSharp.CodeGeneration.Schema
 {
@@ -94,25 +92,26 @@ namespace OSharp.CodeGeneration.Schema
         public EnumMetadata[] EnumMetadatas { get; set; }
 
         private EntityMetadata _entity;
+
         /// <summary>
         /// 获取或设置 所属实体信息
         /// </summary>
         public EntityMetadata Entity
         {
-            get => _entity;
+            get => this._entity;
             set
             {
-                _entity = value;
+                this._entity = value;
                 value.Properties.AddIfNotExist(this);
             }
         }
 
         /// <summary>
-        /// 是否有验证属性 
+        /// 是否有验证属性
         /// </summary>
         public bool HasValidateAttribute()
         {
-            return IsRequired.HasValue || MaxLength.HasValue || MinLength.HasValue || Range != null || Max != null || Min != null;
+            return this.IsRequired.HasValue || this.MaxLength.HasValue || this.MinLength.HasValue || this.Range != null || this.Max != null || this.Min != null;
         }
 
         /// <summary>
@@ -120,7 +119,7 @@ namespace OSharp.CodeGeneration.Schema
         /// </summary>
         public string ToSingleTypeName()
         {
-            return TypeHelper.ToSingleTypeName(TypeName, IsNullable);
+            return TypeHelper.ToSingleTypeName(this.TypeName, this.IsNullable);
         }
 
         /// <summary>
@@ -151,10 +150,12 @@ namespace OSharp.CodeGeneration.Schema
                     name = "date";
                     break;
             }
+
             if (prop.EnumMetadatas != null)
             {
                 name = "number";
             }
+
             return name;
         }
     }

@@ -12,7 +12,6 @@ using System.ComponentModel;
 
 using OSharp.Entity;
 
-
 namespace OSharp.Identity
 {
     /// <summary>
@@ -29,7 +28,7 @@ namespace OSharp.Identity
         /// </summary>
         protected UserRoleBase()
         {
-            CreatedTime = DateTime.Now;
+            this.CreatedTime = DateTime.Now;
         }
 
         /// <summary>
@@ -60,6 +59,5 @@ namespace OSharp.Identity
         /// 获取或设置 数据逻辑删除时间，为null表示正常数据，有值表示已逻辑删除，同时删除时间每次不同也能保证索引唯一性
         /// </summary>
         public DateTime? DeletedTime { get; set; }
-
     }
 }

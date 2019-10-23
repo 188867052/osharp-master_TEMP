@@ -19,7 +19,6 @@ using OSharp.Core.Modules;
 using OSharp.Core.Packs;
 using OSharp.Dependency;
 
-
 namespace OSharp.AspNetCore.Mvc
 {
     /// <summary>
@@ -59,9 +58,10 @@ namespace OSharp.AspNetCore.Mvc
             {
                 return;
             }
+
             functionHandler.Initialize();
 
-            IsEnabled = true;
+            this.IsEnabled = true;
         }
     }
 }

@@ -11,7 +11,6 @@ using System;
 
 using OSharp.Data;
 
-
 namespace OSharp.Mapping
 {
     /// <summary>
@@ -25,7 +24,7 @@ namespace OSharp.Mapping
         public MapFromAttribute(params Type[] sourceTypes)
         {
             Check.NotNull(sourceTypes, nameof(sourceTypes));
-            SourceTypes = sourceTypes;
+            this.SourceTypes = sourceTypes;
         }
 
         /// <summary>

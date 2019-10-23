@@ -14,7 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.Dependency;
 
-
 namespace OSharp.Entity.Sqlite
 {
     /// <summary>
@@ -41,6 +40,7 @@ namespace OSharp.Entity.Sqlite
             {
                 return builder.UseSqlite(connectionString);
             }
+
             return builder.UseSqlite(existingConnection);
         }
     }

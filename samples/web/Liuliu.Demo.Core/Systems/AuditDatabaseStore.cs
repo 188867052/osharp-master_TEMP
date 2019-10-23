@@ -19,7 +19,6 @@ using OSharp.Entity;
 using OSharp.Mapping;
 using OSharp.Net;
 
-
 namespace Liuliu.Demo.Systems
 {
     /// <summary>
@@ -34,7 +33,7 @@ namespace Liuliu.Demo.Systems
         /// </summary>
         public AuditDatabaseStore(IRepository<AuditOperation, Guid> operationRepository)
         {
-            _operationRepository = operationRepository;
+            this._operationRepository = operationRepository;
         }
 
         /// <summary>
@@ -44,7 +43,7 @@ namespace Liuliu.Demo.Systems
         public void Save(AuditOperationEntry operationEntry)
         {
             AuditOperation operation = BuildOperation(operationEntry);
-            _operationRepository.Insert(operation);
+            this._operationRepository.Insert(operation);
         }
 
         /// <summary>
@@ -56,7 +55,7 @@ namespace Liuliu.Demo.Systems
         public async Task SaveAsync(AuditOperationEntry operationEntry, CancellationToken cancelToken = default(CancellationToken))
         {
             AuditOperation operation = BuildOperation(operationEntry);
-            await _operationRepository.InsertAsync(operation);
+            await this._operationRepository.InsertAsync(operation);
         }
 
         private static AuditOperation BuildOperation(AuditOperationEntry operationEntry)
@@ -68,6 +67,7 @@ namespace Liuliu.Demo.Systems
                 operation.OperationSystem = userAgent.GetSystem();
                 operation.Browser = userAgent.GetBrowser();
             }
+
             operation.Elapsed = (int)operationEntry.EndedTime.Subtract(operationEntry.CreatedTime).TotalMilliseconds;
             if (operation.ResultType == AjaxResultType.Success)
             {
@@ -82,6 +82,7 @@ namespace Liuliu.Demo.Systems
                     }
                 }
             }
+
             return operation;
         }
     }

@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Http;
 
 using OSharp.Data;
 
-
 namespace OSharp.AspNetCore
 {
     /// <summary>
@@ -32,7 +31,7 @@ namespace OSharp.AspNetCore
         {
             Check.NotNull(next, nameof(next));
 
-            _next = next;
+            this._next = next;
         }
 
         /// <summary>
@@ -42,12 +41,12 @@ namespace OSharp.AspNetCore
         /// <returns></returns>
         public async Task Invoke(HttpContext context)
         {
-            await _next(context);
+            await this._next(context);
             if (context.Response.StatusCode == 404 && !Path.HasExtension(context.Request.Path.Value)
                 && !context.Request.Path.Value.StartsWith("/api/", StringComparison.OrdinalIgnoreCase))
             {
                 context.Request.Path = "/index.html";
-                await _next(context);
+                await this._next(context);
             }
         }
     }

@@ -14,7 +14,6 @@ using OSharp.Audits;
 using OSharp.Entity;
 using OSharp.Mapping;
 
-
 namespace Liuliu.Demo.Systems.Entities
 {
     /// <summary>

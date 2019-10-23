@@ -19,7 +19,7 @@ namespace OSharp.EventBuses.Internal
         /// </summary>
         public SingletonEventHandlerFactory(IEventHandler handler)
         {
-            HandlerInstance = handler;
+            this.HandlerInstance = handler;
         }
 
         public IEventHandler HandlerInstance { get; }
@@ -30,7 +30,7 @@ namespace OSharp.EventBuses.Internal
         /// <returns></returns>
         public EventHandlerDisposeWrapper GetHandler()
         {
-            return new EventHandlerDisposeWrapper(HandlerInstance);
+            return new EventHandlerDisposeWrapper(this.HandlerInstance);
         }
     }
 }

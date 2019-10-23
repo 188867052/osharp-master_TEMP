@@ -17,7 +17,6 @@ using Microsoft.AspNetCore.Mvc;
 using OSharp.Collections;
 using OSharp.Reflection;
 
-
 namespace OSharp.AspNetCore.Mvc
 {
     /// <summary>
@@ -33,7 +32,7 @@ namespace OSharp.AspNetCore.Mvc
         /// <returns></returns>
         public MethodInfo[] Find(Type type, Func<MethodInfo, bool> predicate)
         {
-            return FindAll(type).Where(predicate).ToArray();
+            return this.FindAll(type).Where(predicate).ToArray();
         }
 
         /// <summary>

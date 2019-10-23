@@ -14,7 +14,6 @@ using OSharp.Core.Packs;
 using OSharp.Entity;
 using OSharp.Entity.SqlServer;
 
-
 namespace Liuliu.Demo.Web.Startups
 {
     /// <summary>

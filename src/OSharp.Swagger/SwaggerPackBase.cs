@@ -8,10 +8,8 @@
 // -----------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -23,9 +21,6 @@ using OSharp.AspNetCore;
 using OSharp.Core.Packs;
 using OSharp.Exceptions;
 using OSharp.Extensions;
-
-using Swashbuckle.AspNetCore.Swagger;
-
 
 namespace OSharp.Swagger
 {
@@ -77,23 +72,24 @@ namespace OSharp.Swagger
                 {
                     options.IncludeXmlComments(file);
                 });
-                //权限Token
+
+                // 权限Token
                 options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme()
                 {
                     Description = "请输入带有Bearer的Token，形如 “Bearer {Token}” ",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey
+                    Type = SecuritySchemeType.ApiKey,
                 });
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
                         new OpenApiSecurityScheme
                         {
-                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" },
                         },
                         new[] { "readAccess", "writeAccess" }
-                    }
+                    },
                 });
             });
 
@@ -122,10 +118,10 @@ namespace OSharp.Swagger
                 bool miniProfilerEnabled = configuration["OSharp:Swagger:MiniProfiler"].CastTo(false);
                 if (miniProfilerEnabled)
                 {
-                    options.IndexStream = () => GetType().Assembly.GetManifestResourceStream("OSharp.Swagger.index.html");
+                    options.IndexStream = () => this.GetType().Assembly.GetManifestResourceStream("OSharp.Swagger.index.html");
                 }
             });
-            IsEnabled = true;
+            this.IsEnabled = true;
         }
     }
 }

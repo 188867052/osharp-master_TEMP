@@ -16,7 +16,6 @@ using Microsoft.Extensions.DependencyInjection;
 using OSharp.AutoMapper;
 using OSharp.Dependency;
 
-
 namespace Liuliu.Demo.Identity.Dtos
 {
     /// <summary>

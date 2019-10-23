@@ -13,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.Dependency;
 
-
 namespace OSharp.EventBuses.Internal
 {
     /// <summary>
@@ -30,8 +29,8 @@ namespace OSharp.EventBuses.Internal
         /// </summary>
         public EventBusBuilder(IEventHandlerTypeFinder typeFinder, IEventBus eventBus)
         {
-            _typeFinder = typeFinder;
-            _eventBus = eventBus;
+            this._typeFinder = typeFinder;
+            this._eventBus = eventBus;
         }
 
         /// <summary>
@@ -39,12 +38,13 @@ namespace OSharp.EventBuses.Internal
         /// </summary>
         public void Build()
         {
-            Type[] types = _typeFinder.FindAll(true);
+            Type[] types = this._typeFinder.FindAll(true);
             if (types.Length == 0)
             {
                 return;
             }
-            _eventBus.SubscribeAll(types);
+
+            this._eventBus.SubscribeAll(types);
         }
     }
 }

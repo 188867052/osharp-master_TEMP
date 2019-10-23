@@ -14,8 +14,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using OSharp.Entity;
 using OSharp.Extensions;
 using OSharp.Filter;
-using OSharp.Security;
-
 
 namespace OSharp.Security
 {
@@ -56,11 +54,12 @@ namespace OSharp.Security
         {
             get
             {
-                if (FilterGroupJson.IsNullOrEmpty())
+                if (this.FilterGroupJson.IsNullOrEmpty())
                 {
                     return null;
                 }
-                return FilterGroupJson.FromJsonString<FilterGroup>();
+
+                return this.FilterGroupJson.FromJsonString<FilterGroup>();
             }
         }
 

@@ -7,7 +7,7 @@ namespace OSharp.Permissions.Tests
         [Fact]
         public void StartupTest()
         {
-            //ServiceCollection services = new ServiceCollection();
+            // ServiceCollection services = new ServiceCollection();
         }
     }
 }

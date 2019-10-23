@@ -24,7 +24,6 @@ using OSharp.Extensions;
 using OSharp.Identity.JwtBearer;
 using OSharp.Threading.Asyncs;
 
-
 namespace OSharp.Identity
 {
     /// <summary>
@@ -45,8 +44,8 @@ namespace OSharp.Identity
         /// </summary>
         public OnlineUserProvider(IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
-            _cache = serviceProvider.GetService<IDistributedCache>();
+            this._serviceProvider = serviceProvider;
+            this._cache = serviceProvider.GetService<IDistributedCache>();
         }
 
         /// <summary>
@@ -61,10 +60,10 @@ namespace OSharp.Identity
             options.SetSlidingExpiration(TimeSpan.FromMinutes(30));
             using (await _asyncLock.LockAsync())
             {
-                return await _cache.GetAsync<OnlineUser>(key,
+                return await this._cache.GetAsync<OnlineUser>(key,
                     async () =>
                     {
-                        UserManager<TUser> userManager = _serviceProvider.GetService<UserManager<TUser>>();
+                        UserManager<TUser> userManager = this._serviceProvider.GetService<UserManager<TUser>>();
                         TUser user = await userManager.FindByNameAsync(userName);
                         if (user == null)
                         {
@@ -72,9 +71,9 @@ namespace OSharp.Identity
                         }
 
                         IList<string> roles = await userManager.GetRolesAsync(user);
-                        RoleManager<TRole> roleManager = _serviceProvider.GetService<RoleManager<TRole>>();
+                        RoleManager<TRole> roleManager = this._serviceProvider.GetService<RoleManager<TRole>>();
                         bool isAdmin = roleManager.Roles.ToList().Any(m => roles.Contains(m.Name) && m.IsAdmin);
-                        RefreshToken[] refreshTokens = await GetRefreshTokens(user);
+                        RefreshToken[] refreshTokens = await this.GetRefreshTokens(user);
                         return new OnlineUser()
                         {
                             Id = user.Id.ToString(),
@@ -84,7 +83,7 @@ namespace OSharp.Identity
                             HeadImg = user.HeadImg,
                             IsAdmin = isAdmin,
                             Roles = roles.ToArray(),
-                            RefreshTokens = refreshTokens.ToDictionary(m => m.ClientId, m => m)
+                            RefreshTokens = refreshTokens.ToDictionary(m => m.ClientId, m => m),
                         };
                     },
                     options);
@@ -101,7 +100,7 @@ namespace OSharp.Identity
             foreach (string userName in userNames)
             {
                 string key = $"Identity_OnlineUser_{userName}";
-                _cache.Remove(key);
+                this._cache.Remove(key);
             }
         }
 
@@ -113,11 +112,12 @@ namespace OSharp.Identity
         private async Task<RefreshToken[]> GetRefreshTokens(TUser user)
         {
             IOsharpUserAuthenticationTokenStore<TUser> store =
-                _serviceProvider.GetService<IUserStore<TUser>>() as IOsharpUserAuthenticationTokenStore<TUser>;
+                this._serviceProvider.GetService<IUserStore<TUser>>() as IOsharpUserAuthenticationTokenStore<TUser>;
             if (store == null)
             {
                 return new RefreshToken[0];
             }
+
             const string loginProvider = "JwtBearer";
             string[] jsons = await store.GetTokensAsync(user, loginProvider, CancellationToken.None);
             if (jsons.Length == 0)
@@ -132,8 +132,8 @@ namespace OSharp.Identity
                 return tokens;
             }
 
-            //删除过期的Token
-            using (var scope = _serviceProvider.CreateScope())
+            // 删除过期的Token
+            using (var scope = this._serviceProvider.CreateScope())
             {
                 IServiceProvider scopedProvider = scope.ServiceProvider;
                 UserManager<TUser> userManager = scopedProvider.GetService<UserManager<TUser>>();

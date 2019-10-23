@@ -1,17 +1,6 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="EntityTypeConfigurationBase.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2017 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2017-08-17 0:40</last-date>
-// -----------------------------------------------------------------------
-
-using System;
-
+﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
 
 namespace OSharp.Entity
 {
@@ -41,6 +30,7 @@ namespace OSharp.Entity
         public void RegisterTo(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(this);
+
             // 给软删除的实体添加全局过滤器
             if (typeof(ISoftDeletable).IsAssignableFrom(typeof(TEntity)))
             {

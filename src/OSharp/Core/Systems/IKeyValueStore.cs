@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 using OSharp.Core.Data;
 using OSharp.Data;
 
-
 namespace OSharp.Core.Systems
 {
     /// <summary>
@@ -27,7 +26,7 @@ namespace OSharp.Core.Systems
         /// 获取 键值对数据查询数据集
         /// </summary>
         IQueryable<KeyValue> KeyValues { get; }
-        
+
         /// <summary>
         /// 获取或创建设置信息
         /// </summary>

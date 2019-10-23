@@ -12,7 +12,6 @@ using Liuliu.Demo.Security.Entities;
 using OSharp.Mapping;
 using OSharp.Security;
 
-
 namespace Liuliu.Demo.Security.Dtos
 {
     /// <summary>
@@ -20,5 +19,6 @@ namespace Liuliu.Demo.Security.Dtos
     /// </summary>
     [MapTo(typeof(Module))]
     public class ModuleInputDto : ModuleInputDtoBase<int>
-    { }
+    {
+    }
 }

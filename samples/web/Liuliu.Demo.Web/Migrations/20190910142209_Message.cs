@@ -33,7 +33,7 @@ namespace Liuliu.Demo.Web.Migrations
                     IsLocked = table.Column<bool>(nullable: false),
                     DeletedTime = table.Column<DateTime>(nullable: true),
                     CreatedTime = table.Column<DateTime>(nullable: false),
-                    SenderId = table.Column<int>(nullable: false)
+                    SenderId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -55,7 +55,7 @@ namespace Liuliu.Demo.Web.Migrations
                     NewReplyCount = table.Column<int>(nullable: false),
                     CreatedTime = table.Column<DateTime>(nullable: false),
                     MessageId = table.Column<Guid>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -87,7 +87,7 @@ namespace Liuliu.Demo.Web.Migrations
                     DeletedTime = table.Column<DateTime>(nullable: true),
                     CreatedTime = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
-                    BelongMessageId = table.Column<Guid>(nullable: false)
+                    BelongMessageId = table.Column<Guid>(nullable: false),
                 },
                 constraints: table =>
                 {

@@ -13,7 +13,6 @@ using System.Text;
 
 using OSharp.Extensions;
 
-
 namespace OSharp.Data
 {
     /// <summary>
@@ -55,6 +54,7 @@ namespace OSharp.Data
                     zip.CopyTo(tmpMs);
                     zip.Close();
                 }
+
                 return tmpMs.ToArray();
             }
         }
@@ -70,6 +70,7 @@ namespace OSharp.Data
             {
                 return string.Empty;
             }
+
             byte[] bytes = Encoding.UTF8.GetBytes(value);
             bytes = Compress(bytes);
             return Convert.ToBase64String(bytes);
@@ -86,6 +87,7 @@ namespace OSharp.Data
             {
                 return string.Empty;
             }
+
             byte[] bytes = Convert.FromBase64String(value);
             bytes = Decompress(bytes);
             return Encoding.UTF8.GetString(bytes);

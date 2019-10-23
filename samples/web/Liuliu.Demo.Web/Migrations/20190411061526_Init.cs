@@ -24,7 +24,7 @@ namespace Liuliu.Demo.Web.Migrations
                     ResultType = table.Column<int>(nullable: false),
                     Message = table.Column<string>(nullable: true),
                     Elapsed = table.Column<int>(nullable: false),
-                    CreatedTime = table.Column<DateTime>(nullable: false)
+                    CreatedTime = table.Column<DateTime>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -39,7 +39,7 @@ namespace Liuliu.Demo.Web.Migrations
                     Name = table.Column<string>(nullable: false),
                     TypeName = table.Column<string>(nullable: false),
                     AuditEnabled = table.Column<bool>(nullable: false),
-                    PropertyJson = table.Column<string>(nullable: false)
+                    PropertyJson = table.Column<string>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -63,7 +63,7 @@ namespace Liuliu.Demo.Web.Migrations
                     AuditEntityEnabled = table.Column<bool>(nullable: false),
                     CacheExpirationSeconds = table.Column<int>(nullable: false),
                     IsCacheSliding = table.Column<bool>(nullable: false),
-                    IsLocked = table.Column<bool>(nullable: false)
+                    IsLocked = table.Column<bool>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -78,7 +78,7 @@ namespace Liuliu.Demo.Web.Migrations
                     ValueJson = table.Column<string>(nullable: true),
                     ValueType = table.Column<string>(nullable: true),
                     Key = table.Column<string>(nullable: false),
-                    IsLocked = table.Column<bool>(nullable: false)
+                    IsLocked = table.Column<bool>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -96,7 +96,7 @@ namespace Liuliu.Demo.Web.Migrations
                     Code = table.Column<string>(nullable: false),
                     OrderCode = table.Column<double>(nullable: false),
                     TreePathString = table.Column<string>(nullable: true),
-                    ParentId = table.Column<int>(nullable: true)
+                    ParentId = table.Column<int>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -117,7 +117,7 @@ namespace Liuliu.Demo.Web.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: false),
                     Remark = table.Column<string>(nullable: true),
-                    ParentId = table.Column<int>(nullable: true)
+                    ParentId = table.Column<int>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -145,7 +145,7 @@ namespace Liuliu.Demo.Web.Migrations
                     IsSystem = table.Column<bool>(nullable: false),
                     IsLocked = table.Column<bool>(nullable: false),
                     CreatedTime = table.Column<DateTime>(nullable: false),
-                    DeletedTime = table.Column<DateTime>(nullable: true)
+                    DeletedTime = table.Column<DateTime>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -178,7 +178,7 @@ namespace Liuliu.Demo.Web.Migrations
                     IsLocked = table.Column<bool>(nullable: false),
                     CreatedTime = table.Column<DateTime>(nullable: false),
                     DeletedTime = table.Column<DateTime>(nullable: true),
-                    Remark = table.Column<string>(nullable: true)
+                    Remark = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -194,7 +194,7 @@ namespace Liuliu.Demo.Web.Migrations
                     TypeName = table.Column<string>(nullable: true),
                     EntityKey = table.Column<string>(nullable: true),
                     OperateType = table.Column<int>(nullable: false),
-                    OperationId = table.Column<Guid>(nullable: false)
+                    OperationId = table.Column<Guid>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -213,7 +213,7 @@ namespace Liuliu.Demo.Web.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     ModuleId = table.Column<int>(nullable: false),
-                    FunctionId = table.Column<Guid>(nullable: false)
+                    FunctionId = table.Column<Guid>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -242,7 +242,7 @@ namespace Liuliu.Demo.Web.Migrations
                     Operation = table.Column<int>(nullable: false),
                     FilterGroupJson = table.Column<string>(nullable: true),
                     IsLocked = table.Column<bool>(nullable: false),
-                    CreatedTime = table.Column<DateTime>(nullable: false)
+                    CreatedTime = table.Column<DateTime>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -267,7 +267,7 @@ namespace Liuliu.Demo.Web.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     ModuleId = table.Column<int>(nullable: false),
-                    RoleId = table.Column<int>(nullable: false)
+                    RoleId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -294,7 +294,7 @@ namespace Liuliu.Demo.Web.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     RoleId = table.Column<int>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true)
+                    ClaimValue = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -316,7 +316,7 @@ namespace Liuliu.Demo.Web.Migrations
                     EntityId = table.Column<Guid>(nullable: false),
                     FilterGroupJson = table.Column<string>(nullable: true),
                     IsLocked = table.Column<bool>(nullable: false),
-                    CreatedTime = table.Column<DateTime>(nullable: false)
+                    CreatedTime = table.Column<DateTime>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -344,7 +344,7 @@ namespace Liuliu.Demo.Web.Migrations
                     UserAgent = table.Column<string>(nullable: true),
                     LogoutTime = table.Column<DateTime>(nullable: true),
                     CreatedTime = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -364,7 +364,7 @@ namespace Liuliu.Demo.Web.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     ModuleId = table.Column<int>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
-                    Disabled = table.Column<bool>(nullable: false)
+                    Disabled = table.Column<bool>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -391,7 +391,7 @@ namespace Liuliu.Demo.Web.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<int>(nullable: false),
                     ClaimType = table.Column<string>(nullable: false),
-                    ClaimValue = table.Column<string>(nullable: true)
+                    ClaimValue = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -411,7 +411,7 @@ namespace Liuliu.Demo.Web.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     RegisterIp = table.Column<string>(nullable: true),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -434,7 +434,7 @@ namespace Liuliu.Demo.Web.Migrations
                     ProviderDisplayName = table.Column<string>(nullable: true),
                     Avatar = table.Column<string>(nullable: true),
                     CreatedTime = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -456,7 +456,7 @@ namespace Liuliu.Demo.Web.Migrations
                     RoleId = table.Column<int>(nullable: false),
                     CreatedTime = table.Column<DateTime>(nullable: false),
                     IsLocked = table.Column<bool>(nullable: false),
-                    DeletedTime = table.Column<DateTime>(nullable: true)
+                    DeletedTime = table.Column<DateTime>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -483,7 +483,7 @@ namespace Liuliu.Demo.Web.Migrations
                     UserId = table.Column<int>(nullable: false),
                     LoginProvider = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(nullable: true)
+                    Value = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -506,7 +506,7 @@ namespace Liuliu.Demo.Web.Migrations
                     OriginalValue = table.Column<string>(nullable: true),
                     NewValue = table.Column<string>(nullable: true),
                     DataType = table.Column<string>(nullable: true),
-                    AuditEntityId = table.Column<Guid>(nullable: false)
+                    AuditEntityId = table.Column<Guid>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -525,7 +525,7 @@ namespace Liuliu.Demo.Web.Migrations
                 values: new object[,]
                 {
                     { new Guid("534d7813-0eea-44cc-b88e-a9cb010c6981"), false, "Site.Name", "\"OSHARP\"", "System.String,System.Private.CoreLib" },
-                    { new Guid("977e4bba-97b2-4759-a768-a9cb010c698c"), false, "Site.Description", "\"Osharp with .NetStandard2.0 & Angular6\"", "System.String,System.Private.CoreLib" }
+                    { new Guid("977e4bba-97b2-4759-a768-a9cb010c698c"), false, "Site.Description", "\"Osharp with .NetStandard2.0 & Angular6\"", "System.String,System.Private.CoreLib" },
                 });
 
             migrationBuilder.InsertData(

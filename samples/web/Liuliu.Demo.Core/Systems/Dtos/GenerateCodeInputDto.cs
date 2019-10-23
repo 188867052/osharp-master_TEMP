@@ -13,5 +13,6 @@ namespace Liuliu.Demo.Systems.Dtos
     /// 代码生成输入DTO
     /// </summary>
     public class GenerateCodeInputDto
-    { }
+    {
+    }
 }

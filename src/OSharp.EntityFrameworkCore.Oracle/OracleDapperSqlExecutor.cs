@@ -1,8 +1,5 @@
-﻿using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
+﻿using System.Data;
+using Oracle.ManagedDataAccess.Client;
 
 namespace OSharp.Entity.Oracle
 {
@@ -18,7 +15,8 @@ namespace OSharp.Entity.Oracle
         /// </summary>
         public OracleDapperSqlExecutor(IUnitOfWorkManager unitOfWorkManager)
             : base(unitOfWorkManager)
-        { }
+        {
+        }
 
         /// <summary>
         /// 获取 数据库类型
@@ -35,5 +33,4 @@ namespace OSharp.Entity.Oracle
             return new OracleConnection(connectionString);
         }
     }
-
 }

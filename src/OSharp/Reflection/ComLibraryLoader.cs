@@ -12,7 +12,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
 
-
 namespace OSharp.Reflection
 {
     /// <summary>
@@ -36,7 +35,7 @@ namespace OSharp.Reflection
         /// <returns></returns>
         public object CreateObjectFromPath(string dllPath, Guid clsid, bool comFallback)
         {
-            return CreateObjectFromPath(dllPath, clsid, false, comFallback);
+            return this.CreateObjectFromPath(dllPath, clsid, false, comFallback);
         }
 
         /// <summary>
@@ -49,21 +48,23 @@ namespace OSharp.Reflection
         /// <returns>创建的Com对象</returns>
         public object CreateObjectFromPath(string dllPath, Guid clsid, bool setSearchPath, bool comFallback)
         {
-            if (File.Exists(dllPath) && (_preferURObjects || !comFallback))
+            if (File.Exists(dllPath) && (this._preferURObjects || !comFallback))
             {
                 if (setSearchPath)
                 {
                     NativeMethods.SetDllDirectory(Path.GetDirectoryName(dllPath));
                 }
-                _lib = NativeMethods.LoadLibrary(dllPath);
+
+                this._lib = NativeMethods.LoadLibrary(dllPath);
                 if (setSearchPath)
                 {
                     NativeMethods.SetDllDirectory(null);
                 }
-                if (_lib != IntPtr.Zero)
+
+                if (this._lib != IntPtr.Zero)
                 {
-                    //we need to cache the handle so the COM object will work and we can clean up later
-                    IntPtr ptr = NativeMethods.GetProcAddress(_lib, "DllGetClassObject");
+                    // we need to cache the handle so the COM object will work and we can clean up later
+                    IntPtr ptr = NativeMethods.GetProcAddress(this._lib, "DllGetClassObject");
                     if (ptr != IntPtr.Zero)
                     {
                         if (Marshal.GetDelegateForFunctionPointer(ptr, typeof(DllGetClassObjectInvoker)) is DllGetClassObjectInvoker invoker)
@@ -85,6 +86,7 @@ namespace OSharp.Reflection
                     }
                 }
             }
+
             if (!comFallback)
             {
                 throw new Win32Exception();
@@ -93,13 +95,13 @@ namespace OSharp.Reflection
             Type type = Type.GetTypeFromCLSID(clsid);
             return Activator.CreateInstance(type);
         }
-        
+
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()
         {
-            NativeMethods.FreeLibrary(_lib);
+            NativeMethods.FreeLibrary(this._lib);
             GC.SuppressFinalize(this);
         }
     }

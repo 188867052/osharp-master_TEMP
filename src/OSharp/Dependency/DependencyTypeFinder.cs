@@ -13,7 +13,6 @@ using System.Linq;
 using OSharp.Finders;
 using OSharp.Reflection;
 
-
 namespace OSharp.Dependency
 {
     /// <summary>
@@ -28,7 +27,7 @@ namespace OSharp.Dependency
         /// </summary>
         public DependencyTypeFinder(IAllAssemblyFinder allAssemblyFinder)
         {
-            _allAssemblyFinder = allAssemblyFinder;
+            this._allAssemblyFinder = allAssemblyFinder;
         }
 
         /// <summary>
@@ -38,7 +37,7 @@ namespace OSharp.Dependency
         protected override Type[] FindAllItems()
         {
             Type[] baseTypes = new[] { typeof(ISingletonDependency), typeof(IScopeDependency), typeof(ITransientDependency) };
-            Type[] types = _allAssemblyFinder.FindAll(true).SelectMany(assembly => assembly.GetTypes())
+            Type[] types = this._allAssemblyFinder.FindAll(true).SelectMany(assembly => assembly.GetTypes())
                 .Where(type => type.IsClass && !type.IsAbstract && !type.IsInterface && !type.HasAttribute<IgnoreDependencyAttribute>()
                     && (baseTypes.Any(b => b.IsAssignableFrom(type)) || type.HasAttribute<DependencyAttribute>()))
                 .ToArray();

@@ -2,7 +2,6 @@
 
 using Xunit;
 
-
 namespace OSharp.UnitTest.Infrastructure
 {
     public static class AssertExtensions

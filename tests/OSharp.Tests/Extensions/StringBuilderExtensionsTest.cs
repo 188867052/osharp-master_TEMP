@@ -4,13 +4,11 @@ using OSharp.Extensions;
 
 using Xunit;
 
-
 namespace OSharp.Tests.Extensions
 {
-    
     public class StringBuilderExtensionsTest
     {
-        [Fact()]
+        [Fact]
         public void TrimTest()
         {
             StringBuilder sb = null;
@@ -18,7 +16,7 @@ namespace OSharp.Tests.Extensions
             Assert.Equal("asd sdf", sb.Trim().ToString());
         }
 
-        [Fact()]
+        [Fact]
         public void TrimStartTest()
         {
             StringBuilder sb = new StringBuilder("asdfgef");
@@ -29,7 +27,7 @@ namespace OSharp.Tests.Extensions
             Assert.Equal(sb.TrimStart("gef").ToString(), string.Empty);
         }
 
-        [Fact()]
+        [Fact]
         public void TrimEndTest()
         {
             StringBuilder sb;

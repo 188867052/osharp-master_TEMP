@@ -1,10 +1,9 @@
 ﻿using Xunit;
 namespace OSharp.Security.Tests
 {
-    
     public class HashHelperTests
     {
-        [Fact()]
+        [Fact]
         public void GetMd5Test()
         {
             const string value = "admin";
@@ -12,7 +11,7 @@ namespace OSharp.Security.Tests
             Assert.Equal(HashHelper.GetMd5(value), actual);
         }
 
-        [Fact()]
+        [Fact]
         public void GetSha1Test()
         {
             const string value = "admin";
@@ -20,7 +19,7 @@ namespace OSharp.Security.Tests
             Assert.Equal(HashHelper.GetSha1(value), actual);
         }
 
-        [Fact()]
+        [Fact]
         public void GetSha256Test()
         {
             const string value = "admin";
@@ -28,7 +27,7 @@ namespace OSharp.Security.Tests
             Assert.Equal(HashHelper.GetSha256(value), actual);
         }
 
-        [Fact()]
+        [Fact]
         public void GetSha512Test()
         {
             const string value = "admin";

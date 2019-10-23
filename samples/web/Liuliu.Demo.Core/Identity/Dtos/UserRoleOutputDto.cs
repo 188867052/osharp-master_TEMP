@@ -1,19 +1,7 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="UserRoleOutputDto.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2018 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2018-06-27 4:44</last-date>
-// -----------------------------------------------------------------------
-
-using System;
-
+﻿using System;
 using Liuliu.Demo.Identity.Entities;
-
 using OSharp.Entity;
 using OSharp.Mapping;
-
 
 namespace Liuliu.Demo.Identity.Dtos
 {
@@ -26,13 +14,13 @@ namespace Liuliu.Demo.Identity.Dtos
         /// <summary>
         /// 初始化一个<see cref="UserRoleOutputDto"/>类型的新实例
         /// </summary>
-        public UserRoleOutputDto(UserRole ur)
+        public UserRoleOutputDto(UserRole entity)
         {
-            Id = ur.Id;
-            UserId = ur.UserId;
-            RoleId = ur.RoleId;
-            IsLocked = ur.IsLocked;
-            CreatedTime = ur.CreatedTime;
+            this.Id = entity.Id;
+            this.UserId = entity.UserId;
+            this.RoleId = entity.RoleId;
+            this.IsLocked = entity.IsLocked;
+            this.CreatedTime = entity.CreatedTime;
         }
 
         /// <summary>
@@ -70,8 +58,6 @@ namespace Liuliu.Demo.Identity.Dtos
         /// </summary>
         public string RoleName { get; set; }
 
-        #region Implementation of IDataAuthEnabled
-
         /// <summary>
         /// 获取或设置 是否可更新的数据权限状态
         /// </summary>
@@ -81,7 +67,5 @@ namespace Liuliu.Demo.Identity.Dtos
         /// 获取或设置 是否可删除的数据权限状态
         /// </summary>
         public bool Deletable { get; set; }
-
-        #endregion
     }
 }

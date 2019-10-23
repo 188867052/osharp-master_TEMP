@@ -14,7 +14,6 @@ using System.Reflection;
 
 using OSharp.Reflection;
 
-
 namespace OSharp.CodeGenerator
 {
     /// <summary>
@@ -26,7 +25,8 @@ namespace OSharp.CodeGenerator
         /// 初始化一个<see cref="PropertyMetadata"/>类型的新实例
         /// </summary>
         public PropertyMetadata()
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="PropertyMetadata"/>类型的新实例
@@ -38,38 +38,42 @@ namespace OSharp.CodeGenerator
                 return;
             }
 
-            Name = property.Name;
-            TypeName = property.PropertyType.FullName;
-            Display = property.GetDescription();
+            this.Name = property.Name;
+            this.TypeName = property.PropertyType.FullName;
+            this.Display = property.GetDescription();
             RequiredAttribute required = property.GetAttribute<RequiredAttribute>();
             if (required != null)
             {
-                IsRequired = !required.AllowEmptyStrings;
+                this.IsRequired = !required.AllowEmptyStrings;
             }
+
             StringLengthAttribute stringLength = property.GetAttribute<StringLengthAttribute>();
             if (stringLength != null)
             {
-                MaxLength = stringLength.MaximumLength;
-                MinLength = stringLength.MinimumLength;
+                this.MaxLength = stringLength.MaximumLength;
+                this.MinLength = stringLength.MinimumLength;
             }
             else
             {
-                MaxLength = property.GetAttribute<MaxLengthAttribute>()?.Length;
-                MinLength = property.GetAttribute<MinLengthAttribute>()?.Length;
+                this.MaxLength = property.GetAttribute<MaxLengthAttribute>()?.Length;
+                this.MinLength = property.GetAttribute<MinLengthAttribute>()?.Length;
             }
+
             RangeAttribute range = property.GetAttribute<RangeAttribute>();
             if (range != null)
             {
-                Range = new[] { range.Minimum, range.Maximum };
-                Max = range.Maximum;
-                Min = range.Minimum;
+                this.Range = new[] { range.Minimum, range.Maximum };
+                this.Max = range.Maximum;
+                this.Min = range.Minimum;
             }
-            IsNullable = property.PropertyType.IsNullableType();
-            if (IsNullable)
+
+            this.IsNullable = property.PropertyType.IsNullableType();
+            if (this.IsNullable)
             {
-                TypeName = property.PropertyType.GetUnNullableType().FullName;
+                this.TypeName = property.PropertyType.GetUnNullableType().FullName;
             }
-            //枚举类型，作为数值类型返回
+
+            // 枚举类型，作为数值类型返回
             if (property.PropertyType.IsEnum)
             {
                 Type enumType = property.PropertyType;
@@ -77,11 +81,11 @@ namespace OSharp.CodeGenerator
                 Enum[] enumItems = values.Cast<Enum>().ToArray();
                 if (enumItems.Length > 0)
                 {
-                    EnumMetadatas = enumItems.Select(m => new EnumMetadata(m)).ToArray();
+                    this.EnumMetadatas = enumItems.Select(m => new EnumMetadata(m)).ToArray();
                 }
             }
         }
-        
+
         /// <summary>
         /// 获取或设置 属性名称
         /// </summary>
@@ -138,11 +142,11 @@ namespace OSharp.CodeGenerator
         public EnumMetadata[] EnumMetadatas { get; set; }
 
         /// <summary>
-        /// 是否有验证属性 
+        /// 是否有验证属性
         /// </summary>
         public bool HasValidateAttribute()
         {
-            return IsRequired.HasValue || MaxLength.HasValue || MinLength.HasValue || Range != null || Max != null || Min != null;
+            return this.IsRequired.HasValue || this.MaxLength.HasValue || this.MinLength.HasValue || this.Range != null || this.Max != null || this.Min != null;
         }
     }
 }

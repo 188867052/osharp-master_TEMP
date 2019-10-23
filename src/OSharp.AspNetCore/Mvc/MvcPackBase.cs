@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------
 
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,7 +16,6 @@ using Newtonsoft.Json.Serialization;
 using OSharp.AspNetCore.Mvc.Conventions;
 using OSharp.AspNetCore.Mvc.Filters;
 using OSharp.Core.Packs;
-
 
 namespace OSharp.AspNetCore.Mvc
 {
@@ -39,7 +37,7 @@ namespace OSharp.AspNetCore.Mvc
         /// <returns></returns>
         public override IServiceCollection AddServices(IServiceCollection services)
         {
-            services = AddCors(services);
+            services = this.AddCors(services);
 
 #if NETCOREAPP3_0
             services.AddControllersWithViews(options =>
@@ -78,13 +76,13 @@ namespace OSharp.AspNetCore.Mvc
         {
 #if NETCOREAPP3_0
             app.UseRouting();
-            UseCors(app);
-#else   
-            UseCors(app);
+            this.UseCors(app);
+#else
+            this.UseCors(app);
             app.UseMvcWithAreaRoute();
 #endif
 
-            IsEnabled = true;
+            this.IsEnabled = true;
         }
 
         /// <summary>

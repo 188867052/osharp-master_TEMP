@@ -19,7 +19,6 @@ using OSharp.Data;
 using OSharp.Dependency;
 using OSharp.Entity;
 
-
 namespace OSharp.AspNetCore.Mvc.Filters
 {
     internal class UnitOfWorkFilterImpl : IActionFilter
@@ -32,8 +31,8 @@ namespace OSharp.AspNetCore.Mvc.Filters
         /// </summary>
         public UnitOfWorkFilterImpl(IServiceProvider serviceProvider)
         {
-            _unitOfWorkManager = serviceProvider.GetService<IUnitOfWorkManager>();
-            _logger = serviceProvider.GetLogger<UnitOfWorkFilterImpl>();
+            this._unitOfWorkManager = serviceProvider.GetService<IUnitOfWorkManager>();
+            this._logger = serviceProvider.GetLogger<UnitOfWorkFilterImpl>();
         }
 
         /// <summary>
@@ -41,7 +40,8 @@ namespace OSharp.AspNetCore.Mvc.Filters
         /// </summary>
         /// <param name="context">The <see cref="T:Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext" />.</param>
         public void OnActionExecuting(ActionExecutingContext context)
-        { }
+        {
+        }
 
         /// <summary>
         /// Called after the action executes, before the action result.
@@ -55,7 +55,7 @@ namespace OSharp.AspNetCore.Mvc.Filters
             if (context.Exception != null && !context.ExceptionHandled)
             {
                 Exception ex = context.Exception;
-                _logger.LogError(new EventId(), ex, ex.Message);
+                this._logger.LogError(new EventId(), ex, ex.Message);
                 message = ex.Message;
                 if (context.HttpContext.Request.IsAjaxRequest() || context.HttpContext.Request.IsJsonContextType())
                 {
@@ -63,9 +63,11 @@ namespace OSharp.AspNetCore.Mvc.Filters
                     {
                         context.Result = new JsonResult(new AjaxResult(ex.Message, AjaxResultType.Error));
                     }
+
                     context.ExceptionHandled = true;
                 }
             }
+
             if (context.Result is JsonResult result1)
             {
                 if (result1.Value is AjaxResult ajax)
@@ -74,7 +76,7 @@ namespace OSharp.AspNetCore.Mvc.Filters
                     message = ajax.Content;
                     if (ajax.Succeeded())
                     {
-                        _unitOfWorkManager?.Commit();
+                        this._unitOfWorkManager?.Commit();
                     }
                 }
             }
@@ -86,15 +88,16 @@ namespace OSharp.AspNetCore.Mvc.Filters
                     message = ajax.Content;
                     if (ajax.Succeeded())
                     {
-                        _unitOfWorkManager?.Commit();
+                        this._unitOfWorkManager?.Commit();
                     }
                 }
                 else
                 {
-                    _unitOfWorkManager?.Commit();
+                    this._unitOfWorkManager?.Commit();
                 }
             }
-            //普通请求
+
+            // 普通请求
             else if (context.HttpContext.Response.StatusCode >= 400)
             {
                 switch (context.HttpContext.Response.StatusCode)
@@ -119,7 +122,7 @@ namespace OSharp.AspNetCore.Mvc.Filters
             else
             {
                 type = AjaxResultType.Success;
-                _unitOfWorkManager?.Commit();
+                this._unitOfWorkManager?.Commit();
             }
 
             if (dict.AuditOperation != null)

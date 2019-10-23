@@ -10,7 +10,6 @@ using System;
 using System.Runtime.ExceptionServices;
 using System.Text;
 
-
 namespace OSharp.Exceptions
 {
     /// <summary>
@@ -35,6 +34,7 @@ namespace OSharp.Exceptions
                 {
                     appString += "  ";
                 }
+
                 sb.AppendLine(string.Format("{0}异常消息：{1}", appString, e.Message));
                 sb.AppendLine(string.Format("{0}异常类型：{1}", appString, e.GetType().FullName));
                 sb.AppendLine(string.Format("{0}异常方法：{1}", appString, (e.TargetSite == null ? null : e.TargetSite.Name)));
@@ -43,13 +43,16 @@ namespace OSharp.Exceptions
                 {
                     sb.AppendLine(string.Format("{0}异常堆栈：{1}", appString, e.StackTrace));
                 }
+
                 if (e.InnerException != null)
                 {
                     sb.AppendLine(string.Format("{0}内部异常：", appString));
                     count++;
                 }
+
                 e = e.InnerException;
             }
+
             return sb.ToString();
         }
 

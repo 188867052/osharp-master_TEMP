@@ -18,7 +18,6 @@ using Microsoft.Extensions.Options;
 
 using OSharp.Logging.RollingFile.Internal;
 
-
 namespace OSharp.Logging.RollingFile
 {
     /// <summary>
@@ -34,29 +33,29 @@ namespace OSharp.Logging.RollingFile
         private readonly string _path;
 
         /// <summary>
-        /// Creates an instance of the <see cref="FileLoggerProvider" /> 
+        /// Creates an instance of the <see cref="FileLoggerProvider" />
         /// </summary>
         /// <param name="options">The options object controlling the logger</param>
         public FileLoggerProvider(IOptions<FileLoggerOptions> options)
             : base(options)
         {
             var loggerOptions = options.Value;
-            _path = loggerOptions.LogDirectory;
-            _fileName = loggerOptions.FileName;
-            _maxFileSize = loggerOptions.FileSizeLimit;
-            _maxRetainedFiles = loggerOptions.RetainedFileCountLimit;
+            this._path = loggerOptions.LogDirectory;
+            this._fileName = loggerOptions.FileName;
+            this._maxFileSize = loggerOptions.FileSizeLimit;
+            this._maxRetainedFiles = loggerOptions.RetainedFileCountLimit;
         }
 
         /// <inheritdoc />
         protected override async Task WriteMessagesAsync(IEnumerable<LogMessageEntry> messages, CancellationToken cancellationToken)
         {
-            Directory.CreateDirectory(_path);
+            Directory.CreateDirectory(this._path);
 
-            foreach (var group in messages.GroupBy(GetGrouping))
+            foreach (var group in messages.GroupBy(this.GetGrouping))
             {
-                var fullName = GetFullName(group.Key);
+                var fullName = this.GetFullName(group.Key);
                 var fileInfo = new FileInfo(fullName);
-                if (_maxFileSize > 0 && fileInfo.Exists && fileInfo.Length > _maxFileSize)
+                if (this._maxFileSize > 0 && fileInfo.Exists && fileInfo.Length > this._maxFileSize)
                 {
                     return;
                 }
@@ -70,12 +69,12 @@ namespace OSharp.Logging.RollingFile
                 }
             }
 
-            RollFiles();
+            this.RollFiles();
         }
 
         private string GetFullName((int Year, int Month, int Day) group)
         {
-            return Path.Combine(_path, $"{_fileName}{group.Year:0000}{group.Month:00}{group.Day:00}.txt");
+            return Path.Combine(this._path, $"{this._fileName}{group.Year:0000}{group.Month:00}{group.Day:00}.txt");
         }
 
         private (int Year, int Month, int Day) GetGrouping(LogMessageEntry message)
@@ -88,12 +87,12 @@ namespace OSharp.Logging.RollingFile
         /// </summary>
         protected void RollFiles()
         {
-            if (_maxRetainedFiles > 0)
+            if (this._maxRetainedFiles > 0)
             {
-                var files = new DirectoryInfo(_path)
-                    .GetFiles(_fileName + "*")
+                var files = new DirectoryInfo(this._path)
+                    .GetFiles(this._fileName + "*")
                     .OrderByDescending(f => f.Name)
-                    .Skip(_maxRetainedFiles.Value);
+                    .Skip(this._maxRetainedFiles.Value);
 
                 foreach (var item in files)
                 {

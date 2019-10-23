@@ -18,7 +18,6 @@ using Newtonsoft.Json.Serialization;
 
 using OSharp.Core.Packs;
 
-
 namespace OSharp.AspNetCore.SignalR
 {
     /// <summary>
@@ -49,7 +48,7 @@ namespace OSharp.AspNetCore.SignalR
             services.TryAddSingleton<IConnectionUserCache, ConnectionUserCache>();
 
             ISignalRServerBuilder builder = services.AddSignalR();
-            Action<ISignalRServerBuilder> buildAction = GetSignalRServerBuildAction(services);
+            Action<ISignalRServerBuilder> buildAction = this.GetSignalRServerBuildAction(services);
             buildAction?.Invoke(builder);
 
             return services;
@@ -78,7 +77,7 @@ namespace OSharp.AspNetCore.SignalR
         /// <param name="app">Asp应用程序构建器</param>
         public override void UsePack(IApplicationBuilder app)
         {
-            Action<HubRouteBuilder> hubRouteBuildAction = GetHubRouteBuildAction(app.ApplicationServices);
+            Action<HubRouteBuilder> hubRouteBuildAction = this.GetHubRouteBuildAction(app.ApplicationServices);
             app.UseSignalR(hubRouteBuildAction);
         }
 

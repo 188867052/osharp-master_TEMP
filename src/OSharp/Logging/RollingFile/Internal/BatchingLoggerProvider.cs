@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-
 namespace OSharp.Logging.RollingFile.Internal
 {
-//power by https://github.com/andrewlock/NetEscapades.Extensions.Logging
+// power by https://github.com/andrewlock/NetEscapades.Extensions.Logging
     public abstract class BatchingLoggerProvider : ILoggerProvider
     {
         private readonly List<LogMessageEntry> _currentBatch = new List<LogMessageEntry>();
@@ -30,47 +29,48 @@ namespace OSharp.Logging.RollingFile.Internal
             {
                 throw new ArgumentOutOfRangeException(nameof(loggerOptions.BatchSize), $"{nameof(loggerOptions.BatchSize)} must be a positive number.");
             }
+
             if (loggerOptions.FlushPeriod <= TimeSpan.Zero)
             {
                 throw new ArgumentOutOfRangeException(nameof(loggerOptions.FlushPeriod), $"{nameof(loggerOptions.FlushPeriod)} must be longer than zero.");
             }
 
-            _interval = loggerOptions.FlushPeriod;
-            _batchSize = loggerOptions.BatchSize;
-            _queueSize = loggerOptions.BackgroundQueueSize;
+            this._interval = loggerOptions.FlushPeriod;
+            this._batchSize = loggerOptions.BatchSize;
+            this._queueSize = loggerOptions.BackgroundQueueSize;
 
-            Start();
+            this.Start();
         }
 
         protected abstract Task WriteMessagesAsync(IEnumerable<LogMessageEntry> messages, CancellationToken token);
 
         private async Task ProcessLogQueue(object state)
         {
-            while (!_cancellationTokenSource.IsCancellationRequested)
+            while (!this._cancellationTokenSource.IsCancellationRequested)
             {
-                var limit = _batchSize ?? int.MaxValue;
+                var limit = this._batchSize ?? int.MaxValue;
 
-                while (limit > 0 && _messageQueue.TryTake(out var message))
+                while (limit > 0 && this._messageQueue.TryTake(out var message))
                 {
-                    _currentBatch.Add(message);
+                    this._currentBatch.Add(message);
                     limit--;
                 }
 
-                if (_currentBatch.Count > 0)
+                if (this._currentBatch.Count > 0)
                 {
                     try
                     {
-                        await WriteMessagesAsync(_currentBatch, _cancellationTokenSource.Token);
+                        await this.WriteMessagesAsync(this._currentBatch, this._cancellationTokenSource.Token);
                     }
                     catch
                     {
                         // ignored
                     }
 
-                    _currentBatch.Clear();
+                    this._currentBatch.Clear();
                 }
 
-                await IntervalAsync(_interval, _cancellationTokenSource.Token);
+                await this.IntervalAsync(this._interval, this._cancellationTokenSource.Token);
             }
         }
 
@@ -81,40 +81,40 @@ namespace OSharp.Logging.RollingFile.Internal
 
         internal void AddMessage(DateTimeOffset timestamp, string message)
         {
-            if (!_messageQueue.IsAddingCompleted)
+            if (!this._messageQueue.IsAddingCompleted)
             {
                 try
                 {
-                    _messageQueue.Add(new LogMessageEntry { Message = message, Timestamp = timestamp }, _cancellationTokenSource.Token);
+                    this._messageQueue.Add(new LogMessageEntry { Message = message, Timestamp = timestamp }, this._cancellationTokenSource.Token);
                 }
                 catch
                 {
-                    //cancellation token canceled or CompleteAdding called
+                    // cancellation token canceled or CompleteAdding called
                 }
             }
         }
 
         private void Start()
         {
-            _messageQueue = _queueSize == null ?
+            this._messageQueue = this._queueSize == null ?
                 new BlockingCollection<LogMessageEntry>(new ConcurrentQueue<LogMessageEntry>()) :
-                new BlockingCollection<LogMessageEntry>(new ConcurrentQueue<LogMessageEntry>(), _queueSize.Value);
+                new BlockingCollection<LogMessageEntry>(new ConcurrentQueue<LogMessageEntry>(), this._queueSize.Value);
 
-            _cancellationTokenSource = new CancellationTokenSource();
-            _outputTask = Task.Factory.StartNew<Task>(
-                ProcessLogQueue,
+            this._cancellationTokenSource = new CancellationTokenSource();
+            this._outputTask = Task.Factory.StartNew<Task>(
+                this.ProcessLogQueue,
                 null,
                 TaskCreationOptions.LongRunning);
         }
 
         private void Stop()
         {
-            _cancellationTokenSource.Cancel();
-            _messageQueue.CompleteAdding();
+            this._cancellationTokenSource.Cancel();
+            this._messageQueue.CompleteAdding();
 
             try
             {
-                _outputTask.Wait(_interval);
+                this._outputTask.Wait(this._interval);
             }
             catch (TaskCanceledException)
             {
@@ -126,7 +126,7 @@ namespace OSharp.Logging.RollingFile.Internal
 
         public void Dispose()
         {
-            Stop();
+            this.Stop();
         }
 
         public ILogger CreateLogger(string categoryName)

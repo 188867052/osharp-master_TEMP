@@ -23,7 +23,6 @@ using OSharp.Dependency;
 using OSharp.Exceptions;
 using OSharp.Reflection;
 
-
 namespace OSharp.Entity
 {
     /// <summary>
@@ -42,7 +41,7 @@ namespace OSharp.Entity
         /// </summary>
         public EntityManager(IEntityConfigurationTypeFinder typeFinder)
         {
-            _typeFinder = typeFinder;
+            this._typeFinder = typeFinder;
         }
 
         /// <summary>
@@ -50,9 +49,9 @@ namespace OSharp.Entity
         /// </summary>
         public virtual void Initialize()
         {
-            var dict = _entityRegistersDict;
-            Type[] types = _typeFinder.FindAll(true);
-            if (types.Length == 0 || _initialized)
+            var dict = this._entityRegistersDict;
+            Type[] types = this._typeFinder.FindAll(true);
+            if (types.Length == 0 || this._initialized)
             {
                 return;
             }
@@ -69,7 +68,7 @@ namespace OSharp.Entity
                 dict[key] = list.ToArray();
             }
 
-            //添加框架的一些默认实体的实体映射信息（如果不存在）
+            // 添加框架的一些默认实体的实体映射信息（如果不存在）
             key = typeof(DefaultDbContext);
             if (dict.ContainsKey(key))
             {
@@ -79,7 +78,7 @@ namespace OSharp.Entity
                 dict[key] = list.ToArray();
             }
 
-            _initialized = true;
+            this._initialized = true;
         }
 
         /// <summary>
@@ -89,7 +88,7 @@ namespace OSharp.Entity
         /// <returns></returns>
         public virtual IEntityRegister[] GetEntityRegisters(Type dbContextType)
         {
-            return _entityRegistersDict.ContainsKey(dbContextType) ? _entityRegistersDict[dbContextType] : new IEntityRegister[0];
+            return this._entityRegistersDict.ContainsKey(dbContextType) ? this._entityRegistersDict[dbContextType] : new IEntityRegister[0];
         }
 
         /// <summary>
@@ -99,13 +98,13 @@ namespace OSharp.Entity
         /// <returns>数据上下文类型</returns>
         public virtual Type GetDbContextTypeForEntity(Type entityType)
         {
-            var dict = _entityRegistersDict;
+            var dict = this._entityRegistersDict;
             if (dict.Count == 0)
             {
                 throw new OsharpException($"未发现任何数据上下文实体映射配置，请通过对各个实体继承基类“EntityTypeConfigurationBase<TEntity, TKey>”以使实体加载到上下文中");
             }
 
-            foreach (var item in _entityRegistersDict)
+            foreach (var item in this._entityRegistersDict)
             {
                 if (item.Value.Any(m => m.EntityType == entityType))
                 {
@@ -115,7 +114,6 @@ namespace OSharp.Entity
 
             throw new OsharpException($"无法获取实体类“{entityType}”的所属上下文类型，请通过继承基类“EntityTypeConfigurationBase<TEntity, TKey>”配置实体加载到上下文中");
         }
-
 
         private class EntityInfoConfiguration : EntityTypeConfigurationBase<EntityInfo, Guid>
         {
@@ -128,7 +126,6 @@ namespace OSharp.Entity
                 builder.HasIndex(m => m.TypeName).HasName("ClassFullNameIndex").IsUnique();
             }
         }
-
 
         private class FunctionConfiguration : EntityTypeConfigurationBase<Function, Guid>
         {

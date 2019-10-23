@@ -10,7 +10,6 @@
 using System.Xml;
 using System.Xml.Linq;
 
-
 namespace OSharp.Linq
 {
     /// <summary>
@@ -29,6 +28,7 @@ namespace OSharp.Linq
             {
                 node.WriteTo(xmlWriter);
             }
+
             return xdoc.Root;
         }
 

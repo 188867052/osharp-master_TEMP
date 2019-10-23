@@ -25,7 +25,6 @@ using OSharp.Core.Functions;
 using OSharp.Core.Modules;
 using OSharp.Security;
 
-
 namespace Liuliu.Demo.Web.Controllers
 {
     [Description("网站-授权")]
@@ -39,8 +38,8 @@ namespace Liuliu.Demo.Web.Controllers
             SecurityManager securityManager,
             ILoggerFactory loggerFactory)
         {
-            _securityManager = securityManager;
-            _logger = loggerFactory.CreateLogger<SecurityController>();
+            this._securityManager = securityManager;
+            this._logger = loggerFactory.CreateLogger<SecurityController>();
         }
 
         /// <summary>
@@ -66,15 +65,16 @@ namespace Liuliu.Demo.Web.Controllers
         [Description("获取授权信息")]
         public List<string> GetAuthInfo()
         {
-            Module[] modules = _securityManager.Modules.ToArray();
+            Module[] modules = this._securityManager.Modules.ToArray();
             List<AuthItem> list = new List<AuthItem>();
             foreach (Module module in modules)
             {
-                if (CheckFuncAuth(module, out bool empty))
+                if (this.CheckFuncAuth(module, out bool empty))
                 {
                     list.Add(new AuthItem { Code = GetModuleTreeCode(module, modules), HasFunc = !empty });
                 }
             }
+
             List<string> codes = new List<string>();
             foreach (AuthItem item in list)
             {
@@ -87,6 +87,7 @@ namespace Liuliu.Demo.Web.Controllers
                     codes.Add(item.Code);
                 }
             }
+
             return codes;
         }
 
@@ -98,10 +99,10 @@ namespace Liuliu.Demo.Web.Controllers
         /// <returns></returns>
         private bool CheckFuncAuth(Module module, out bool empty)
         {
-            IServiceProvider services = HttpContext.RequestServices;
+            IServiceProvider services = this.HttpContext.RequestServices;
             IFunctionAuthorization authorization = services.GetService<IFunctionAuthorization>();
-          
-            Function[] functions = _securityManager.ModuleFunctions.Where(m => m.ModuleId == module.Id).Select(m => m.Function).ToArray();
+
+            Function[] functions = this._securityManager.ModuleFunctions.Where(m => m.ModuleId == module.Id).Select(m => m.Function).ToArray();
             empty = functions.Length == 0;
             if (empty)
             {
@@ -110,11 +111,12 @@ namespace Liuliu.Demo.Web.Controllers
 
             foreach (Function function in functions)
             {
-                if (!authorization.Authorize(function, User).IsOk)
+                if (!authorization.Authorize(function, this.User).IsOk)
                 {
                     return false;
                 }
             }
+
             return true;
         }
 
@@ -127,7 +129,6 @@ namespace Liuliu.Demo.Web.Controllers
             string[] names = pathIds.Select(m => source.First(n => n.Id == m)).Select(m => m.Code).ToArray();
             return names.ExpandAndToString(".");
         }
-
 
         private class AuthItem
         {

@@ -7,9 +7,6 @@
 //  <last-date>2018-05-11 1:05</last-date>
 // -----------------------------------------------------------------------
 
-using OSharp.Core.Functions;
-
-
 namespace OSharp.Security
 {
     /// <summary>
@@ -22,6 +19,7 @@ namespace OSharp.Security
         /// </summary>
         public FunctionAuthorization(IFunctionAuthCache functionAuthCache)
             : base(functionAuthCache)
-        { }
+        {
+        }
     }
 }

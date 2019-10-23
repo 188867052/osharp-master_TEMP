@@ -12,10 +12,7 @@ using System.Linq;
 using System.Reflection;
 
 using Microsoft.Extensions.DependencyModel;
-
-using OSharp.Collections;
 using OSharp.Extensions;
-
 
 namespace OSharp.Reflection
 {
@@ -55,7 +52,7 @@ namespace OSharp.Reflection
                 "Microsoft.Extensions.Configuration.Binder",
                 "Microsoft.Extensions.DependencyInjection",
                 "Microsoft.Extensions.DependencyInjection.Abstractions",
-                "Microsoft.Extensions.Configuration.Abstractions"
+                "Microsoft.Extensions.Configuration.Abstractions",
             };
             CompilationLibrary lib = null;
             foreach (string dllName in dllNames)
@@ -66,6 +63,7 @@ namespace OSharp.Reflection
                     break;
                 }
             }
+
             string cliVersion = lib?.Version;
             return cliVersion;
         }

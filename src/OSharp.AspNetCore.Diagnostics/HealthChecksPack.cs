@@ -9,7 +9,6 @@
 
 using System.ComponentModel;
 
-
 namespace OSharp.AspNetCore.Diagnostics
 {
     /// <summary>
@@ -17,5 +16,6 @@ namespace OSharp.AspNetCore.Diagnostics
     /// </summary>
     [Description("HealthChecks模块")]
     public class HealthChecksPack : HealthChecksPackBase
-    { }
+    {
+    }
 }

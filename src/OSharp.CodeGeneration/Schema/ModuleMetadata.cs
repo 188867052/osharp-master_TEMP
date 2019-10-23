@@ -11,7 +11,6 @@ using System.Collections.Generic;
 
 using OSharp.Collections;
 
-
 namespace OSharp.CodeGeneration.Schema
 {
     /// <summary>
@@ -36,10 +35,10 @@ namespace OSharp.CodeGeneration.Schema
         /// </summary>
         public ProjectMetadata Project
         {
-            get => _project;
+            get => this._project;
             set
             {
-                _project = value;
+                this._project = value;
                 value.Modules.AddIfNotExist(this);
             }
         }
@@ -47,7 +46,7 @@ namespace OSharp.CodeGeneration.Schema
         /// <summary>
         /// 获取 模块命名空间
         /// </summary>
-        public string Namespace => $"{Project?.NamespacePrefix}.{Name}";
+        public string Namespace => $"{this.Project?.NamespacePrefix}.{this.Name}";
 
         /// <summary>
         /// 获取或设置 实体元数据集合

@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 using OSharp.Data;
 using OSharp.Dependency;
 
-
 namespace OSharp.Security
 {
     /// <summary>
@@ -24,8 +23,6 @@ namespace OSharp.Security
     [IgnoreDependency]
     public interface IModuleUserStore<TModuleUser, in TUserKey, TModuleKey>
     {
-        #region 模块用户信息业务
-
         /// <summary>
         /// 获取 模块用户信息查询数据集
         /// </summary>
@@ -60,7 +57,5 @@ namespace OSharp.Security
         /// <param name="userId">用户编号</param>
         /// <returns>模块编号集合</returns>
         TModuleKey[] GetUserWithRoleModuleIds(TUserKey userId);
-
-        #endregion
     }
 }

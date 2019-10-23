@@ -6,7 +6,6 @@ using Shouldly;
 
 using Xunit;
 
-
 namespace OSharp.Data.Tests
 {
     public class SerializeHelperTests
@@ -16,9 +15,9 @@ namespace OSharp.Data.Tests
         [Fact]
         public void Binary_Test()
         {
-            byte[] bytes = SerializeHelper.ToBinary(_entity);
+            byte[] bytes = SerializeHelper.ToBinary(this._entity);
             TestEntity newEntity = SerializeHelper.FromBinary<TestEntity>(bytes);
-            newEntity.Name.ShouldBe(_entity.Name);
+            newEntity.Name.ShouldBe(this._entity.Name);
         }
 
         [Fact]
@@ -26,17 +25,17 @@ namespace OSharp.Data.Tests
         {
             string file = "bin-test.tmp";
 
-            SerializeHelper.ToBinaryFile(file, _entity);
+            SerializeHelper.ToBinaryFile(file, this._entity);
             TestEntity newEntity = SerializeHelper.FromBinaryFile<TestEntity>(file);
-            newEntity.Name.ShouldBe(_entity.Name);
+            newEntity.Name.ShouldBe(this._entity.Name);
         }
 
         [Fact]
         public void Xml_Test()
         {
-            string xml = SerializeHelper.ToXml(_entity);
+            string xml = SerializeHelper.ToXml(this._entity);
             TestEntity newEntity = SerializeHelper.FromXml<TestEntity>(xml);
-            newEntity.Name.ShouldBe(_entity.Name);
+            newEntity.Name.ShouldBe(this._entity.Name);
         }
 
         [Fact]
@@ -44,9 +43,9 @@ namespace OSharp.Data.Tests
         {
             string file = "xml-test.tmp";
 
-            SerializeHelper.ToXmlFile(file,_entity);
+            SerializeHelper.ToXmlFile(file,this._entity);
             TestEntity newEntity = SerializeHelper.FromXmlFile<TestEntity>(file);
-            newEntity.Name.ShouldBe(_entity.Name);
+            newEntity.Name.ShouldBe(this._entity.Name);
         }
     }
 }

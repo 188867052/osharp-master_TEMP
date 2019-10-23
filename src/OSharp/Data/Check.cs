@@ -1,22 +1,11 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="Check.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2017 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2017-08-16 23:06</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-
 using OSharp.Entity;
 using OSharp.Properties;
-
 
 namespace OSharp.Data
 {
@@ -39,10 +28,12 @@ namespace OSharp.Data
             {
                 return;
             }
+
             if (string.IsNullOrEmpty(message))
             {
                 throw new ArgumentNullException(nameof(message));
             }
+
             TException exception = (TException)Activator.CreateInstance(typeof(TException), message);
             throw exception;
         }
@@ -59,6 +50,7 @@ namespace OSharp.Data
             {
                 throw new ArgumentNullException(nameof(assertionFunc));
             }
+
             Require<Exception>(assertionFunc(value), message);
         }
 
@@ -76,6 +68,7 @@ namespace OSharp.Data
             {
                 throw new ArgumentNullException("assertionFunc");
             }
+
             Require<TException>(assertionFunc(value), message);
         }
 

@@ -7,9 +7,7 @@
 //  <last-date>2018-08-06 10:16</last-date>
 // -----------------------------------------------------------------------
 
-
 using OSharp.Reflection;
-
 
 namespace OSharp.Entity
 {
@@ -23,6 +21,7 @@ namespace OSharp.Entity
         /// </summary>
         public OutputDtoTypeFinder(IAllAssemblyFinder allAssemblyFinder)
             : base(allAssemblyFinder)
-        { }
+        {
+        }
     }
 }

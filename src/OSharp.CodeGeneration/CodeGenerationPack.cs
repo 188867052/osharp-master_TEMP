@@ -1,19 +1,7 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="CodeGenerationPack.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2019 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2019-01-06 22:26</last-date>
-// -----------------------------------------------------------------------
-
-using System.ComponentModel;
-
+﻿using System.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-
 using OSharp.Core.Packs;
-
 
 namespace OSharp.CodeGeneration
 {

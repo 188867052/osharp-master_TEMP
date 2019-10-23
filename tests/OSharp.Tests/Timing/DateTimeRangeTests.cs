@@ -1,13 +1,12 @@
 ﻿using System;
-
-using Xunit;
 using Shouldly;
+using Xunit;
 
 namespace OSharp.Timing.Tests
 {
     public class DateTimeRangeTests
     {
-        [Fact()]
+        [Fact]
         public void DateTimeRangeTest_Ctor()
         {
             DateTimeRange range = new DateTimeRange();
@@ -20,7 +19,7 @@ namespace OSharp.Timing.Tests
             Assert.Equal(9, range.EndTime.Day);
         }
 
-        [Fact()]
+        [Fact]
         public void DateTimeRangeTest_Properties()
         {
             DateTimeRange.Today.StartTime.ShouldBeGreaterThan(DateTimeRange.Yesterday.EndTime);
@@ -42,6 +41,5 @@ namespace OSharp.Timing.Tests
             DateTimeRange.Last7DaysExceptToday.EndTime.ShouldBeLessThan(DateTimeRange.Today.StartTime);
             DateTimeRange.Last30DaysExceptToday.EndTime.ShouldBeLessThan(DateTimeRange.Today.StartTime);
         }
-
     }
 }

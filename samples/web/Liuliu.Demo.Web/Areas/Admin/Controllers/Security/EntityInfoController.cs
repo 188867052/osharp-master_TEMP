@@ -21,7 +21,6 @@ using Microsoft.AspNetCore.Mvc;
 
 using OSharp.AspNetCore.Mvc.Filters;
 using OSharp.AspNetCore.UI;
-using OSharp.Core;
 using OSharp.Core.EntityInfos;
 using OSharp.Core.Modules;
 using OSharp.Data;
@@ -29,7 +28,6 @@ using OSharp.Entity;
 using OSharp.Extensions;
 using OSharp.Filter;
 using OSharp.Security;
-
 
 namespace Liuliu.Demo.Web.Areas.Admin.Controllers
 {
@@ -43,8 +41,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         public EntityInfoController(SecurityManager securityManager,
             IFilterService filterService)
         {
-            _securityManager = securityManager;
-            _filterService = filterService;
+            this._securityManager = securityManager;
+            this._filterService = filterService;
         }
 
         /// <summary>
@@ -60,8 +58,9 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             {
                 request.PageCondition.SortConditions = new[] { new SortCondition("TypeName") };
             }
-            Expression<Func<EntityInfo, bool>> predicate = _filterService.GetExpression<EntityInfo>(request.FilterGroup);
-            var page = _securityManager.EntityInfos.ToPage<EntityInfo, EntityInfoOutputDto>(predicate, request.PageCondition);
+
+            Expression<Func<EntityInfo, bool>> predicate = this._filterService.GetExpression<EntityInfo>(request.FilterGroup);
+            var page = this._securityManager.EntityInfos.ToPage<EntityInfo, EntityInfoOutputDto>(predicate, request.PageCondition);
             return page.ToPageData();
         }
 
@@ -74,7 +73,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         [Description("读取节点")]
         public List<EntityInfoNode> ReadNode()
         {
-            List<EntityInfoNode> nodes = _securityManager.EntityInfos.OrderBy(m => m.TypeName).ToOutput<EntityInfo, EntityInfoNode>().ToList();
+            List<EntityInfoNode> nodes = this._securityManager.EntityInfos.OrderBy(m => m.TypeName).ToOutput<EntityInfo, EntityInfoNode>().ToList();
             return nodes;
         }
 
@@ -88,11 +87,12 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         public AjaxResult ReadProperties(string typeName)
         {
             Check.NotNull(typeName, nameof(typeName));
-            string json = _securityManager.EntityInfos.FirstOrDefault(m => m.TypeName == typeName)?.PropertyJson;
+            string json = this._securityManager.EntityInfos.FirstOrDefault(m => m.TypeName == typeName)?.PropertyJson;
             if (json == null)
             {
                 return new AjaxResult($"实体类“{typeName}”不存在", AjaxResultType.Error);
             }
+
             string[] filterTokens = { "Normalized", "Stamp", "Password" };
             EntityProperty[] properties = json.FromJsonString<EntityProperty[]>().Where(m => !filterTokens.Any(n => m.Name.Contains(n)))
                 .OrderByDescending(m => m.Name == "Id").ToArray();
@@ -112,7 +112,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         public async Task<AjaxResult> Update(EntityInfoInputDto[] dtos)
         {
             Check.NotNull(dtos, nameof(dtos));
-            OperationResult result = await _securityManager.UpdateEntityInfos(dtos);
+            OperationResult result = await this._securityManager.UpdateEntityInfos(dtos);
             return result.ToAjaxResult();
         }
     }

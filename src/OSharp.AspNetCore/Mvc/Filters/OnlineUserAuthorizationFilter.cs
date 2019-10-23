@@ -19,7 +19,6 @@ using OSharp.Collections;
 using OSharp.Dependency;
 using OSharp.Identity;
 
-
 namespace OSharp.AspNetCore.Mvc.Filters
 {
     /// <summary>
@@ -48,14 +47,17 @@ namespace OSharp.AspNetCore.Mvc.Filters
                 {
                     return;
                 }
+
                 if (!string.IsNullOrEmpty(onlineUser.NickName))
                 {
                     identity.AddClaim(new Claim(ClaimTypes.GivenName, onlineUser.NickName));
                 }
+
                 if (!string.IsNullOrEmpty(onlineUser.Email))
                 {
                     identity.AddClaim(new Claim(ClaimTypes.Email, onlineUser.Email));
                 }
+
                 if (onlineUser.Roles.Length > 0)
                 {
                     identity.AddClaim(new Claim(ClaimTypes.Role, onlineUser.Roles.ExpandAndToString()));

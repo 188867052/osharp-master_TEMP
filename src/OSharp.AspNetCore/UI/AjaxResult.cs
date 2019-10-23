@@ -9,11 +9,10 @@
 
 using OSharp.Data;
 
-
 namespace OSharp.AspNetCore.UI
 {
     /// <summary>
-    /// 表示Ajax操作结果 
+    /// 表示Ajax操作结果
     /// </summary>
     public class AjaxResult
     {
@@ -22,23 +21,25 @@ namespace OSharp.AspNetCore.UI
         /// </summary>
         public AjaxResult()
             : this(null)
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="AjaxResult"/>类型的新实例
         /// </summary>
         public AjaxResult(string content, AjaxResultType type = AjaxResultType.Success, object data = null)
             : this(content, data, type)
-        { }
+        {
+        }
 
         /// <summary>
         /// 初始化一个<see cref="AjaxResult"/>类型的新实例
         /// </summary>
         public AjaxResult(string content, object data, AjaxResultType type = AjaxResultType.Success)
         {
-            Type = type;
-            Content = content;
-            Data = data;
+            this.Type = type;
+            this.Content = content;
+            this.Data = data;
         }
 
         /// <summary>
@@ -61,7 +62,7 @@ namespace OSharp.AspNetCore.UI
         /// </summary>
         public bool Succeeded()
         {
-            return Type == AjaxResultType.Success;
+            return this.Type == AjaxResultType.Success;
         }
 
         /// <summary>
@@ -69,7 +70,7 @@ namespace OSharp.AspNetCore.UI
         /// </summary>
         public bool Error()
         {
-            return Type == AjaxResultType.Error;
+            return this.Type == AjaxResultType.Error;
         }
 
         /// <summary>

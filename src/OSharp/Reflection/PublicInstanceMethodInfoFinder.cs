@@ -11,7 +11,6 @@ using System;
 using System.Linq;
 using System.Reflection;
 
-
 namespace OSharp.Reflection
 {
     /// <summary>
@@ -27,7 +26,7 @@ namespace OSharp.Reflection
         /// <returns></returns>
         public MethodInfo[] Find(Type type, Func<MethodInfo, bool> predicate)
         {
-            return FindAll(type).Where(predicate).ToArray();
+            return this.FindAll(type).Where(predicate).ToArray();
         }
 
         /// <summary>

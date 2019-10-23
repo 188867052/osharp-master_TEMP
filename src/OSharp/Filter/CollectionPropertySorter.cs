@@ -18,7 +18,6 @@ using OSharp.Exceptions;
 using OSharp.Extensions;
 using OSharp.Properties;
 
-
 namespace OSharp.Filter
 {
     /// <summary>
@@ -102,6 +101,7 @@ namespace OSharp.Filter
             {
                 return Cache[key];
             }
+
             ParameterExpression param = Expression.Parameter(type);
             string[] propertyNames = keyName.Split('.');
             Expression propertyAccess = param;
@@ -112,9 +112,11 @@ namespace OSharp.Filter
                 {
                     throw new OsharpException(string.Format(Resources.ObjectExtensions_PropertyNameNotExistsInType, propertyName));
                 }
+
                 type = property.PropertyType;
                 propertyAccess = Expression.MakeMemberAccess(propertyAccess, property);
             }
+
             LambdaExpression keySelector = Expression.Lambda(propertyAccess, param);
             Cache[key] = keySelector;
             return keySelector;

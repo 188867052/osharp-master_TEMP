@@ -21,7 +21,6 @@ using OSharp.Core.Modules;
 using OSharp.Entity;
 using OSharp.Filter;
 
-
 namespace Liuliu.Demo.Web.Areas.Admin.Controllers
 {
     [ModuleInfo(Order = 2, Position = "Systems", PositionName = "系统管理模块")]
@@ -33,8 +32,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
 
         public AuditOperationController(IAuditContract auditContract, IFilterService filterService)
         {
-            _auditContract = auditContract;
-            _filterService = filterService;
+            this._auditContract = auditContract;
+            this._filterService = filterService;
         }
 
         /// <summary>
@@ -47,9 +46,9 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         [Description("读取")]
         public PageData<AuditOperationOutputDto> Read(PageRequest request)
         {
-            Expression<Func<AuditOperation, bool>> predicate = _filterService.GetExpression<AuditOperation>(request.FilterGroup);
+            Expression<Func<AuditOperation, bool>> predicate = this._filterService.GetExpression<AuditOperation>(request.FilterGroup);
             request.AddDefaultSortCondition(new SortCondition("CreatedTime", ListSortDirection.Descending));
-            var page = _auditContract.AuditOperations.ToPage<AuditOperation, AuditOperationOutputDto>(predicate, request.PageCondition);
+            var page = this._auditContract.AuditOperations.ToPage<AuditOperation, AuditOperationOutputDto>(predicate, request.PageCondition);
             return page.ToPageData();
         }
     }

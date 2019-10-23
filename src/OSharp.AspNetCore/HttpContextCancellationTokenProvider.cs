@@ -15,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using OSharp.Dependency;
 using OSharp.Threading;
 
-
 namespace OSharp.AspNetCore
 {
     /// <summary>
@@ -31,12 +30,12 @@ namespace OSharp.AspNetCore
         /// </summary>
         public HttpContextCancellationTokenProvider(IHttpContextAccessor httpContextAccessor)
         {
-            _httpContextAccessor = httpContextAccessor;
+            this._httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
         /// 获取 异步任务取消标识
         /// </summary>
-        public CancellationToken Token => _httpContextAccessor.HttpContext?.RequestAborted ?? CancellationToken.None;
+        public CancellationToken Token => this._httpContextAccessor.HttpContext?.RequestAborted ?? CancellationToken.None;
     }
 }

@@ -11,7 +11,6 @@ using System.ComponentModel.DataAnnotations;
 
 using OSharp.Extensions;
 
-
 namespace OSharp.DataAnnotations
 {
     /// <summary>
@@ -28,11 +27,11 @@ namespace OSharp.DataAnnotations
         public PasswordAttribute()
             : base(DataType.Password)
         {
-            RequiredLength = 6;
-            RequiredDigit = true;
-            CanOnlyDigit = false;
-            RequiredLowercase = true;
-            RequiredUppercase = false;
+            this.RequiredLength = 6;
+            this.RequiredDigit = true;
+            this.CanOnlyDigit = false;
+            this.RequiredLowercase = true;
+            this.RequiredUppercase = false;
         }
 
         /// <summary>
@@ -60,8 +59,6 @@ namespace OSharp.DataAnnotations
         /// </summary>
         public bool RequiredUppercase { get; set; }
 
-        #region Overrides of DataTypeAttribute
-
         /// <summary>
         /// 检查数据字段的值是否有效。
         /// </summary>
@@ -75,29 +72,35 @@ namespace OSharp.DataAnnotations
             {
                 return true;
             }
+
             string input = value as string;
             if (input == null)
             {
                 return false;
             }
-            _value = input;
-            if (input.Length < RequiredLength)
+
+            this._value = input;
+            if (input.Length < this.RequiredLength)
             {
                 return false;
             }
-            if (RequiredDigit && !input.IsMatch(@"[0-9]"))
+
+            if (this.RequiredDigit && !input.IsMatch(@"[0-9]"))
             {
                 return false;
             }
-            if (!CanOnlyDigit && input.IsMatch(@"^[0-9]+$"))
+
+            if (!this.CanOnlyDigit && input.IsMatch(@"^[0-9]+$"))
             {
                 return false;
             }
-            if (RequiredLowercase && !input.IsMatch(@"[a-z]"))
+
+            if (this.RequiredLowercase && !input.IsMatch(@"[a-z]"))
             {
                 return false;
             }
-            return !RequiredUppercase || input.IsMatch(@"[A-Z]");
+
+            return !this.RequiredUppercase || input.IsMatch(@"[A-Z]");
         }
 
         /// <summary>
@@ -110,29 +113,32 @@ namespace OSharp.DataAnnotations
         public override string FormatErrorMessage(string name)
         {
             name.CheckNotNullOrEmpty("name" );
-            if (_value.Length < RequiredLength)
+            if (this._value.Length < this.RequiredLength)
             {
-                return "{0} 长度必须大于{1}位".FormatWith(name, RequiredLength);
+                return "{0} 长度必须大于{1}位".FormatWith(name, this.RequiredLength);
             }
-            if (RequiredDigit && !_value.IsMatch(@"[0-9]"))
+
+            if (this.RequiredDigit && !this._value.IsMatch(@"[0-9]"))
             {
                 return "{0} 必须包含数字".FormatWith(name);
             }
-            if (!CanOnlyDigit && _value.IsMatch(@"^[0-9]+$"))
+
+            if (!this.CanOnlyDigit && this._value.IsMatch(@"^[0-9]+$"))
             {
                 return "{0} 不允许是全是数字";
             }
-            if (RequiredLowercase && !_value.IsMatch(@"[a-z]"))
+
+            if (this.RequiredLowercase && !this._value.IsMatch(@"[a-z]"))
             {
                 return "{0} 必须包含小写字母".FormatWith(name);
             }
-            if (RequiredUppercase && !_value.IsMatch(@"[A-Z]"))
+
+            if (this.RequiredUppercase && !this._value.IsMatch(@"[A-Z]"))
             {
                 return "{0} 必须包含大写字母".FormatWith(name);
             }
+
             return base.FormatErrorMessage(name);
         }
-
-        #endregion
     }
 }

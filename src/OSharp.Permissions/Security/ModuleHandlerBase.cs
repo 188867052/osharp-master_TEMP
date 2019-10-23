@@ -10,7 +10,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -21,7 +20,6 @@ using OSharp.Data;
 using OSharp.Dependency;
 using OSharp.Entity;
 using OSharp.Exceptions;
-
 
 namespace OSharp.Security
 {
@@ -42,9 +40,9 @@ namespace OSharp.Security
         /// </summary>
         protected ModuleHandlerBase(IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
-            _moduleInfoPicker = serviceProvider.GetService<IModuleInfoPicker>();
-            Logger = serviceProvider.GetLogger(GetType());
+            this._serviceProvider = serviceProvider;
+            this._moduleInfoPicker = serviceProvider.GetService<IModuleInfoPicker>();
+            this.Logger = serviceProvider.GetLogger(this.GetType());
         }
 
         /// <summary>
@@ -57,14 +55,15 @@ namespace OSharp.Security
         /// </summary>
         public void Initialize()
         {
-            ModuleInfo[] moduleInfos = _moduleInfoPicker.Pickup();
+            ModuleInfo[] moduleInfos = this._moduleInfoPicker.Pickup();
             if (moduleInfos.Length == 0)
             {
                 return;
             }
-            _serviceProvider.ExecuteScopedWork(provider =>
+
+            this._serviceProvider.ExecuteScopedWork(provider =>
             {
-                SyncToDatabase(provider, moduleInfos);
+                this.SyncToDatabase(provider, moduleInfos);
             });
         }
 
@@ -85,7 +84,7 @@ namespace OSharp.Security
                 provider.GetService<IModuleStore<TModule, TModuleInputDto, TModuleKey>>();
             if (moduleStore == null)
             {
-                Logger.LogWarning("初始化模块数据时，IRepository<,>的服务未找到，请初始化 EntityFrameworkCoreModule 模块");
+                this.Logger.LogWarning("初始化模块数据时，IRepository<,>的服务未找到，请初始化 EntityFrameworkCoreModule 模块");
                 return;
             }
 
@@ -93,17 +92,17 @@ namespace OSharp.Security
                 provider.GetService<IModuleFunctionStore<TModuleFunction, TModuleKey>>();
             if (moduleFunctionStore == null)
             {
-                Logger.LogWarning("初始化模块功能数据时，IRepository<,>的服务未找到，请初始化 EntityFrameworkCoreModule 模块");
+                this.Logger.LogWarning("初始化模块功能数据时，IRepository<,>的服务未找到，请初始化 EntityFrameworkCoreModule 模块");
                 return;
             }
 
-            if (!moduleInfos.CheckSyncByHash(provider, Logger))
+            if (!moduleInfos.CheckSyncByHash(provider, this.Logger))
             {
-                Logger.LogInformation("同步模块数据时，数据签名与上次相同，取消同步");
+                this.Logger.LogInformation("同步模块数据时，数据签名与上次相同，取消同步");
                 return;
             }
 
-            //删除数据库中多余的模块
+            // 删除数据库中多余的模块
             TModule[] modules = moduleStore.Modules.ToArray();
             var positionModules = modules.Select(m => new { m.Id, Position = GetModulePosition(modules, m) })
                 .OrderByDescending(m => m.Position.Length).ToArray();
@@ -121,20 +120,22 @@ namespace OSharp.Security
                 }
             }
 
-            //新增或更新传入的模块
+            // 新增或更新传入的模块
             foreach (ModuleInfo info in moduleInfos)
             {
-                TModule parent = GetModule(moduleStore, info.Position);
-                //插入父级分类
+                TModule parent = this.GetModule(moduleStore, info.Position);
+
+                // 插入父级分类
                 if (parent == null)
                 {
                     int lastIndex = info.Position.LastIndexOf('.');
                     string parent1Position = info.Position.Substring(0, lastIndex);
-                    TModule parent1 = GetModule(moduleStore, parent1Position);
+                    TModule parent1 = this.GetModule(moduleStore, parent1Position);
                     if (parent1 == null)
                     {
                         throw new OsharpException($"路径为“{parent1Position}”的模块信息无法找到");
                     }
+
                     string parentCode = info.Position.Substring(lastIndex + 1, info.Position.Length - lastIndex - 1);
                     ModuleInfo parentInfo = new ModuleInfo() { Code = parentCode, Name = info.PositionName ?? parentCode, Position = parent1Position };
                     TModuleInputDto dto = GetDto(parentInfo, parent1, null);
@@ -143,10 +144,13 @@ namespace OSharp.Security
                     {
                         throw new OsharpException(result.Message);
                     }
+
                     parent = moduleStore.Modules.First(m => m.ParentId.Equals(parent1.Id) && m.Code == parentCode);
                 }
+
                 TModule module = moduleStore.Modules.FirstOrDefault(m => m.ParentId.Equals(parent.Id) && m.Code == info.Code);
-                //新建模块
+
+                // 新建模块
                 if (module == null)
                 {
                     TModuleInputDto dto = GetDto(info, parent, null);
@@ -155,9 +159,10 @@ namespace OSharp.Security
                     {
                         throw new OsharpException(result.Message);
                     }
+
                     module = moduleStore.Modules.First(m => m.ParentId.Equals(parent.Id) && m.Code == info.Code);
                 }
-                else //更新模块
+                else // 更新模块
                 {
                     TModuleInputDto dto = GetDto(info, parent, module);
                     OperationResult result = moduleStore.UpdateModule(dto).GetAwaiter().GetResult();
@@ -166,6 +171,7 @@ namespace OSharp.Security
                         throw new OsharpException(result.Message);
                     }
                 }
+
                 if (info.DependOnFunctions.Length > 0)
                 {
                     Guid[] functionIds = info.DependOnFunctions.Select(m => m.Id).ToArray();
@@ -184,21 +190,24 @@ namespace OSharp.Security
         private readonly IDictionary<string, TModule> _positionDictionary = new Dictionary<string, TModule>();
         private TModule GetModule(IModuleStore<TModule, TModuleInputDto, TModuleKey> moduleStore, string position)
         {
-            if (_positionDictionary.ContainsKey(position))
+            if (this._positionDictionary.ContainsKey(position))
             {
-                return _positionDictionary[position];
+                return this._positionDictionary[position];
             }
+
             string[] codes = position.Split('.');
             if (codes.Length == 0)
             {
                 return null;
             }
+
             string code = codes[0];
             TModule module = moduleStore.Modules.FirstOrDefault(m => m.Code == code);
             if (module == null)
             {
                 return null;
             }
+
             for (int i = 1; i < codes.Length; i++)
             {
                 code = codes[i];
@@ -208,7 +217,8 @@ namespace OSharp.Security
                     return null;
                 }
             }
-            _positionDictionary.Add(position, module);
+
+            this._positionDictionary.Add(position, module);
             return module;
         }
 
@@ -221,7 +231,7 @@ namespace OSharp.Security
                 Code = info.Code,
                 OrderCode = info.Order,
                 Remark = $"{parent.Name}-{info.Name}",
-                ParentId = parent.Id
+                ParentId = parent.Id,
             };
         }
 

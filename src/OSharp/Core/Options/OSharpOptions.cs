@@ -12,7 +12,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
-
 namespace OSharp.Core.Options
 {
     /// <summary>
@@ -25,8 +24,8 @@ namespace OSharp.Core.Options
         /// </summary>
         public OsharpOptions()
         {
-            DbContexts = new ConcurrentDictionary<string, OsharpDbContextOptions>(StringComparer.OrdinalIgnoreCase);
-            OAuth2S = new ConcurrentDictionary<string, OAuth2Options>();
+            this.DbContexts = new ConcurrentDictionary<string, OsharpDbContextOptions>(StringComparer.OrdinalIgnoreCase);
+            this.OAuth2S = new ConcurrentDictionary<string, OAuth2Options>();
         }
 
         /// <summary>
@@ -64,7 +63,7 @@ namespace OSharp.Core.Options
         /// </summary>
         public OsharpDbContextOptions GetDbContextOptions(Type dbContextType)
         {
-            return DbContexts.Values.SingleOrDefault(m => m.DbContextType == dbContextType);
+            return this.DbContexts.Values.SingleOrDefault(m => m.DbContextType == dbContextType);
         }
     }
 }

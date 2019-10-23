@@ -11,7 +11,6 @@ using System.IO;
 
 using OSharp.Extensions;
 
-
 namespace OSharp.IO
 {
     /// <summary>
@@ -54,10 +53,12 @@ namespace OSharp.IO
             {
                 throw new DirectoryNotFoundException("递归复制文件夹时源目录不存在。");
             }
+
             if (!Directory.Exists(targetPath))
             {
                 Directory.CreateDirectory(targetPath);
             }
+
             string[] dirs = Directory.GetDirectories(sourcePath);
             if (dirs.Length > 0)
             {
@@ -66,6 +67,7 @@ namespace OSharp.IO
                     Copy(dir, targetPath + dir.Substring(dir.LastIndexOf("\\", StringComparison.Ordinal)));
                 }
             }
+
             if (searchPatterns != null && searchPatterns.Length > 0)
             {
                 foreach (string searchPattern in searchPatterns)
@@ -75,6 +77,7 @@ namespace OSharp.IO
                     {
                         continue;
                     }
+
                     foreach (string file in files)
                     {
                         File.Copy(file, targetPath + file.Substring(file.LastIndexOf("\\", StringComparison.Ordinal)));
@@ -88,6 +91,7 @@ namespace OSharp.IO
                 {
                     return;
                 }
+
                 foreach (string file in files)
                 {
                     File.Copy(file, targetPath + file.Substring(file.LastIndexOf("\\", StringComparison.Ordinal)));
@@ -109,24 +113,28 @@ namespace OSharp.IO
             DirectoryInfo dirPathInfo = new DirectoryInfo(directory);
             if (dirPathInfo.Exists)
             {
-                //删除目录下所有文件
+                // 删除目录下所有文件
                 foreach (FileInfo fileInfo in dirPathInfo.GetFiles())
                 {
                     fileInfo.Delete();
                 }
-                //递归删除所有子目录
+
+                // 递归删除所有子目录
                 foreach (DirectoryInfo subDirectory in dirPathInfo.GetDirectories())
                 {
                     Delete(subDirectory.FullName);
                 }
-                //删除目录
+
+                // 删除目录
                 if (isDeleteRoot)
                 {
                     dirPathInfo.Attributes = FileAttributes.Normal;
                     dirPathInfo.Delete();
                 }
+
                 flag = true;
             }
+
             return flag;
         }
 
@@ -144,6 +152,7 @@ namespace OSharp.IO
             {
                 throw new DirectoryNotFoundException("设置目录属性时指定文件夹不存在");
             }
+
             if (isSet)
             {
                 di.Attributes = di.Attributes | attribute;

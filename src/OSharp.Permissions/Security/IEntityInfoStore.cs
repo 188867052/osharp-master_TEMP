@@ -2,11 +2,9 @@
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-
+using OSharp.Core.EntityInfos;
 using OSharp.Data;
 using OSharp.Dependency;
-using OSharp.Core.EntityInfos;
-
 
 namespace OSharp.Security
 {
@@ -18,8 +16,6 @@ namespace OSharp.Security
         where TEntityInfo : IEntityInfo
         where TEntityInfoInputDto : EntityInfoInputDtoBase
     {
-        #region 实体信息业务
-
         /// <summary>
         /// 获取 实体信息查询数据集
         /// </summary>
@@ -39,8 +35,5 @@ namespace OSharp.Security
         /// <param name="dtos">包含更新信息的实体信息DTO信息</param>
         /// <returns>业务操作结果</returns>
         Task<OperationResult> UpdateEntityInfos(params TEntityInfoInputDto[] dtos);
-
-        #endregion
-
     }
 }

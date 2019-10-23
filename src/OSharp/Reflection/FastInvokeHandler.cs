@@ -11,11 +11,9 @@ using System;
 using System.Reflection;
 using System.Reflection.Emit;
 
-
 namespace OSharp.Reflection
 {
     using InvokeHandler = Func<object, object[], object>;
-
 
     /// <summary>
     /// 快速执行处理器
@@ -33,6 +31,7 @@ namespace OSharp.Reflection
             {
                 throw new InvalidOperationException("methodInfo的类型为空。");
             }
+
             DynamicMethod dynamicMethod = new DynamicMethod(string.Empty,
                 typeof(object),
                 new[] { typeof(object), typeof(object[]) },
@@ -51,12 +50,14 @@ namespace OSharp.Reflection
                     paramTypes[i] = ps[i].ParameterType;
                 }
             }
+
             LocalBuilder[] locals = new LocalBuilder[paramTypes.Length];
 
             for (int i = 0; i < paramTypes.Length; i++)
             {
                 locals[i] = il.DeclareLocal(paramTypes[i], true);
             }
+
             for (int i = 0; i < paramTypes.Length; i++)
             {
                 il.Emit(OpCodes.Ldarg_1);
@@ -65,14 +66,17 @@ namespace OSharp.Reflection
                 EmitCastToReference(il, paramTypes[i]);
                 il.Emit(OpCodes.Stloc, locals[i]);
             }
+
             if (!methodInfo.IsStatic)
             {
                 il.Emit(OpCodes.Ldarg_0);
             }
+
             for (int i = 0; i < paramTypes.Length; i++)
             {
                 il.Emit(ps[i].ParameterType.IsByRef ? OpCodes.Ldloca_S : OpCodes.Ldloc, locals[i]);
             }
+
             il.EmitCall(methodInfo.IsStatic ? OpCodes.Call : OpCodes.Callvirt, methodInfo, null);
             if (methodInfo.ReturnType == typeof(void))
             {
@@ -94,6 +98,7 @@ namespace OSharp.Reflection
                     {
                         il.Emit(OpCodes.Box, locals[i].LocalType);
                     }
+
                     il.Emit(OpCodes.Stelem_Ref);
                 }
             }
@@ -151,7 +156,6 @@ namespace OSharp.Reflection
                     il.Emit(OpCodes.Ldc_I4_8);
                     return;
             }
-
 
             if (value > -129 && value < 128)
             {

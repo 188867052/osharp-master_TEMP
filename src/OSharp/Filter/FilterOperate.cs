@@ -8,7 +8,6 @@
 
 using System.ComponentModel;
 
-
 namespace OSharp.Filter
 {
     /// <summary>
@@ -103,13 +102,13 @@ namespace OSharp.Filter
         ///// <summary>
         ///// 包括在
         ///// </summary>
-        //[OperateCode("in")]
-        //In = 13,
+        // [OperateCode("in")]
+        // In = 13,
 
         ///// <summary>
         ///// 不包括在
         ///// </summary>
-        //[OperateCode("notin")]
-        //NotIn = 14
+        // [OperateCode("notin")]
+        // NotIn = 14
     }
 }

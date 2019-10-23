@@ -13,7 +13,6 @@
 
 using System;
 
-
 namespace Liuliu.Demo.Infos
 {
     /// <summary>
@@ -26,6 +25,7 @@ namespace Liuliu.Demo.Infos
         /// </summary>
         public InfosService(IServiceProvider provider)
             : base(provider)
-        { }
+        {
+        }
     }
 }

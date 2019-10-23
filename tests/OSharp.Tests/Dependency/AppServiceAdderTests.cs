@@ -2,7 +2,6 @@
 
 using Xunit;
 
-
 namespace OSharp.Dependency.Tests
 {
     public class AppServiceAdderTests
@@ -13,22 +12,35 @@ namespace OSharp.Dependency.Tests
             DependencyPack pack = new DependencyPack();
             IServiceCollection services = new ServiceCollection();
             services = pack.AddServices(services);
-
         }
 
         [IgnoreDependency]
-        private interface IIgnoreContract { }
+        private interface IIgnoreContract
+        {
+        }
 
-        private interface ITestContract : IIgnoreContract { }
+        private interface ITestContract : IIgnoreContract
+        {
+        }
 
-        private class TransientTestService : ITestContract, ITransientDependency { }
+        private class TransientTestService : ITestContract, ITransientDependency
+        {
+        }
 
-        private class ScopedTestService : ITestContract, IScopeDependency { }
+        private class ScopedTestService : ITestContract, IScopeDependency
+        {
+        }
 
-        private class SingletonTestService : ITestContract, ISingletonDependency { }
+        private class SingletonTestService : ITestContract, ISingletonDependency
+        {
+        }
 
-        private interface IGenericContract<T> { }
+        private interface IGenericContract<T>
+        {
+        }
 
-        private class GenericService<T> : IGenericContract<T>, IScopeDependency { }
+        private class GenericService<T> : IGenericContract<T>, IScopeDependency
+        {
+        }
     }
 }

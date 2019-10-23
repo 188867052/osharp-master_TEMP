@@ -10,7 +10,6 @@
 using OSharp.Core.Functions;
 using OSharp.Mapping;
 
-
 namespace OSharp.Security
 {
     /// <summary>
@@ -18,5 +17,6 @@ namespace OSharp.Security
     /// </summary>
     [MapTo(typeof(Function))]
     public class FunctionInputDto : FunctionInputDtoBase
-    { }
+    {
+    }
 }

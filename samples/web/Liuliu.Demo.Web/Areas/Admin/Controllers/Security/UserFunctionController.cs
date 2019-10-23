@@ -26,7 +26,6 @@ using OSharp.Entity;
 using OSharp.Filter;
 using OSharp.Linq;
 
-
 namespace Liuliu.Demo.Web.Areas.Admin.Controllers
 {
     [ModuleInfo(Order = 4, Position = "Security", PositionName = "权限安全模块")]
@@ -38,13 +37,13 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         private readonly UserManager<User> _userManager;
 
         public UserFunctionController(SecurityManager securityManager,
-            UserManager<User> userManager, 
+            UserManager<User> userManager,
             RoleManager<Role> roleManager,
             IFilterService filterService)
         {
-            _securityManager = securityManager;
-            _userManager = userManager;
-            _filterService = filterService;
+            this._securityManager = securityManager;
+            this._userManager = userManager;
+            this._filterService = filterService;
         }
 
         /// <summary>
@@ -57,8 +56,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         public PageData<UserOutputDto2> Read(PageRequest request)
         {
             request.FilterGroup.Rules.Add(new FilterRule("IsLocked", false, FilterOperate.Equal));
-            Expression<Func<User, bool>> predicate = _filterService.GetExpression<User>(request.FilterGroup);
-            var page = _userManager.Users.ToPage<User, UserOutputDto2>(predicate, request.PageCondition);
+            Expression<Func<User, bool>> predicate = this._filterService.GetExpression<User>(request.FilterGroup);
+            var page = this._userManager.Users.ToPage<User, UserOutputDto2>(predicate, request.PageCondition);
             return page.ToPageData();
         }
 
@@ -77,22 +76,22 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
                 return new PageData<FunctionOutputDto2>();
             }
 
-            int[] moduleIds = _securityManager.GetUserWithRoleModuleIds(userId);
-            Guid[] functionIds = _securityManager.ModuleFunctions.Where(m => moduleIds.Contains(m.ModuleId)).Select(m => m.FunctionId).Distinct()
+            int[] moduleIds = this._securityManager.GetUserWithRoleModuleIds(userId);
+            Guid[] functionIds = this._securityManager.ModuleFunctions.Where(m => moduleIds.Contains(m.ModuleId)).Select(m => m.FunctionId).Distinct()
                 .ToArray();
             if (functionIds.Length == 0)
             {
                 return new PageData<FunctionOutputDto2>();
             }
 
-            Expression<Func<Function, bool>> funcExp = _filterService.GetExpression<Function>(request.FilterGroup);
+            Expression<Func<Function, bool>> funcExp = this._filterService.GetExpression<Function>(request.FilterGroup);
             funcExp = funcExp.And(m => functionIds.Contains(m.Id));
             if (request.PageCondition.SortConditions.Length == 0)
             {
                 request.PageCondition.SortConditions = new[] { new SortCondition("Area"), new SortCondition("Controller") };
             }
 
-            PageResult<FunctionOutputDto2> page = _securityManager.Functions.ToPage<Function, FunctionOutputDto2>(funcExp, request.PageCondition);
+            PageResult<FunctionOutputDto2> page = this._securityManager.Functions.ToPage<Function, FunctionOutputDto2>(funcExp, request.PageCondition);
             return page.ToPageData();
         }
     }

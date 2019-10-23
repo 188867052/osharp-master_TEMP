@@ -19,7 +19,6 @@ using OSharp.Data;
 using OSharp.Dependency;
 using OSharp.Extensions;
 
-
 namespace OSharp.AspNetCore
 {
     /// <summary>
@@ -36,7 +35,7 @@ namespace OSharp.AspNetCore
         /// </summary>
         public VerifyCodeService(IDistributedCache cache)
         {
-            _cache = cache;
+            this._cache = cache;
         }
 
         /// <summary>
@@ -54,10 +53,10 @@ namespace OSharp.AspNetCore
             }
 
             string key = $"{OsharpConstants.VerifyCodeKeyPrefix}_{id}";
-            bool flag = code.Equals(_cache.GetString(key), StringComparison.OrdinalIgnoreCase);
+            bool flag = code.Equals(this._cache.GetString(key), StringComparison.OrdinalIgnoreCase);
             if (removeIfSuccess && flag)
             {
-                _cache.Remove(key);
+                this._cache.Remove(key);
             }
 
             return flag;
@@ -71,7 +70,7 @@ namespace OSharp.AspNetCore
             id = Guid.NewGuid().ToString("N");
             string key = $"{OsharpConstants.VerifyCodeKeyPrefix}_{id}";
             const int seconds = 60 * 3;
-            _cache.SetString(key, code, new DistributedCacheEntryOptions() { AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(seconds) });
+            this._cache.SetString(key, code, new DistributedCacheEntryOptions() { AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(seconds) });
         }
 
         /// <summary>

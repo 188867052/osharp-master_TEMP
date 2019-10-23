@@ -18,33 +18,40 @@ namespace OSharp.CodeGeneration.Schema
         /// 实体类
         /// </summary>
         Entity,
+
         /// <summary>
         /// 输入DTO类
         /// </summary>
         InputDto,
+
         /// <summary>
         /// 输出DTO类
         /// </summary>
         OutputDto,
+
         /// <summary>
         /// 服务接口
         /// </summary>
         ServiceContract,
+
         /// <summary>
         /// 服务综合实现
         /// </summary>
         ServiceMainImpl,
+
         /// <summary>
         /// 服务实体实现
         /// </summary>
         ServiceEntityImpl,
+
         /// <summary>
         /// 实体数据映射类
         /// </summary>
         EntityConfiguration,
+
         /// <summary>
         /// 实体控制器类
         /// </summary>
-        AdminController
+        AdminController,
     }
 }

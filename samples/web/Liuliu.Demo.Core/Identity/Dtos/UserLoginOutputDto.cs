@@ -11,7 +11,6 @@ using System;
 
 using OSharp.Entity;
 
-
 namespace Liuliu.Demo.Identity.Dtos
 {
     /// <summary>

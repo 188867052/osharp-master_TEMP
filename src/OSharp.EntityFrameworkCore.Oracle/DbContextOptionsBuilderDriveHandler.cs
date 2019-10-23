@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.Dependency;
 
-
 namespace OSharp.Entity.Oracle
 {
     /// <summary>
@@ -32,6 +31,7 @@ namespace OSharp.Entity.Oracle
             {
                 return builder.UseOracle(connectionString);
             }
+
             return builder.UseOracle(existingConnection);
         }
     }

@@ -14,10 +14,6 @@ using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
 
-using OSharp.Data;
-using OSharp.Entity;
-
-
 namespace OSharp.Dependency
 {
     /// <summary>

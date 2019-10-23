@@ -12,7 +12,6 @@ using System.ComponentModel.DataAnnotations;
 
 using OSharp.Entity;
 
-
 namespace Liuliu.Demo.Identity.Entities
 {
     /// <summary>
@@ -24,7 +23,8 @@ namespace Liuliu.Demo.Identity.Entities
         /// <summary>
         /// 获取或设置 名称
         /// </summary>
-        [Required, DisplayName("名称")]
+        [Required]
+        [DisplayName("名称")]
         public string Name { get; set; }
 
         /// <summary>

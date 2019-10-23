@@ -3,7 +3,6 @@ using System.Linq.Expressions;
 
 using OSharp.Collections;
 
-
 namespace OSharp.Caching
 {
     /// <summary>
@@ -18,10 +17,8 @@ namespace OSharp.Caching
         /// </summary>
         public ExpressionCacheKeyGenerator(Expression expression)
         {
-            _expression = expression;
+            this._expression = expression;
         }
-
-        #region Implementation of ICacheKeyGenerator
 
         /// <summary>
         /// 生成缓存键
@@ -30,14 +27,12 @@ namespace OSharp.Caching
         /// <returns></returns>
         public string GetKey(params object[] args)
         {
-            Expression expression = _expression;
+            Expression expression = this._expression;
             expression = Evaluator.PartialEval(expression, CanBeEvaluatedLocally);
             expression = LocalCollectionExpressionVisitor.Rewrite(expression);
             string key = expression.ToString();
             return key + args.ExpandAndToString();
         }
-
-        #endregion
 
         private static bool CanBeEvaluatedLocally(Expression expression)
         {
@@ -45,10 +40,12 @@ namespace OSharp.Caching
             {
                 return false;
             }
+
             if (typeof(IQueryable).IsAssignableFrom(expression.Type))
             {
                 return false;
             }
+
             return true;
         }
     }

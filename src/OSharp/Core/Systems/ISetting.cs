@@ -13,5 +13,6 @@ namespace OSharp.Core.Systems
     /// 定义设置信息
     /// </summary>
     public interface ISetting
-    { }
+    {
+    }
 }

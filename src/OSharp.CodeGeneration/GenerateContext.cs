@@ -9,7 +9,6 @@
 
 using OSharp.CodeGeneration.Schema;
 
-
 namespace OSharp.CodeGeneration
 {
     /// <summary>

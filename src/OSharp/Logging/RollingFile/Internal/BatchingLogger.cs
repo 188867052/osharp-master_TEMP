@@ -12,10 +12,9 @@ using System.Text;
 
 using Microsoft.Extensions.Logging;
 
-
 namespace OSharp.Logging.RollingFile.Internal
 {
-//power by https://github.com/andrewlock/NetEscapades.Extensions.Logging
+// power by https://github.com/andrewlock/NetEscapades.Extensions.Logging
     internal class BatchingLogger : ILogger
     {
         private readonly string _category;
@@ -23,8 +22,8 @@ namespace OSharp.Logging.RollingFile.Internal
 
         public BatchingLogger(BatchingLoggerProvider loggerProvider, string categoryName)
         {
-            _provider = loggerProvider;
-            _category = categoryName;
+            this._provider = loggerProvider;
+            this._category = categoryName;
         }
 
         public IDisposable BeginScope<TState>(TState state)
@@ -38,12 +37,13 @@ namespace OSharp.Logging.RollingFile.Internal
             {
                 return false;
             }
+
             return true;
         }
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
-            Log(DateTimeOffset.Now, logLevel, eventId, state, exception, formatter);
+            this.Log(DateTimeOffset.Now, logLevel, eventId, state, exception, formatter);
         }
 
         public void Log<TState>(DateTimeOffset timestamp,
@@ -53,7 +53,7 @@ namespace OSharp.Logging.RollingFile.Internal
             Exception exception,
             Func<TState, Exception, string> formatter)
         {
-            if (!IsEnabled(logLevel))
+            if (!this.IsEnabled(logLevel))
             {
                 return;
             }
@@ -63,7 +63,7 @@ namespace OSharp.Logging.RollingFile.Internal
             builder.Append(" [");
             builder.Append(logLevel.ToString());
             builder.Append("] ");
-            builder.Append(_category);
+            builder.Append(this._category);
             builder.Append(": ");
             builder.AppendLine(formatter(state, exception));
 
@@ -72,7 +72,7 @@ namespace OSharp.Logging.RollingFile.Internal
                 builder.AppendLine(exception.ToString());
             }
 
-            _provider.AddMessage(timestamp, builder.ToString());
+            this._provider.AddMessage(timestamp, builder.ToString());
         }
     }
 }

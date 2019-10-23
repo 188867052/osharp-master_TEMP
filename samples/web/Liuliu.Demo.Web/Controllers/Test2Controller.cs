@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
-
-using Liuliu.Demo.Identity.Entities;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyModel;
@@ -14,7 +9,6 @@ using OSharp.Collections;
 using OSharp.Core.Modules;
 using OSharp.Entity;
 
-
 namespace Liuliu.Demo.Web.Controllers
 {
     public class Test2Controller : ApiController
@@ -23,7 +17,7 @@ namespace Liuliu.Demo.Web.Controllers
 
         public Test2Controller(DefaultDbContext dbContext)
         {
-            _dbContext = dbContext;
+            this._dbContext = dbContext;
         }
 
         /// <summary>

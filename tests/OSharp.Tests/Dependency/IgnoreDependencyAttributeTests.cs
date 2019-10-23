@@ -1,11 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-using OSharp.Core.Options;
-
 using Shouldly;
 
 using Xunit;
-
 
 namespace OSharp.Dependency.Tests
 {
@@ -23,10 +20,16 @@ namespace OSharp.Dependency.Tests
         }
 
         [IgnoreDependency]
-        private interface IIgnoreContract { }
+        private interface IIgnoreContract
+        {
+        }
 
-        private interface ITestContract : IIgnoreContract { }
+        private interface ITestContract : IIgnoreContract
+        {
+        }
 
-        private class TestService : ITestContract, ITransientDependency { }
+        private class TestService : ITestContract, ITransientDependency
+        {
+        }
     }
 }

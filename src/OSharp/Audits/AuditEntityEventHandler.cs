@@ -1,22 +1,10 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="AuditEntityStoreEventHandler.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2018 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2018-08-01 21:39</last-date>
-// -----------------------------------------------------------------------
-
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using OSharp.Dependency;
 using OSharp.EventBuses;
 using OSharp.Extensions;
-
 
 namespace OSharp.Audits
 {
@@ -33,7 +21,7 @@ namespace OSharp.Audits
         /// </summary>
         public AuditEntityEventHandler(ScopedDictionary scopedDictionary)
         {
-            _scopedDictionary = scopedDictionary;
+            this._scopedDictionary = scopedDictionary;
         }
 
         /// <summary>
@@ -44,11 +32,12 @@ namespace OSharp.Audits
         {
             eventData.CheckNotNull("eventData");
 
-            AuditOperationEntry operation = _scopedDictionary.AuditOperation;
+            AuditOperationEntry operation = this._scopedDictionary.AuditOperation;
             if (operation == null)
             {
                 return;
             }
+
             foreach (AuditEntityEntry auditEntity in eventData.AuditEntities)
             {
                 SetAddedId(auditEntity);
@@ -67,16 +56,18 @@ namespace OSharp.Audits
             eventData.CheckNotNull("eventData");
             cancelToken.ThrowIfCancellationRequested();
 
-            AuditOperationEntry operation = _scopedDictionary.AuditOperation;
+            AuditOperationEntry operation = this._scopedDictionary.AuditOperation;
             if (operation == null)
             {
                 return Task.FromResult(0);
             }
+
             foreach (AuditEntityEntry auditEntity in eventData.AuditEntities)
             {
                 SetAddedId(auditEntity);
                 operation.EntityEntries.Add(auditEntity);
             }
+
             return Task.FromResult(0);
         }
 

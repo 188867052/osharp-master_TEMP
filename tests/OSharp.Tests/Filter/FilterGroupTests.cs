@@ -1,11 +1,10 @@
 ﻿using Xunit;
 
-
 namespace OSharp.Filter.Tests
 {
     public class FilterGroupTests
     {
-        [Fact()]
+        [Fact]
         public void FilterGroupTest()
         {
             FilterGroup group = new FilterGroup();

@@ -7,12 +7,7 @@
 //  <last-date>2018-07-05 4:28</last-date>
 // -----------------------------------------------------------------------
 
-using System;
-
-using OSharp.Dependency;
 using OSharp.EventBuses;
-using OSharp.Security;
-
 
 namespace OSharp.Security.Events
 {
@@ -28,7 +23,7 @@ namespace OSharp.Security.Events
         /// </summary>
         public DataAuthCacheRefreshEventHandler(IDataAuthCache authCache)
         {
-            _authCache = authCache;
+            this._authCache = authCache;
         }
 
         /// <summary>
@@ -37,15 +32,16 @@ namespace OSharp.Security.Events
         /// <param name="eventData">事件源数据</param>
         public override void Handle(DataAuthCacheRefreshEventData eventData)
         {
-            //更新缓存项
+            // 更新缓存项
             foreach (DataAuthCacheItem cacheItem in eventData.SetItems)
             {
-                _authCache.SetCache(cacheItem);
+                this._authCache.SetCache(cacheItem);
             }
-            //移除缓存项
+
+            // 移除缓存项
             foreach (DataAuthCacheItem cacheItem in eventData.RemoveItems)
             {
-                _authCache.RemoveCache(cacheItem);
+                this._authCache.RemoveCache(cacheItem);
             }
         }
     }

@@ -9,7 +9,6 @@
 
 using System;
 
-
 namespace OSharp.Entity
 {
     /// <summary>
@@ -35,7 +34,7 @@ namespace OSharp.Entity
         /// <returns></returns>
         public bool IsTimeValid()
         {
-            return !BeginTime.HasValue || !EndTime.HasValue || BeginTime.Value <= EndTime.Value;
+            return !this.BeginTime.HasValue || !this.EndTime.HasValue || this.BeginTime.Value <= this.EndTime.Value;
         }
 
         /// <summary>
@@ -43,10 +42,11 @@ namespace OSharp.Entity
         /// </summary>
         public void ThrowIfTimeInvalid()
         {
-            if (IsTimeValid())
+            if (this.IsTimeValid())
             {
                 return;
             }
+
             throw new IndexOutOfRangeException("生效时间不能大于过期时间");
         }
     }

@@ -9,7 +9,6 @@
 
 using System.ComponentModel;
 
-
 namespace OSharp.Security
 {
     /// <summary>
@@ -45,6 +44,6 @@ namespace OSharp.Security
         /// <summary>
         /// 权限检查出现错误
         /// </summary>
-        [Description("权限检测出现错误")] Error = 500
+        [Description("权限检测出现错误")] Error = 500,
     }
 }

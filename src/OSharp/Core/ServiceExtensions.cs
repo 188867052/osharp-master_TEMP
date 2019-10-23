@@ -13,8 +13,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-
-using OSharp.Collections;
 using OSharp.Core.Builders;
 using OSharp.Core.Options;
 using OSharp.Core.Packs;
@@ -22,7 +20,6 @@ using OSharp.Data;
 using OSharp.Dependency;
 using OSharp.Entity;
 using OSharp.Reflection;
-
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -42,7 +39,7 @@ namespace Microsoft.Extensions.DependencyInjection
             IConfiguration configuration = services.GetConfiguration();
             Singleton<IConfiguration>.Instance = configuration;
 
-            //初始化所有程序集查找器
+            // 初始化所有程序集查找器
             services.TryAddSingleton<IAllAssemblyFinder>(new AppDomainAllAssemblyFinder());
 
             IOsharpBuilder builder = services.GetSingletonInstanceOrNull<IOsharpBuilder>() ?? new OsharpBuilder();

@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Shouldly;
-
 using Xunit;
-
 
 namespace OSharp.Collections.Tests
 {
@@ -21,7 +18,7 @@ namespace OSharp.Collections.Tests
             nums.Count(m => m == 5).ShouldBe(1);
 
             nums = null;
-            Assert.Throws<ArgumentNullException>(()=>
+            Assert.Throws<ArgumentNullException>(() =>
             {
                 nums.AddIfNotExist(3);
             });

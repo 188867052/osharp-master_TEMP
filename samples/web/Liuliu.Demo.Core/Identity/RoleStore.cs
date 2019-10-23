@@ -12,7 +12,6 @@ using Liuliu.Demo.Identity.Entities;
 using OSharp.Entity;
 using OSharp.Identity;
 
-
 namespace Liuliu.Demo.Identity
 {
     /// <summary>
@@ -25,6 +24,7 @@ namespace Liuliu.Demo.Identity
         /// </summary>
         public RoleStore(IRepository<Role, int> roleRepository, IRepository<RoleClaim, int> roleClaimRepository)
             : base(roleRepository, roleClaimRepository)
-        { }
+        {
+        }
     }
 }

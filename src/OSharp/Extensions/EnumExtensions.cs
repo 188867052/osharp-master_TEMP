@@ -13,7 +13,6 @@ using System.Reflection;
 
 using OSharp.Reflection;
 
-
 namespace OSharp.Extensions
 {
     /// <summary>

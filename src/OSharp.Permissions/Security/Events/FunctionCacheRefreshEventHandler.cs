@@ -13,9 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.AspNetCore;
 using OSharp.Core.Functions;
-using OSharp.Dependency;
 using OSharp.EventBuses;
-
 
 namespace OSharp.Security.Events
 {
@@ -31,7 +29,7 @@ namespace OSharp.Security.Events
         /// </summary>
         public FunctionCacheRefreshEventHandler(IServiceProvider provider)
         {
-            _provider = provider;
+            this._provider = provider;
         }
 
         /// <summary>
@@ -40,11 +38,12 @@ namespace OSharp.Security.Events
         /// <param name="eventData">事件源数据</param>
         public override void Handle(FunctionCacheRefreshEventData eventData)
         {
-            if (!_provider.InHttpRequest())
+            if (!this._provider.InHttpRequest())
             {
                 return;
             }
-            IFunctionHandler functionHandler = _provider.GetService<IFunctionHandler>();
+
+            IFunctionHandler functionHandler = this._provider.GetService<IFunctionHandler>();
             functionHandler.RefreshCache();
         }
     }

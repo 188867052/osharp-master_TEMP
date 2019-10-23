@@ -9,7 +9,6 @@
 
 using System.Collections.Generic;
 
-
 namespace OSharp.Core.EntityInfos
 {
     /// <summary>
@@ -22,7 +21,7 @@ namespace OSharp.Core.EntityInfos
         /// </summary>
         public EntityProperty()
         {
-            ValueRange = new List<object>();
+            this.ValueRange = new List<object>();
         }
 
         /// <summary>

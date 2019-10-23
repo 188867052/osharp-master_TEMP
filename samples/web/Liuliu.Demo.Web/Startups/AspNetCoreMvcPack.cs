@@ -11,7 +11,6 @@ using System.ComponentModel;
 
 using OSharp.AspNetCore.Mvc;
 
-
 namespace Liuliu.Demo.Web.Startups
 {
     /// <summary>

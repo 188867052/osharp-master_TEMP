@@ -19,7 +19,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 using OSharp.Core.Packs;
 
-
 namespace Liuliu.Demo.Infos
 {
     /// <summary>

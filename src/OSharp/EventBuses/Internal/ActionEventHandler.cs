@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 using OSharp.Data;
 
-
 namespace OSharp.EventBuses.Internal
 {
     /// <summary>
@@ -26,14 +25,14 @@ namespace OSharp.EventBuses.Internal
         /// </summary>
         public ActionEventHandler(Action<TEventData> action)
         {
-            Action = action;
+            this.Action = action;
         }
 
         /// <summary>
         /// 获取 事件执行的委托
         /// </summary>
         public Action<TEventData> Action { get; }
-        
+
         /// <summary>
         /// 事件处理
         /// </summary>
@@ -41,7 +40,7 @@ namespace OSharp.EventBuses.Internal
         public override void Handle(TEventData eventData)
         {
             Check.NotNull(eventData, nameof(eventData));
-            Action(eventData);
+            this.Action(eventData);
         }
 
         /// <summary>
@@ -54,7 +53,7 @@ namespace OSharp.EventBuses.Internal
         {
             Check.NotNull(eventData, nameof(eventData));
             cancelToken.ThrowIfCancellationRequested();
-            return Task.Run(() => Action(eventData), cancelToken);
+            return Task.Run(() => this.Action(eventData), cancelToken);
         }
     }
 }

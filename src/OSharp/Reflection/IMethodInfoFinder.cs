@@ -12,7 +12,6 @@ using System.Reflection;
 
 using OSharp.Dependency;
 
-
 namespace OSharp.Reflection
 {
     /// <summary>

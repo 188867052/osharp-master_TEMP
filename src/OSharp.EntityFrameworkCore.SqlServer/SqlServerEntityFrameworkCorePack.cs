@@ -14,8 +14,6 @@ using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 
 using OSharp.Core.Packs;
-using OSharp.Dependency;
-
 
 namespace OSharp.Entity.SqlServer
 {
@@ -47,7 +45,7 @@ namespace OSharp.Entity.SqlServer
 
             return services;
         }
-        
+
         /// <summary>
         /// 应用模块服务
         /// </summary>

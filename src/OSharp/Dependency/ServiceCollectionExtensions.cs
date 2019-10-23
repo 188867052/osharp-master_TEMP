@@ -7,11 +7,10 @@
 //  <last-date>2018-12-30 22:24</last-date>
 // -----------------------------------------------------------------------
 
-using Microsoft.Extensions.DependencyInjection;
-using OSharp.Reflection;
 using System;
 using System.Linq;
-
+using Microsoft.Extensions.DependencyInjection;
+using OSharp.Reflection;
 
 namespace OSharp.Dependency
 {
@@ -60,6 +59,7 @@ namespace OSharp.Dependency
                 item = factory();
                 services.AddSingleton<TServiceType>(item);
             }
+
             return item;
         }
 
