@@ -144,7 +144,7 @@ namespace OSharp.Caching
             string json = cache.GetString(key);
             if (json == null)
             {
-                return default(TResult);
+                return default;
             }
 
             return json.FromJsonString<TResult>();
@@ -158,7 +158,7 @@ namespace OSharp.Caching
             string json = await cache.GetStringAsync(key);
             if (json == null)
             {
-                return default(TResult);
+                return default;
             }
 
             return json.FromJsonString<TResult>();
@@ -178,7 +178,7 @@ namespace OSharp.Caching
             result = getFunc();
             if (Equals(result, default(TResult)))
             {
-                return default(TResult);
+                return default;
             }
 
             cache.Set(key, result, options);
@@ -199,7 +199,7 @@ namespace OSharp.Caching
             result = await getAsyncFunc();
             if (Equals(result, default(TResult)))
             {
-                return default(TResult);
+                return default;
             }
 
             await cache.SetAsync(key, result, options);

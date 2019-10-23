@@ -107,7 +107,7 @@ namespace OSharp.Dependency
                 return obj as T;
             }
 
-            return default(T);
+            return default;
         }
     }
 }

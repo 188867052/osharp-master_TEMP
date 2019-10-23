@@ -27,7 +27,7 @@ namespace OSharp.Extensions
         /// <returns>获取到的值</returns>
         public static TValue GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue>dictionary, TKey key)
         {
-            return dictionary.TryGetValue(key, out TValue value) ? value : default(TValue);
+            return dictionary.TryGetValue(key, out TValue value) ? value : default;
         }
 
         /// <summary>

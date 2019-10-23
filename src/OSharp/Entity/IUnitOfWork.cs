@@ -48,7 +48,7 @@ namespace OSharp.Entity
         /// </summary>
         /// <param name="cancellationToken">异步取消标记</param>
         /// <returns></returns>
-        Task BeginOrUseTransactionAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task BeginOrUseTransactionAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// 提交当前上下文的事务更改

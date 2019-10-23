@@ -41,13 +41,11 @@ namespace OSharp.Threading
                 thread.Start();
             }
             catch (ThreadAbortException)
-            { }
+            {
+            }
             catch (Exception e)
             {
-                if (failAction != null)
-                {
-                    failAction(e);
-                }
+                failAction?.Invoke(e);
             }
         }
     }

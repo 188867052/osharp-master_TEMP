@@ -102,7 +102,7 @@ namespace OSharp.Tests.IEventBuses
             /// <param name="eventData">事件源数据</param>
             /// <param name="cancelToken">异步取消标识</param>
             /// <returns>是否成功</returns>
-            public override Task HandleAsync(HelloEventData eventData, CancellationToken cancelToken = default(CancellationToken))
+            public override Task HandleAsync(HelloEventData eventData, CancellationToken cancelToken = default)
             {
                 return Task.Run(() => this.Handle(eventData), cancelToken);
             }

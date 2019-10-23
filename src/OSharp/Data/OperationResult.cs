@@ -72,7 +72,7 @@ namespace OSharp.Data
         /// <returns></returns>
         public OperationResult<T> ToOperationResult<T>()
         {
-            T data = default(T);
+            T data = default;
             if (this.Data is T variable)
             {
                 data = variable;
@@ -105,7 +105,7 @@ namespace OSharp.Data
         /// 初始化一个<see cref="OperationResult{TData}"/>类型的新实例
         /// </summary>
         public OperationResult(OperationResultType resultType)
-            : this(resultType, null, default(TData))
+            : this(resultType, null, default)
         {
         }
 
@@ -113,7 +113,7 @@ namespace OSharp.Data
         /// 初始化一个<see cref="OperationResult{TData}"/>类型的新实例
         /// </summary>
         public OperationResult(OperationResultType resultType, string message)
-            : this(resultType, message, default(TData))
+            : this(resultType, message, default)
         {
         }
 

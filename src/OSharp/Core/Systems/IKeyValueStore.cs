@@ -53,7 +53,7 @@ namespace OSharp.Core.Systems
         /// <param name="predicate">检查谓语表达式</param>
         /// <param name="id">更新的键值对信息编号</param>
         /// <returns>键值对信息是否存在</returns>
-        Task<bool> CheckKeyValueExists(Expression<Func<KeyValue, bool>> predicate, Guid id = default(Guid));
+        Task<bool> CheckKeyValueExists(Expression<Func<KeyValue, bool>> predicate, Guid id = default);
 
         /// <summary>
         /// 添加或更新键值对信息信息

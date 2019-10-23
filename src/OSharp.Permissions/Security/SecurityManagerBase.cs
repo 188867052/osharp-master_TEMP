@@ -138,7 +138,7 @@ namespace OSharp.Security
         /// <param name="predicate">检查谓语表达式</param>
         /// <param name="id">更新的功能信息编号</param>
         /// <returns>功能信息是否存在</returns>
-        public virtual Task<bool> CheckFunctionExists(Expression<Func<TFunction, bool>> predicate, Guid id = default(Guid))
+        public virtual Task<bool> CheckFunctionExists(Expression<Func<TFunction, bool>> predicate, Guid id = default)
         {
             return this._functionRepository.CheckExistsAsync(predicate, id);
         }
@@ -205,7 +205,7 @@ namespace OSharp.Security
         /// <param name="predicate">检查谓语表达式</param>
         /// <param name="id">更新的实体信息编号</param>
         /// <returns>实体信息是否存在</returns>
-        public virtual Task<bool> CheckEntityInfoExists(Expression<Func<TEntityInfo, bool>> predicate, Guid id = default(Guid))
+        public virtual Task<bool> CheckEntityInfoExists(Expression<Func<TEntityInfo, bool>> predicate, Guid id = default)
         {
             return this._entityInfoRepository.CheckExistsAsync(predicate, id);
         }
@@ -232,7 +232,7 @@ namespace OSharp.Security
         /// <param name="predicate">检查谓语表达式</param>
         /// <param name="id">更新的模块信息编号</param>
         /// <returns>模块信息是否存在</returns>
-        public virtual Task<bool> CheckModuleExists(Expression<Func<TModule, bool>> predicate, TModuleKey id = default(TModuleKey))
+        public virtual Task<bool> CheckModuleExists(Expression<Func<TModule, bool>> predicate, TModuleKey id = default)
         {
             return this._moduleRepository.CheckExistsAsync(predicate, id);
         }
@@ -433,7 +433,7 @@ namespace OSharp.Security
         /// <param name="predicate">检查谓语表达式</param>
         /// <param name="id">更新的模块功能信息编号</param>
         /// <returns>模块功能信息是否存在</returns>
-        public virtual Task<bool> CheckModuleFunctionExists(Expression<Func<TModuleFunction, bool>> predicate, Guid id = default(Guid))
+        public virtual Task<bool> CheckModuleFunctionExists(Expression<Func<TModuleFunction, bool>> predicate, Guid id = default)
         {
             return this._moduleFunctionRepository.CheckExistsAsync(predicate, id);
         }
@@ -517,7 +517,7 @@ namespace OSharp.Security
         /// <param name="predicate">检查谓语表达式</param>
         /// <param name="id">更新的模块角色信息编号</param>
         /// <returns>模块角色信息是否存在</returns>
-        public virtual Task<bool> CheckModuleRoleExists(Expression<Func<TModuleRole, bool>> predicate, Guid id = default(Guid))
+        public virtual Task<bool> CheckModuleRoleExists(Expression<Func<TModuleRole, bool>> predicate, Guid id = default)
         {
             return this._moduleRoleRepository.CheckExistsAsync(predicate, id);
         }
@@ -621,7 +621,7 @@ namespace OSharp.Security
         /// <param name="predicate">检查谓语表达式</param>
         /// <param name="id">更新的模块用户信息编号</param>
         /// <returns>模块用户信息是否存在</returns>
-        public virtual Task<bool> CheckModuleUserExists(Expression<Func<TModuleUser, bool>> predicate, Guid id = default(Guid))
+        public virtual Task<bool> CheckModuleUserExists(Expression<Func<TModuleUser, bool>> predicate, Guid id = default)
         {
             return this._moduleUserRepository.CheckExistsAsync(predicate, id);
         }
@@ -740,7 +740,7 @@ namespace OSharp.Security
         /// <param name="predicate">检查谓语表达式</param>
         /// <param name="id">更新的实体角色信息编号</param>
         /// <returns>实体角色信息是否存在</returns>
-        public virtual Task<bool> CheckEntityRoleExists(Expression<Func<TEntityRole, bool>> predicate, Guid id = default(Guid))
+        public virtual Task<bool> CheckEntityRoleExists(Expression<Func<TEntityRole, bool>> predicate, Guid id = default)
         {
             return this._entityRoleRepository.CheckExistsAsync(predicate, id);
         }

@@ -27,7 +27,7 @@ namespace OSharp.Security
         /// <param name="predicate">检查谓语表达式</param>
         /// <param name="id">更新的实体信息编号</param>
         /// <returns>实体信息是否存在</returns>
-        Task<bool> CheckEntityInfoExists(Expression<Func<TEntityInfo, bool>> predicate, Guid id = default(Guid));
+        Task<bool> CheckEntityInfoExists(Expression<Func<TEntityInfo, bool>> predicate, Guid id = default);
 
         /// <summary>
         /// 更新实体信息

@@ -52,7 +52,7 @@ namespace Liuliu.Demo.Systems
         /// <param name="operationEntry">操作审计数据</param>
         /// <param name="cancelToken">异步取消标识</param>
         /// <returns></returns>
-        public async Task SaveAsync(AuditOperationEntry operationEntry, CancellationToken cancelToken = default(CancellationToken))
+        public async Task SaveAsync(AuditOperationEntry operationEntry, CancellationToken cancelToken = default)
         {
             AuditOperation operation = BuildOperation(operationEntry);
             await this._operationRepository.InsertAsync(operation);

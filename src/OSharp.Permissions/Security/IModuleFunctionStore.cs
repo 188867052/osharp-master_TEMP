@@ -34,7 +34,7 @@ namespace OSharp.Security
         /// <param name="predicate">检查谓语表达式</param>
         /// <param name="id">更新的模块功能信息编号</param>
         /// <returns>模块功能信息是否存在</returns>
-        Task<bool> CheckModuleFunctionExists(Expression<Func<TModuleFunction, bool>> predicate, Guid id = default(Guid));
+        Task<bool> CheckModuleFunctionExists(Expression<Func<TModuleFunction, bool>> predicate, Guid id = default);
 
         /// <summary>
         /// 设置模块的功能信息

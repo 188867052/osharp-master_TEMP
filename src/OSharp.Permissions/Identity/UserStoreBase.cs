@@ -1219,7 +1219,7 @@ namespace OSharp.Identity
         {
             if (id == null)
             {
-                return default(TUserKey);
+                return default;
             }
 
             return (TUserKey)TypeDescriptor.GetConverter(typeof(TUserKey)).ConvertFromInvariantString(id);
@@ -1232,7 +1232,7 @@ namespace OSharp.Identity
         /// <returns>An <see cref="string"/> representation of the provided <paramref name="id"/>.</returns>
         public virtual string ConvertIdToString(TUserKey id)
         {
-            if (id.Equals(default(TUserKey)))
+            if (id.Equals(default))
             {
                 return null;
             }

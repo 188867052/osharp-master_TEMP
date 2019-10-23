@@ -51,7 +51,7 @@ namespace OSharp.Core.Options
             string json = Get(key);
             if (string.IsNullOrEmpty(json))
             {
-                return default(T);
+                return default;
             }
 
             return json.FromJsonString<T>();

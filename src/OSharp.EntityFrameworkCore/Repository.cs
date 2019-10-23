@@ -355,11 +355,11 @@ namespace OSharp.Entity
         /// <param name="predicate">查询条件谓语表达式</param>
         /// <param name="id">编辑的实体标识</param>
         /// <returns>是否存在</returns>
-        public virtual bool CheckExists(Expression<Func<TEntity, bool>> predicate, TKey id = default(TKey))
+        public virtual bool CheckExists(Expression<Func<TEntity, bool>> predicate, TKey id = default)
         {
             Check.NotNull(predicate, nameof(predicate));
 
-            TKey defaultId = default(TKey);
+            TKey defaultId = default;
             var entity = this._dbSet.Where(predicate).Select(m => new { m.Id }).FirstOrDefault();
             bool exists = !typeof(TKey).IsValueType && ReferenceEquals(id, null) || id.Equals(defaultId)
                 ? entity != null
@@ -774,11 +774,11 @@ namespace OSharp.Entity
         /// <param name="predicate">查询条件谓语表达式</param>
         /// <param name="id">编辑的实体标识</param>
         /// <returns>是否存在</returns>
-        public virtual async Task<bool> CheckExistsAsync(Expression<Func<TEntity, bool>> predicate, TKey id = default(TKey))
+        public virtual async Task<bool> CheckExistsAsync(Expression<Func<TEntity, bool>> predicate, TKey id = default)
         {
             predicate.CheckNotNull(nameof(predicate));
 
-            TKey defaultId = default(TKey);
+            TKey defaultId = default;
             var entity = await this._dbSet.Where(predicate).Select(m => new { m.Id }).FirstOrDefaultAsync(this._cancellationTokenProvider.Token);
             bool exists = !typeof(TKey).IsValueType && ReferenceEquals(id, null) || id.Equals(defaultId)
                 ? entity != null

@@ -9,9 +9,7 @@
 
 using System;
 using System.ComponentModel;
-
 using Liuliu.Demo.Identity.Entities;
-
 using OSharp.Entity;
 using OSharp.Mapping;
 

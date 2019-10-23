@@ -64,7 +64,7 @@ namespace OSharp.Extensions
         {
             if (value == null && default(T) == null)
             {
-                return default(T);
+                return default;
             }
 
             if (value.GetType() == typeof(T))
@@ -166,7 +166,7 @@ namespace OSharp.Extensions
         {
             if (obj == null)
             {
-                return default(T);
+                return default;
             }
 
             if (typeof(T).HasAttribute<SerializableAttribute>())

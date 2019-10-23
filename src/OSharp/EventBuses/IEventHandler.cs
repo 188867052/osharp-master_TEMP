@@ -40,7 +40,7 @@ namespace OSharp.EventBuses
         /// <param name="eventData">事件源数据</param>
         /// <param name="cancelToken">异步取消标识</param>
         /// <returns></returns>
-        Task HandleAsync(IEventData eventData, CancellationToken cancelToken = default(CancellationToken));
+        Task HandleAsync(IEventData eventData, CancellationToken cancelToken = default);
     }
 
     /// <summary>
@@ -62,6 +62,6 @@ namespace OSharp.EventBuses
         /// </summary>
         /// <param name="eventData">事件源数据</param>
         /// <param name="cancelToken">异步取消标识</param>
-        Task HandleAsync(TEventData eventData, CancellationToken cancelToken = default(CancellationToken));
+        Task HandleAsync(TEventData eventData, CancellationToken cancelToken = default);
     }
 }

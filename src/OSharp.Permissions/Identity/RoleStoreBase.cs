@@ -309,7 +309,7 @@ namespace OSharp.Identity
         {
             if (id == null)
             {
-                return default(TRoleKey);
+                return default;
             }
 
             return (TRoleKey)TypeDescriptor.GetConverter(typeof(TRoleKey)).ConvertFromInvariantString(id);
@@ -322,7 +322,7 @@ namespace OSharp.Identity
         /// <returns>An <see cref="string"/> representation of the provided <paramref name="id"/>.</returns>
         public virtual string ConvertIdToString(TRoleKey id)
         {
-            if (id.Equals(default(TRoleKey)))
+            if (id.Equals(default))
             {
                 return null;
             }

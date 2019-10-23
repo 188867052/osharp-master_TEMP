@@ -45,7 +45,6 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers.Release
             UserManager<User> userManager,
             SecurityManager securityManager,
             IIdentityContract identityContract,
-            ILoggerFactory loggerFactory,
             ICacheService cacheService,
             IRepository<Versions, int> versionRepository,
             IFilterService filterService)

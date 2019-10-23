@@ -56,7 +56,7 @@ namespace Liuliu.Demo.Identity.Events
         /// <param name="eventData">事件源数据</param>
         /// <param name="cancelToken">异步取消标识</param>
         /// <returns>是否成功</returns>
-        public override async Task HandleAsync(LogoutEventData eventData, CancellationToken cancelToken = default(CancellationToken))
+        public override async Task HandleAsync(LogoutEventData eventData, CancellationToken cancelToken = default)
         {
             LoginLog log = this._loginLogRepository.QueryAsNoTracking().LastOrDefault(m => m.UserId == eventData.UserId);
             if (log == null)

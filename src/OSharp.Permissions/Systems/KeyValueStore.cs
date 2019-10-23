@@ -100,7 +100,7 @@ namespace OSharp.Systems
         /// <param name="predicate">检查谓语表达式</param>
         /// <param name="id">更新的键值对信息编号</param>
         /// <returns>键值对信息是否存在</returns>
-        public Task<bool> CheckKeyValueExists(Expression<Func<KeyValue, bool>> predicate, Guid id = default(Guid))
+        public Task<bool> CheckKeyValueExists(Expression<Func<KeyValue, bool>> predicate, Guid id = default)
         {
             return this._keyValueRepository.CheckExistsAsync(predicate, id);
         }

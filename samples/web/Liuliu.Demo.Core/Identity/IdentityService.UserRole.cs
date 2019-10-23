@@ -41,7 +41,7 @@ namespace Liuliu.Demo.Identity
         /// <param name="predicate">检查谓语表达式</param>
         /// <param name="id">更新的用户角色信息编号</param>
         /// <returns>用户角色信息是否存在</returns>
-        public Task<bool> CheckUserRoleExists(Expression<Func<UserRole, bool>> predicate, Guid id = default(Guid))
+        public Task<bool> CheckUserRoleExists(Expression<Func<UserRole, bool>> predicate, Guid id = default)
         {
             return this._userRoleRepository.CheckExistsAsync(predicate, id);
         }

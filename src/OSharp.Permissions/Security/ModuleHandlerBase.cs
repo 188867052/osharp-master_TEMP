@@ -226,7 +226,7 @@ namespace OSharp.Security
         {
             return new TModuleInputDto()
             {
-                Id = existsModule?.Id ?? default(TModuleKey),
+                Id = existsModule?.Id ?? default,
                 Name = info.Name,
                 Code = info.Code,
                 OrderCode = info.Order,

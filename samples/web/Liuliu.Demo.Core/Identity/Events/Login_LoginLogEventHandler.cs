@@ -54,7 +54,7 @@ namespace Liuliu.Demo.Identity.Events
         /// <param name="eventData">事件源数据</param>
         /// <param name="cancelToken">异步取消标识</param>
         /// <returns>是否成功</returns>
-        public override Task HandleAsync(LoginEventData eventData, CancellationToken cancelToken = default(CancellationToken))
+        public override Task HandleAsync(LoginEventData eventData, CancellationToken cancelToken = default)
         {
             LoginLog log = new LoginLog()
             {

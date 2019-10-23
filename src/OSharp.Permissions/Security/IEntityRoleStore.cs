@@ -33,7 +33,7 @@ namespace OSharp.Security
         /// <param name="predicate">检查谓语表达式</param>
         /// <param name="id">更新的实体角色信息编号</param>
         /// <returns>实体角色信息是否存在</returns>
-        Task<bool> CheckEntityRoleExists(Expression<Func<TEntityRole, bool>> predicate, Guid id = default(Guid));
+        Task<bool> CheckEntityRoleExists(Expression<Func<TEntityRole, bool>> predicate, Guid id = default);
 
         /// <summary>
         /// 获取指定角色和实体的过滤条件组

@@ -146,7 +146,7 @@ namespace OSharp.Entity
         /// </summary>
         /// <param name="cancellationToken">异步取消标记</param>
         /// <returns></returns>
-        public virtual async Task BeginOrUseTransactionAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task BeginOrUseTransactionAsync(CancellationToken cancellationToken = default)
         {
             if (this._dbContexts.Count == 0)
             {

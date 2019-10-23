@@ -28,6 +28,6 @@ namespace OSharp.Entity
         /// </summary>
         /// <param name="cancelToken">任务取消标识</param>
         /// <returns>操作影响的行数</returns>
-        Task<int> SaveChangesAsync(CancellationToken cancelToken = default(CancellationToken));
+        Task<int> SaveChangesAsync(CancellationToken cancelToken = default);
     }
 }
