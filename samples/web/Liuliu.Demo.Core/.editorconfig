@@ -20,3 +20,15 @@ dotnet_diagnostic.SA1636.severity = none
 
 # SA1611: Element parameters should be documented
 dotnet_diagnostic.SA1611.severity = none
+
+# SA1649: File name should match first type name
+dotnet_diagnostic.SA1649.severity = none
+
+# SA1618: Generic type parameters should be documented
+dotnet_diagnostic.SA1618.severity = none
+
+# SA1600: Elements should be documented
+dotnet_diagnostic.SA1600.severity = none
+
+# IDE0005: Using 指令是不需要的。
+dotnet_diagnostic.IDE0005.severity = none

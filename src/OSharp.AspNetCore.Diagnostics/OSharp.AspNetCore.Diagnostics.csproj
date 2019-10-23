@@ -10,6 +10,7 @@
     <Description>OSharp AspNetCore性能诊断组件，提供AspNetCore性能诊断功能的封装</Description>
     <RootNamespace>OSharp.AspNetCore.Diagnostics</RootNamespace>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">

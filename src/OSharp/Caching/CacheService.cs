@@ -1,20 +1,9 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="CacheService.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2018 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2018-12-19 19:10</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-
 using Microsoft.Extensions.Caching.Distributed;
-
 using OSharp.Collections;
 using OSharp.Core.Functions;
 using OSharp.Entity;
@@ -495,6 +484,11 @@ namespace OSharp.Caching
                 if (typeof(TEntity).IsEntityType())
                 {
                     source = source.OrderBy("Id");
+                }
+
+                // TODO: Skip if it is a view
+                else if (typeof(TEntity).Name == "VTables")
+                {
                 }
                 else if (typeof(TEntity).IsBaseOn<ICreatedTime>())
                 {

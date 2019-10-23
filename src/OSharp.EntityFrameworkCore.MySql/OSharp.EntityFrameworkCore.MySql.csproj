@@ -9,6 +9,7 @@
     <Description>OSharp 数据访问组件，封装EntityFrameworkCore的MySql数据访问功能的实现</Description>
     <Summary>OSharp 数据访问组件MySql</Summary>
     <RootNamespace>OSharp.Entity.MySql</RootNamespace>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">

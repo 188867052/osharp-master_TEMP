@@ -10,6 +10,7 @@
     <Description>OSharp AspNetCore组件，提供AspNetCore的服务端功能的封装</Description>
     <RootNamespace>OSharp.AspNetCore</RootNamespace>
     <AssemblyName>OSharp.AspNetCore</AssemblyName>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">

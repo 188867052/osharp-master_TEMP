@@ -209,6 +209,10 @@ namespace OSharp.Entity
                 {
                     source = source.OrderBy("Id");
                 }
+                // TODO: Skip if it is a view
+                else if (typeof(TEntity).Name == "VTables")
+                {
+                }
                 else if (typeof(TEntity).IsBaseOn<ICreatedTime>())
                 {
                     source = source.OrderBy("CreatedTime");

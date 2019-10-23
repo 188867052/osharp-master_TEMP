@@ -1,9 +1,6 @@
 ﻿using System;
-
 using log4net;
-
 using Microsoft.Extensions.Logging;
-
 using OSharp.Data;
 
 namespace OSharp.Log4Net

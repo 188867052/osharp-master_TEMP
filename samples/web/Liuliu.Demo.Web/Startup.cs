@@ -7,8 +7,10 @@
 //  <last-date>2018-06-27 4:50</last-date>
 // -----------------------------------------------------------------------
 
+using Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 #if NETCOREAPP3_0
 using Microsoft.Extensions.Hosting;
@@ -25,6 +27,7 @@ namespace Liuliu.Demo.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOSharp<AspOsharpPackManager>();
+            services.AddDbContext<OSharpDbContext>(options => options.UseSqlServer(EFCore.Scaffolding.Extension.Connection.ConnectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

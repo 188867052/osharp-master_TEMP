@@ -27,6 +27,7 @@ const routes: Routes = [
             { path: 'systems', loadChildren: () => import('./systems/systems.module').then(m => m.SystemsModule) },
             { path: 'infos', loadChildren: () => import('./infos/infos.module').then(m => m.InfosModule), canActivateChild: [ACLGuard], data: { guard: 'Root.Admin.Infos' } },
             { path: 'release', loadChildren: () => import('./release.manage/release.module').then(m => m.ReleaseModule) },
+            { path: 'sqlonline', loadChildren: () => import('./sqlonline/sqlonline.module').then(m => m.SqlOnlineModule) },
         ]
     },
     // 全屏布局

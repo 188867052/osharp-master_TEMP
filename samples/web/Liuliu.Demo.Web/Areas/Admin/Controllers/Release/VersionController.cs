@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Liuliu.Demo.Common.Dtos;
 using Liuliu.Demo.Core.Release.Dtos;
 using Liuliu.Demo.Core.Release.Entities;
+using Liuliu.Demo.Core.SqlOnline.Dtos;
 using Liuliu.Demo.Identity;
 using Liuliu.Demo.Identity.Dtos;
 using Liuliu.Demo.Identity.Entities;
@@ -14,7 +15,6 @@ using Liuliu.Demo.Security;
 using Liuliu.Demo.Security.Dtos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using OSharp.AspNetCore.Mvc;
 using OSharp.AspNetCore.Mvc.Filters;
 using OSharp.AspNetCore.UI;
@@ -27,6 +27,8 @@ using OSharp.Entity;
 using OSharp.Filter;
 using OSharp.Mapping;
 using OSharp.Security;
+using VersionInputDto = Liuliu.Demo.Core.Release.Dtos.VersionInputDto;
+using VersionOutputDto = Liuliu.Demo.Identity.Dtos.VersionOutputDto;
 
 namespace Liuliu.Demo.Web.Areas.Admin.Controllers.Release
 {

@@ -1,12 +1,4 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="FileHelper.cs" company="OSharp开源团队">
-//      Copyright (c) 2014 OSharp. All rights reserved.
-//  </copyright>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2014-07-18 18:25</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;

@@ -20,3 +20,6 @@ dotnet_diagnostic.SA1616.severity = none
 
 # SA1614: Element parameter documentation should have text
 dotnet_diagnostic.SA1614.severity = none
+
+# SA1633: File should have header
+dotnet_diagnostic.SA1633.severity = none

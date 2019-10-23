@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="utf-16"?>
+<config>
+  <class Name="AuditEntity" Table="AuditEntity" PrimaryKey="Id">
+    <property Name="Id" Column="Id" />
+    <property Name="Name" Column="Name" />
+    <property Name="TypeName" Column="TypeName" />
+    <property Name="EntityKey" Column="EntityKey" />
+    <property Name="OperateType" Column="OperateType" />
+    <property Name="OperationId" Column="OperationId" />
+  </class>
+  <class Name="AuditOperation" Table="AuditOperation" PrimaryKey="Id">
+    <property Name="Id" Column="Id" />
+    <property Name="FunctionName" Column="FunctionName" />
+    <property Name="UserId" Column="UserId" />
+    <property Name="UserName" Column="UserName" />
+    <property Name="NickName" Column="NickName" />
+    <property Name="Ip" Column="Ip" />
+    <property Name="OperationSystem" Column="OperationSystem" />
+    <property Name="Browser" Column="Browser" />
+    <property Name="UserAgent" Column="UserAgent" />
+    <property Name="ResultType" Column="ResultType" />
+    <property Name="Message" Column="Message" />
+    <property Name="Elapsed" Column="Elapsed" />
+    <property Name="CreatedTime" Column="CreatedTime" />
+  </class>
+  <class Name="AuditProperty" Table="AuditProperty" PrimaryKey="Id">
+    <property Name="Id" Column="Id" />
+    <property Name="DisplayName" Column="DisplayName" />
+    <property Name="FieldName" Column="FieldName" />
+    <property Name="OriginalValue" Column="OriginalValue" />
+    <property Name="NewValue" Column="NewValue" />
+    <property Name="DataType" Column="DataType" />
+    <property Name="AuditEntityId" Column="AuditEntityId" />
+  </class>
+  <class Name="EntityInfo" Table="EntityInfo" PrimaryKey="Id">
+    <property Name="Id" Column="Id" />
+    <property Name="Name" Column="Name" />
+    <property Name="TypeName" Column="TypeName" />
+    <property Name="AuditEnabled" Column="AuditEnabled" />
+    <property Name="PropertyJson" Column="PropertyJson" />
+  </class>
+  <class Name="EntityRole" Table="EntityRole" PrimaryKey="Id">
+    <property Name="Id" Column="Id" />
+    <property Name="RoleId" Column="RoleId" />
+    <property Name="EntityId" Column="EntityId" />
+    <property Name="Operation" Column="Operation" />
+    <property Name="FilterGroupJson" Column="FilterGroupJson" />
+    <property Name="IsLocked" Column="IsLocked" />
+    <property Name="CreatedTime" Column="CreatedTime" />
+  </class>
+  <class Name="EntityUser" Table="EntityUser" PrimaryKey="Id">
+    <property Name="Id" Column="Id" />
+    <property Name="UserId" Column="UserId" />
+    <property Name="EntityId" Column="EntityId" />
+    <property Name="FilterGroupJson" Column="FilterGroupJson" />
+    <property Name="IsLocked" Column="IsLocked" />
+    <property Name="CreatedTime" Column="CreatedTime" />
+  </class>
+  <class Name="Function" Table="Function" PrimaryKey="Id">
+    <property Name="Id" Column="Id" />
+    <property Name="Name" Column="Name" />
+    <property Name="Area" Column="Area" />
+    <property Name="Controller" Column="Controller" />
+    <property Name="Action" Column="Action" />
+    <property Name="IsController" Column="IsController" />
+    <property Name="IsAjax" Column="IsAjax" />
+    <property Name="AccessType" Column="AccessType" />
+    <property Name="IsAccessTypeChanged" Column="IsAccessTypeChanged" />
+    <property Name="AuditOperationEnabled" Column="AuditOperationEnabled" />
+    <property Name="AuditEntityEnabled" Column="AuditEntityEnabled" />
+    <property Name="CacheExpirationSeconds" Column="CacheExpirationSeconds" />
+    <property Name="IsCacheSliding" Column="IsCacheSliding" />
+    <property Name="IsLocked" Column="IsLocked" />
+  </class>
+  <class Name="KeyValue" Table="KeyValue" PrimaryKey="Id">
+    <property Name="Id" Column="Id" />
+    <property Name="ValueJson" Column="ValueJson" />
+    <property Name="ValueType" Column="ValueType" />
+    <property Name="Key" Column="Key" />
+    <property Name="IsLocked" Column="IsLocked" />
+  </class>
+  <class Name="LoginLog" Table="LoginLog" PrimaryKey="Id">
+    <property Name="Id" Column="Id" />
+    <property Name="Ip" Column="Ip" />
+    <property Name="UserAgent" Column="UserAgent" />
+    <property Name="LogoutTime" Column="LogoutTime" />
+    <property Name="CreatedTime" Column="CreatedTime" />
+    <property Name="UserId" Column="UserId" />
+  </class>
+  <class Name="Message" Table="Message" PrimaryKey="Id">
+    <property Name="Id" Column="Id" />
+    <property Name="Title" Column="Title" />
+    <property Name="Content" Column="Content" />
+    <property Name="MessageType" Column="MessageType" />
+    <property Name="NewReplyCount" Column="NewReplyCount" />
+    <property Name="IsSended" Column="IsSended" />
+    <property Name="CanReply" Column="CanReply" />
+    <property Name="BeginDate" Column="BeginDate" />
+    <property Name="EndDate" Column="EndDate" />
+    <property Name="IsLocked" Column="IsLocked" />
+    <property Name="DeletedTime" Column="DeletedTime" />
+    <property Name="CreatedTime" Column="CreatedTime" />
+    <property Name="SenderId" Column="SenderId" />
+  </class>
+  <class Name="MessageReceive" Table="MessageReceive" PrimaryKey="Id">
+    <property Name="Id" Column="Id" />
+    <property Name="ReadDate" Column="ReadDate" />
+    <property Name="NewReplyCount" Column="NewReplyCount" />
+    <property Name="CreatedTime" Column="CreatedTime" />
+    <property Name="MessageId" Column="MessageId" />
+    <property Name="UserId" Column="UserId" />
+  </class>
+  <class Name="MessageReply" Table="MessageReply" PrimaryKey="Id">
+    <property Name="Id" Column="Id" />
+    <property Name="Content" Column="Content" />
+    <property Name="IsRead" Column="IsRead" />
+    <property Name="ParentMessageId" Column="ParentMessageId" />
+    <property Name="ParentReplyId" Column="ParentReplyId" />
+    <property Name="IsLocked" Column="IsLocked" />
+    <property Name="DeletedTime" Column="DeletedTime" />
+    <property Name="CreatedTime" Column="CreatedTime" />
+    <property Name="UserId" Column="UserId" />
+    <property Name="BelongMessageId" Column="BelongMessageId" />
+  </class>
+  <class Name="Module" Table="Module" PrimaryKey="Id">
+    <property Name="Id" ValueGenerated="OnAdd" Column="Id" />
+    <property Name="Name" Column="Name" />
+    <property Name="Remark" Column="Remark" />
+    <property Name="Code" Column="Code" />
+    <property Name="OrderCode" Column="OrderCode" />
+    <property Name="TreePathString" Column="TreePathString" />
+    <property Name="ParentId" Column="ParentId" />
+  </class>
+  <class Name="ModuleFunction" Table="ModuleFunction" PrimaryKey="Id">
+    <property Name="Id" Column="Id" />
+    <property Name="ModuleId" Column="ModuleId" />
+    <property Name="FunctionId" Column="FunctionId" />
+  </class>
+  <class Name="ModuleRole" Table="ModuleRole" PrimaryKey="Id">
+    <property Name="Id" Column="Id" />
+    <property Name="ModuleId" Column="ModuleId" />
+    <property Name="RoleId" Column="RoleId" />
+  </class>
+  <class Name="ModuleUser" Table="ModuleUser" PrimaryKey="Id">
+    <property Name="Id" Column="Id" />
+    <property Name="ModuleId" Column="ModuleId" />
+    <property Name="UserId" Column="UserId" />
+    <property Name="Disabled" Column="Disabled" />
+  </class>
+  <class Name="Organization" Table="Organization" PrimaryKey="Id">
+    <property Name="Id" ValueGenerated="OnAdd" Column="Id" />
+    <property Name="Name" Column="Name" />
+    <property Name="Remark" Column="Remark" />
+    <property Name="ParentId" Column="ParentId" />
+  </class>
+  <class Name="Role" Table="Role" PrimaryKey="Id">
+    <property Name="Id" ValueGenerated="OnAdd" Column="Id" />
+    <property Name="Name" Column="Name" />
+    <property Name="NormalizedName" Column="NormalizedName" />
+    <property Name="ConcurrencyStamp" Column="ConcurrencyStamp" />
+    <property Name="Remark" Column="Remark" />
+    <property Name="IsAdmin" Column="IsAdmin" />
+    <property Name="IsDefault" Column="IsDefault" />
+    <property Name="IsSystem" Column="IsSystem" />
+    <property Name="IsLocked" Column="IsLocked" />
+    <property Name="CreatedTime" Column="CreatedTime" />
+    <property Name="DeletedTime" Column="DeletedTime" />
+    <property Name="MessageId" Column="MessageId" />
+  </class>
+  <class Name="RoleClaim" Table="RoleClaim" PrimaryKey="Id">
+    <property Name="Id" ValueGenerated="OnAdd" Column="Id" />
+    <property Name="RoleId" Column="RoleId" />
+    <property Name="ClaimType" Column="ClaimType" />
+    <property Name="ClaimValue" Column="ClaimValue" />
+  </class>
+  <class Name="User" Table="User" PrimaryKey="Id">
+    <property Name="Id" ValueGenerated="OnAdd" Column="Id" />
+    <property Name="UserName" Column="UserName" />
+    <property Name="NormalizedUserName" Column="NormalizedUserName" />
+    <property Name="NickName" Column="NickName" />
+    <property Name="Email" Column="Email" />
+    <property Name="NormalizeEmail" Column="NormalizeEmail" />
+    <property Name="EmailConfirmed" Column="EmailConfirmed" />
+    <property Name="PasswordHash" Column="PasswordHash" />
+    <property Name="HeadImg" Column="HeadImg" />
+    <property Name="SecurityStamp" Column="SecurityStamp" />
+    <property Name="ConcurrencyStamp" Column="ConcurrencyStamp" />
+    <property Name="PhoneNumber" Column="PhoneNumber" />
+    <property Name="PhoneNumberConfirmed" Column="PhoneNumberConfirmed" />
+    <property Name="TwoFactorEnabled" Column="TwoFactorEnabled" />
+    <property Name="LockoutEnd" Column="LockoutEnd" />
+    <property Name="LockoutEnabled" Column="LockoutEnabled" />
+    <property Name="AccessFailedCount" Column="AccessFailedCount" />
+    <property Name="IsSystem" Column="IsSystem" />
+    <property Name="IsLocked" Column="IsLocked" />
+    <property Name="CreatedTime" Column="CreatedTime" />
+    <property Name="DeletedTime" Column="DeletedTime" />
+    <property Name="Remark" Column="Remark" />
+    <property Name="MessageId" Column="MessageId" />
+  </class>
+  <class Name="UserClaim" Table="UserClaim" PrimaryKey="Id">
+    <property Name="Id" ValueGenerated="OnAdd" Column="Id" />
+    <property Name="UserId" Column="UserId" />
+    <property Name="ClaimType" Column="ClaimType" />
+    <property Name="ClaimValue" Column="ClaimValue" />
+  </class>
+  <class Name="UserDetail" Table="UserDetail" PrimaryKey="Id">
+    <property Name="Id" ValueGenerated="OnAdd" Column="Id" />
+    <property Name="RegisterIp" Column="RegisterIp" />
+    <property Name="UserId" Column="UserId" />
+  </class>
+  <class Name="UserLogin" Table="UserLogin" PrimaryKey="Id">
+    <property Name="Id" Column="Id" />
+    <property Name="LoginProvider" Column="LoginProvider" />
+    <property Name="ProviderKey" Column="ProviderKey" />
+    <property Name="ProviderDisplayName" Column="ProviderDisplayName" />
+    <property Name="Avatar" Column="Avatar" />
+    <property Name="CreatedTime" Column="CreatedTime" />
+    <property Name="UserId" Column="UserId" />
+  </class>
+  <class Name="UserRole" Table="UserRole" PrimaryKey="Id">
+    <property Name="Id" Column="Id" />
+    <property Name="UserId" Column="UserId" />
+    <property Name="RoleId" Column="RoleId" />
+    <property Name="CreatedTime" Column="CreatedTime" />
+    <property Name="IsLocked" Column="IsLocked" />
+    <property Name="DeletedTime" Column="DeletedTime" />
+  </class>
+  <class Name="UserToken" Table="UserToken" PrimaryKey="Id">
+    <property Name="Id" Column="Id" />
+    <property Name="UserId" Column="UserId" />
+    <property Name="LoginProvider" Column="LoginProvider" />
+    <property Name="Name" Column="Name" />
+    <property Name="Value" Column="Value" />
+  </class>
+  <class Name="VTables" View="V_Tables">
+    <property Name="Name" Column="name" />
+    <property Name="Rows" Column="rows" />
+    <property Name="KeyCount" Column="key_count" />
+    <property Name="CreateDate" Column="create_date" Summary="创建时间" />
+    <property Name="ModifyDate" Column="modify_date" Summary="修改时间" />
+  </class>
+  <class Name="Versions" Table="Versions" PrimaryKey="id">
+    <property Name="Id" ValueGenerated="OnAdd" Column="id" />
+    <property Name="Name" Column="Name" />
+    <property Name="CreatedTime" Column="CreatedTime" />
+    <property Name="DeletedTime" Column="DeletedTime" />
+    <property Name="IsLocked" Column="IsLocked" />
+  </class>
+  <namespace Type="SexEnum">EFCore.Scaffolding.Extension.Entity.Enums</namespace>
+</config>

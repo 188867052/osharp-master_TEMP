@@ -164,8 +164,7 @@ namespace OSharp.Filter
         /// <param name="group">传入的查询条件组，为空时则只返回数据权限过滤器</param>
         /// <param name="operation">数据权限操作</param>
         /// <returns>综合之后的表达式</returns>
-        public static Expression<Func<T, bool>> GetDataFilterExpression<T>(FilterGroup group = null,
-            DataAuthOperation operation = DataAuthOperation.Read)
+        public static Expression<Func<T, bool>> GetDataFilterExpression<T>(FilterGroup group = null, DataAuthOperation operation = DataAuthOperation.Read)
         {
             Expression<Func<T, bool>> exp = m => true;
             if (group != null)
