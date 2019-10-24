@@ -32,3 +32,6 @@ dotnet_diagnostic.SA1600.severity = none
 
 # IDE0005: Using 指令是不需要的。
 dotnet_diagnostic.IDE0005.severity = none
+
+# SA1601: Partial elements should be documented
+dotnet_diagnostic.SA1601.severity = none

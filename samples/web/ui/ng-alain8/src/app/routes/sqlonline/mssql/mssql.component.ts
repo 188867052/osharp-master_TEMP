@@ -3,7 +3,7 @@ import { STComponentBase } from '@shared/osharp/components/st-component-base';
 import { SFUISchema } from '@delon/form';
 import { FilterGroup } from '@shared/osharp/osharp.model';
 import { STData, STColumn } from '@delon/abc';
-import { FunctionViewComponent } from '@shared/components/function-view/function-view.component';
+import { ColumnViewComponent } from './column-view.component';
 
 @Component({
     selector: 'app-mssql',
@@ -59,13 +59,13 @@ export class MsSqlComponent extends STComponentBase implements OnInit {
     functionTitle: string;
     functionVisible = false;
     functionReadUrl: string;
-    @ViewChild('function', { static: false }) function: FunctionViewComponent;
+    @ViewChild('function', { static: false }) function: ColumnViewComponent;
 
     private viewFunction(row: STData) {
         this.functionTitle = `查看字段功能 - ${row.Name}`;
         this.functionVisible = true;
 
-        this.functionReadUrl = `api/admin/userfunction/readfunctions?userId=${row.Id}`;
+        this.functionReadUrl = `api/admin/mssql/readcolumns?tableName=${row.Name}`;
         let filter: FilterGroup = new FilterGroup();
         setTimeout(() => {
             this.function.reload(filter);

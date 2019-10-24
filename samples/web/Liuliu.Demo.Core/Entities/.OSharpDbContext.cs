@@ -66,6 +66,8 @@ namespace Entities
 
         public virtual DbSet<UserToken> UserToken { get; set; }
 
+        public virtual DbSet<VColumns> VColumns { get; set; }
+
         public virtual DbSet<VTables> VTables { get; set; }
 
         public virtual DbSet<Versions> Versions { get; set; }
@@ -455,6 +457,93 @@ namespace Entities
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserToken)
                     .HasForeignKey(d => d.UserId);
+            });
+
+            modelBuilder.Entity<VColumns>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("V_Columns");
+
+                entity.Property(e => e.CharacterMaximumLength).HasColumnName("CHARACTER_MAXIMUM_LENGTH");
+
+                entity.Property(e => e.CharacterOctetLength).HasColumnName("CHARACTER_OCTET_LENGTH");
+
+                entity.Property(e => e.CharacterSetCatalog)
+                    .HasColumnName("CHARACTER_SET_CATALOG")
+                    .HasMaxLength(128);
+
+                entity.Property(e => e.CharacterSetName)
+                    .HasColumnName("CHARACTER_SET_NAME")
+                    .HasMaxLength(128);
+
+                entity.Property(e => e.CharacterSetSchema)
+                    .HasColumnName("CHARACTER_SET_SCHEMA")
+                    .HasMaxLength(128);
+
+                entity.Property(e => e.CollationCatalog)
+                    .HasColumnName("COLLATION_CATALOG")
+                    .HasMaxLength(128);
+
+                entity.Property(e => e.CollationName)
+                    .HasColumnName("COLLATION_NAME")
+                    .HasMaxLength(128);
+
+                entity.Property(e => e.CollationSchema)
+                    .HasColumnName("COLLATION_SCHEMA")
+                    .HasMaxLength(128);
+
+                entity.Property(e => e.ColumnDefault)
+                    .HasColumnName("COLUMN_DEFAULT")
+                    .HasMaxLength(4000);
+
+                entity.Property(e => e.ColumnName)
+                    .HasColumnName("COLUMN_NAME")
+                    .HasMaxLength(128);
+
+                entity.Property(e => e.DataType)
+                    .HasColumnName("DATA_TYPE")
+                    .HasMaxLength(128);
+
+                entity.Property(e => e.DatetimePrecision).HasColumnName("DATETIME_PRECISION");
+
+                entity.Property(e => e.DomainCatalog)
+                    .HasColumnName("DOMAIN_CATALOG")
+                    .HasMaxLength(128);
+
+                entity.Property(e => e.DomainName)
+                    .HasColumnName("DOMAIN_NAME")
+                    .HasMaxLength(128);
+
+                entity.Property(e => e.DomainSchema)
+                    .HasColumnName("DOMAIN_SCHEMA")
+                    .HasMaxLength(128);
+
+                entity.Property(e => e.IsNullable)
+                    .HasColumnName("IS_NULLABLE")
+                    .HasMaxLength(3)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NumericPrecision).HasColumnName("NUMERIC_PRECISION");
+
+                entity.Property(e => e.NumericPrecisionRadix).HasColumnName("NUMERIC_PRECISION_RADIX");
+
+                entity.Property(e => e.NumericScale).HasColumnName("NUMERIC_SCALE");
+
+                entity.Property(e => e.OrdinalPosition).HasColumnName("ORDINAL_POSITION");
+
+                entity.Property(e => e.TableCatalog)
+                    .HasColumnName("TABLE_CATALOG")
+                    .HasMaxLength(128);
+
+                entity.Property(e => e.TableName)
+                    .IsRequired()
+                    .HasColumnName("TABLE_NAME")
+                    .HasMaxLength(128);
+
+                entity.Property(e => e.TableSchema)
+                    .HasColumnName("TABLE_SCHEMA")
+                    .HasMaxLength(128);
             });
 
             modelBuilder.Entity<VTables>(entity =>

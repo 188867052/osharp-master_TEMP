@@ -233,6 +233,31 @@
     <property Name="Name" Column="Name" />
     <property Name="Value" Column="Value" />
   </class>
+  <class Name="VColumns" View="V_Columns">
+    <property Name="TableCatalog" Column="TABLE_CATALOG" />
+    <property Name="TableSchema" Column="TABLE_SCHEMA" />
+    <property Name="TableName" Column="TABLE_NAME" />
+    <property Name="ColumnName" Column="COLUMN_NAME" />
+    <property Name="OrdinalPosition" Column="ORDINAL_POSITION" />
+    <property Name="ColumnDefault" Column="COLUMN_DEFAULT" />
+    <property Name="IsNullable" Column="IS_NULLABLE" />
+    <property Name="DataType" Column="DATA_TYPE" />
+    <property Name="CharacterMaximumLength" Column="CHARACTER_MAXIMUM_LENGTH" />
+    <property Name="CharacterOctetLength" Column="CHARACTER_OCTET_LENGTH" />
+    <property Name="NumericPrecision" Column="NUMERIC_PRECISION" />
+    <property Name="NumericPrecisionRadix" Column="NUMERIC_PRECISION_RADIX" />
+    <property Name="NumericScale" Column="NUMERIC_SCALE" />
+    <property Name="DatetimePrecision" Column="DATETIME_PRECISION" />
+    <property Name="CharacterSetCatalog" Column="CHARACTER_SET_CATALOG" />
+    <property Name="CharacterSetSchema" Column="CHARACTER_SET_SCHEMA" />
+    <property Name="CharacterSetName" Column="CHARACTER_SET_NAME" />
+    <property Name="CollationCatalog" Column="COLLATION_CATALOG" />
+    <property Name="CollationSchema" Column="COLLATION_SCHEMA" />
+    <property Name="CollationName" Column="COLLATION_NAME" />
+    <property Name="DomainCatalog" Column="DOMAIN_CATALOG" />
+    <property Name="DomainSchema" Column="DOMAIN_SCHEMA" />
+    <property Name="DomainName" Column="DOMAIN_NAME" />
+  </class>
   <class Name="VTables" View="V_Tables">
     <property Name="Name" Column="name" />
     <property Name="Rows" Column="rows" />

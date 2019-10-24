@@ -487,7 +487,7 @@ namespace OSharp.Caching
                 }
 
                 // TODO: Skip if it is a view
-                else if (typeof(TEntity).Name == "VTables")
+                else if (typeof(TEntity).Name == "VTables" || typeof(TEntity).Name == "VColumns")
                 {
                 }
                 else if (typeof(TEntity).IsBaseOn<ICreatedTime>())

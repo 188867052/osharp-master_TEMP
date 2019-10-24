@@ -77,6 +77,28 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers.Release
         }
 
         /// <summary>
+        /// 读取用户功能信息
+        /// </summary>
+        /// <returns>用户功能信息</returns>
+        [HttpPost]
+        [ModuleInfo]
+        [Description("读取字段")]
+        public PageData<ColumnOutputDto> ReadColumns(string tableName, [FromBody]PageRequest request)
+        {
+            Check.NotNull(request, nameof(request));
+            Check.NotNullOrEmpty(tableName, nameof(tableName));
+
+            Check.NotNull(request, nameof(request));
+            IFunction function = this.GetExecuteFunction();
+
+            Expression<Func<VColumns, bool>> predicate = this._filterService.GetExpression<VColumns>(request.FilterGroup);
+            var source = this.dbContext.VColumns.Where(o => o.TableName == tableName);
+            var page = this._cacheService.ToPageCache(source, predicate, request.PageCondition, m => new { D = m, }, function)
+                           .ToPageResult(data => data.Select(m => new ColumnOutputDto(m.D)).ToArray());
+            return page.ToPageData();
+        }
+
+        /// <summary>
         /// 读取版本节点信息
         /// </summary>
         /// <param name="group"></param>
