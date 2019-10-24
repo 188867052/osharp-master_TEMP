@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Entities;
 using Liuliu.Demo.Identity.Dtos;
+using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using OSharp.Entity;
 using OSharp.Mapping;
 
@@ -15,12 +17,14 @@ namespace Liuliu.Demo.Core.SqlOnline.Dtos
         /// <summary>
         /// 初始化一个<see cref="UserOutputDto"/>类型的新实例
         /// </summary>
-        public TableOutputDto(VTables u)
+        public TableOutputDto(VTables u, DatabaseTable databaseTable)
         {
             this.Name = u.Name;
             this.CreateDate = u.CreateDate;
             this.ModifyDate = u.ModifyDate;
-            this.KeyCount = u.KeyCount;
+            this.ColumnCount = databaseTable.Columns.Count;
+            this.Comment = databaseTable.Comment;
+            this.PrimaryKeys = string.Join(",", databaseTable.PrimaryKey.Columns.Select(o => o.Name));
             this.Rows = u.Rows;
         }
 
@@ -29,13 +33,17 @@ namespace Liuliu.Demo.Core.SqlOnline.Dtos
         /// </summary>
         public string Name { get; set; }
 
+        public string Comment { get; set; }
+
+        public string PrimaryKeys { get; set; }
+
         public DateTime CreateDate { get; set; }
 
         public DateTime ModifyDate { get; set; }
 
         public int? Rows { get; set; }
 
-        public int? KeyCount { get; set; }
+        public int ColumnCount { get; set; }
 
         /// <summary>
         /// 获取或设置 是否可更新

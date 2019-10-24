@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using EFCore.Scaffolding.Extension;
 using Entities;
 using Liuliu.Demo.Common.Dtos;
 using Liuliu.Demo.Core.Release.Entities;
@@ -13,18 +15,18 @@ using Liuliu.Demo.Security;
 using Liuliu.Demo.Security.Dtos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
+using OSharp.AspNetCore.CodeGeneration;
 using OSharp.AspNetCore.Mvc;
 using OSharp.AspNetCore.Mvc.Filters;
 using OSharp.AspNetCore.UI;
 using OSharp.Caching;
-using OSharp.Collections;
 using OSharp.Core.Functions;
 using OSharp.Core.Modules;
 using OSharp.Data;
 using OSharp.Entity;
 using OSharp.Filter;
-using OSharp.Mapping;
-using OSharp.Security;
+using Check = OSharp.Data.Check;
 using User = Liuliu.Demo.Identity.Entities.User;
 using VersionInputDto = Liuliu.Demo.Core.SqlOnline.Dtos.VersionInputDto;
 
@@ -70,9 +72,12 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers.Release
             IFunction function = this.GetExecuteFunction();
 
             Expression<Func<VTables, bool>> predicate = this._filterService.GetExpression<VTables>(request.FilterGroup);
-            var source = this.dbContext.VTables;
+            DatabaseModel databaseModel = DbContextGenerator.DatabaseModel;
+
+            // __EFMigrationsHistory is not in Microsoft.EntityFrameworkCore.Scaffolding.Metadata.DatabaseModel.
+            var source = this.dbContext.VTables.Where(o => o.Name != "__EFMigrationsHistory");
             var page = this._cacheService.ToPageCache(source, predicate, request.PageCondition, m => new { D = m, }, function)
-                           .ToPageResult(data => data.Select(m => new TableOutputDto(m.D)).ToArray());
+                           .ToPageResult(data => data.Select(m => new TableOutputDto(m.D, databaseModel.Tables.First(o => o.Name == m.D.Name))).ToArray());
             return page.ToPageData();
         }
 
@@ -85,16 +90,16 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers.Release
         [Description("读取字段")]
         public PageData<ColumnOutputDto> ReadColumns(string tableName, [FromBody]PageRequest request)
         {
-            Check.NotNull(request, nameof(request));
             Check.NotNullOrEmpty(tableName, nameof(tableName));
-
             Check.NotNull(request, nameof(request));
+
             IFunction function = this.GetExecuteFunction();
+            DatabaseModel databaseModel = DbContextGenerator.DatabaseModel;
 
             Expression<Func<VColumns, bool>> predicate = this._filterService.GetExpression<VColumns>(request.FilterGroup);
             var source = this.dbContext.VColumns.Where(o => o.TableName == tableName);
-            var page = this._cacheService.ToPageCache(source, predicate, request.PageCondition, m => new { D = m, }, function)
-                           .ToPageResult(data => data.Select(m => new ColumnOutputDto(m.D)).ToArray());
+            var page = this._cacheService.ToPageCache(source, predicate, request.PageCondition, column => new { c = column, }, function)
+                           .ToPageResult(data => data.Select(m => new ColumnOutputDto(m.c, databaseModel.Tables.First(o => o.Name == m.c.TableName).Columns.First(o => o.Name == m.c.ColumnName))).ToArray());
             return page.ToPageData();
         }
 

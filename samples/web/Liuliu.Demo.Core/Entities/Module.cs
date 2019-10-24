@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Entities
 {
+    /// <summary>
+    /// 模块信息.
+    /// </summary>
     public partial class Module
     {
         public Module()

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Entities
 {
+    /// <summary>
+    /// 数据角色信息.
+    /// </summary>
     public partial class EntityRole
     {
         public Guid Id { get; set; }

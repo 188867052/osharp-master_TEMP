@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Entities
 {
+    /// <summary>
+    /// 模块功能信息.
+    /// </summary>
     public partial class ModuleFunction
     {
         public Guid Id { get; set; }

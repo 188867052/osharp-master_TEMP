@@ -16,7 +16,7 @@
     </div>
   </sf>
 </nz-modal>
-<!--查看配置-->
+<!--查看字段-->
 <nz-drawer [nzTitle]="functionTitle" [nzVisible]="functionVisible" nzWidth="600px" (nzOnClose)="closeFunction()">
-  <osharp-function-view #function [ReadUrl]="functionReadUrl"></osharp-function-view>
+  <osharp-column-view #function [ReadUrl]="functionReadUrl"></osharp-column-view>
 </nz-drawer>

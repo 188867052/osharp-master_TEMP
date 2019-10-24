@@ -59,7 +59,7 @@
             if (!_cache.ContainsKey(key))
             {
                 T v = action();
-                _cache.Add(key, v);
+                _cache.TryAdd(key, v);
                 return v;
             }
 

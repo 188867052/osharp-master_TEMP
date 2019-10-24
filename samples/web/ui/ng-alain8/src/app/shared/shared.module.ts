@@ -26,60 +26,62 @@ import { FilterRuleComponent } from './components/filter-group/filter-rule.compo
 import { AdSearchComponent } from './components/ad-search/ad-search.component';
 import { AdSearchModalComponent } from './components/ad-search/modal/modal.component';
 import { FunctionViewComponent } from './components/function-view/function-view.component';
+import { ColumnViewComponent } from '@shared/components/column-view/column-view.component';
 
 const THIRDMODULES = [
-  NgZorroAntdModule,
-  CountdownModule,
-  OsharpModule
+    NgZorroAntdModule,
+    CountdownModule,
+    OsharpModule
 ];
 // #endregion
 
 // #region your componets & directives
 const COMPONENTS = [
-  ModalTreeComponent,
-  FilterGroupComponent,
-  FilterRuleComponent,
-  AdSearchComponent,
-  AdSearchModalComponent,
-  FunctionViewComponent
+    ModalTreeComponent,
+    FilterGroupComponent,
+    FilterRuleComponent,
+    AdSearchComponent,
+    AdSearchModalComponent,
+    FunctionViewComponent,
+    ColumnViewComponent
 ];
 const DIRECTIVES = [];
 // #endregion
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    ReactiveFormsModule,
-    AlainThemeModule.forChild(),
-    DelonABCModule,
-    DelonACLModule,
-    DelonFormModule,
-    // third libs
-    ...THIRDMODULES
-  ],
-  declarations: [
-    // your components
-    ...COMPONENTS,
-    ...DIRECTIVES
-  ],
-  exports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterModule,
-    AlainThemeModule,
-    DelonABCModule,
-    DelonACLModule,
-    DelonFormModule,
-    // i18n
-    TranslateModule,
-    // third libs
-    ...THIRDMODULES,
-    // your components
-    ...COMPONENTS,
-    ...DIRECTIVES,
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        RouterModule,
+        ReactiveFormsModule,
+        AlainThemeModule.forChild(),
+        DelonABCModule,
+        DelonACLModule,
+        DelonFormModule,
+        // third libs
+        ...THIRDMODULES
+    ],
+    declarations: [
+        // your components
+        ...COMPONENTS,
+        ...DIRECTIVES
+    ],
+    exports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule,
+        AlainThemeModule,
+        DelonABCModule,
+        DelonACLModule,
+        DelonFormModule,
+        // i18n
+        TranslateModule,
+        // third libs
+        ...THIRDMODULES,
+        // your components
+        ...COMPONENTS,
+        ...DIRECTIVES,
+    ]
 })
 export class SharedModule { }

@@ -39,7 +39,7 @@
     <property Name="AuditEnabled" Column="AuditEnabled" />
     <property Name="PropertyJson" Column="PropertyJson" />
   </class>
-  <class Name="EntityRole" Table="EntityRole" PrimaryKey="Id">
+  <class Name="EntityRole" Table="EntityRole" Summary="数据角色信息" PrimaryKey="Id">
     <property Name="Id" Column="Id" />
     <property Name="RoleId" Column="RoleId" />
     <property Name="EntityId" Column="EntityId" />
@@ -48,7 +48,7 @@
     <property Name="IsLocked" Column="IsLocked" />
     <property Name="CreatedTime" Column="CreatedTime" />
   </class>
-  <class Name="EntityUser" Table="EntityUser" PrimaryKey="Id">
+  <class Name="EntityUser" Table="EntityUser" Summary="数据用户信息" PrimaryKey="Id">
     <property Name="Id" Column="Id" />
     <property Name="UserId" Column="UserId" />
     <property Name="EntityId" Column="EntityId" />
@@ -122,7 +122,7 @@
     <property Name="UserId" Column="UserId" />
     <property Name="BelongMessageId" Column="BelongMessageId" />
   </class>
-  <class Name="Module" Table="Module" PrimaryKey="Id">
+  <class Name="Module" Table="Module" Summary="模块信息" PrimaryKey="Id">
     <property Name="Id" ValueGenerated="OnAdd" Column="Id" />
     <property Name="Name" Column="Name" />
     <property Name="Remark" Column="Remark" />
@@ -131,17 +131,17 @@
     <property Name="TreePathString" Column="TreePathString" />
     <property Name="ParentId" Column="ParentId" />
   </class>
-  <class Name="ModuleFunction" Table="ModuleFunction" PrimaryKey="Id">
+  <class Name="ModuleFunction" Table="ModuleFunction" Summary="模块功能信息" PrimaryKey="Id">
     <property Name="Id" Column="Id" />
     <property Name="ModuleId" Column="ModuleId" />
     <property Name="FunctionId" Column="FunctionId" />
   </class>
-  <class Name="ModuleRole" Table="ModuleRole" PrimaryKey="Id">
+  <class Name="ModuleRole" Table="ModuleRole" Summary="角色模块信息" PrimaryKey="Id">
     <property Name="Id" Column="Id" />
     <property Name="ModuleId" Column="ModuleId" />
     <property Name="RoleId" Column="RoleId" />
   </class>
-  <class Name="ModuleUser" Table="ModuleUser" PrimaryKey="Id">
+  <class Name="ModuleUser" Table="ModuleUser" Summary="用户模块信息" PrimaryKey="Id">
     <property Name="Id" Column="Id" />
     <property Name="ModuleId" Column="ModuleId" />
     <property Name="UserId" Column="UserId" />
@@ -173,30 +173,30 @@
     <property Name="ClaimType" Column="ClaimType" />
     <property Name="ClaimValue" Column="ClaimValue" />
   </class>
-  <class Name="User" Table="User" PrimaryKey="Id">
-    <property Name="Id" ValueGenerated="OnAdd" Column="Id" />
-    <property Name="UserName" Column="UserName" />
-    <property Name="NormalizedUserName" Column="NormalizedUserName" />
-    <property Name="NickName" Column="NickName" />
-    <property Name="Email" Column="Email" />
-    <property Name="NormalizeEmail" Column="NormalizeEmail" />
-    <property Name="EmailConfirmed" Column="EmailConfirmed" />
-    <property Name="PasswordHash" Column="PasswordHash" />
-    <property Name="HeadImg" Column="HeadImg" />
-    <property Name="SecurityStamp" Column="SecurityStamp" />
-    <property Name="ConcurrencyStamp" Column="ConcurrencyStamp" />
-    <property Name="PhoneNumber" Column="PhoneNumber" />
-    <property Name="PhoneNumberConfirmed" Column="PhoneNumberConfirmed" />
-    <property Name="TwoFactorEnabled" Column="TwoFactorEnabled" />
-    <property Name="LockoutEnd" Column="LockoutEnd" />
-    <property Name="LockoutEnabled" Column="LockoutEnabled" />
-    <property Name="AccessFailedCount" Column="AccessFailedCount" />
-    <property Name="IsSystem" Column="IsSystem" />
-    <property Name="IsLocked" Column="IsLocked" />
-    <property Name="CreatedTime" Column="CreatedTime" />
-    <property Name="DeletedTime" Column="DeletedTime" />
-    <property Name="Remark" Column="Remark" />
-    <property Name="MessageId" Column="MessageId" />
+  <class Name="User" Table="User" Summary="用户表" PrimaryKey="Id">
+    <property Name="Id" ValueGenerated="OnAdd" Column="Id" Summary="主键" />
+    <property Name="UserName" Column="UserName" Summary="用户名" />
+    <property Name="NormalizedUserName" Column="NormalizedUserName" Summary="标准化的用户名" />
+    <property Name="NickName" Column="NickName" Summary="NickName" />
+    <property Name="Email" Column="Email" Summary="电子邮箱" />
+    <property Name="NormalizeEmail" Column="NormalizeEmail" Summary="标准化的电子邮箱" />
+    <property Name="EmailConfirmed" Column="EmailConfirmed" Summary="电子邮箱确认" />
+    <property Name="PasswordHash" Column="PasswordHash" Summary="密码哈希值" />
+    <property Name="HeadImg" Column="HeadImg" Summary="用户头像" />
+    <property Name="SecurityStamp" Column="SecurityStamp" Summary="安全标识" />
+    <property Name="ConcurrencyStamp" Column="ConcurrencyStamp" Summary="版本标识" />
+    <property Name="PhoneNumber" Column="PhoneNumber" Summary="手机号码" />
+    <property Name="PhoneNumberConfirmed" Column="PhoneNumberConfirmed" Summary="手机号码确定" />
+    <property Name="TwoFactorEnabled" Column="TwoFactorEnabled" Summary="双因子身份验证" />
+    <property Name="LockoutEnd" Column="LockoutEnd" Summary="锁定时间" />
+    <property Name="LockoutEnabled" Column="LockoutEnabled" Summary="是否登录锁" />
+    <property Name="AccessFailedCount" Column="AccessFailedCount" Summary="登录失败次数" />
+    <property Name="IsSystem" Column="IsSystem" Summary="是否系统用户" />
+    <property Name="IsLocked" Column="IsLocked" Summary="是否锁定" />
+    <property Name="CreatedTime" Column="CreatedTime" Summary="创建时间" />
+    <property Name="DeletedTime" Column="DeletedTime" Summary="数据逻辑删除时间" />
+    <property Name="Remark" Column="Remark" Summary="备注" />
+    <property Name="MessageId" Column="MessageId" Summary="Message" />
   </class>
   <class Name="UserClaim" Table="UserClaim" PrimaryKey="Id">
     <property Name="Id" ValueGenerated="OnAdd" Column="Id" />

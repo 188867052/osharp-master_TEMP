@@ -126,6 +126,8 @@ namespace Entities
 
             modelBuilder.Entity<EntityRole>(entity =>
             {
+                entity.HasComment("数据角色信息");
+
                 entity.HasIndex(e => e.RoleId);
 
                 entity.HasIndex(e => new { e.EntityId, e.RoleId, e.Operation })
@@ -145,6 +147,8 @@ namespace Entities
 
             modelBuilder.Entity<EntityUser>(entity =>
             {
+                entity.HasComment("数据用户信息");
+
                 entity.HasIndex(e => e.UserId);
 
                 entity.HasIndex(e => new { e.EntityId, e.UserId })
@@ -259,6 +263,8 @@ namespace Entities
 
             modelBuilder.Entity<Module>(entity =>
             {
+                entity.HasComment("模块信息");
+
                 entity.HasIndex(e => e.ParentId);
 
                 entity.Property(e => e.Code).IsRequired();
@@ -272,6 +278,8 @@ namespace Entities
 
             modelBuilder.Entity<ModuleFunction>(entity =>
             {
+                entity.HasComment("模块功能信息");
+
                 entity.HasIndex(e => e.FunctionId);
 
                 entity.HasIndex(e => new { e.ModuleId, e.FunctionId })
@@ -291,6 +299,8 @@ namespace Entities
 
             modelBuilder.Entity<ModuleRole>(entity =>
             {
+                entity.HasComment("角色模块信息");
+
                 entity.HasIndex(e => e.RoleId);
 
                 entity.HasIndex(e => new { e.ModuleId, e.RoleId })
@@ -310,6 +320,8 @@ namespace Entities
 
             modelBuilder.Entity<ModuleUser>(entity =>
             {
+                entity.HasComment("用户模块信息");
+
                 entity.HasIndex(e => e.UserId);
 
                 entity.HasIndex(e => new { e.ModuleId, e.UserId })
@@ -369,6 +381,8 @@ namespace Entities
 
             modelBuilder.Entity<User>(entity =>
             {
+                entity.HasComment("用户表");
+
                 entity.HasIndex(e => e.MessageId);
 
                 entity.HasIndex(e => new { e.NormalizeEmail, e.DeletedTime })
@@ -379,9 +393,55 @@ namespace Entities
                     .IsUnique()
                     .HasFilter("([DeletedTime] IS NOT NULL)");
 
-                entity.Property(e => e.NormalizedUserName).IsRequired();
+                entity.Property(e => e.Id).HasComment("主键");
 
-                entity.Property(e => e.UserName).IsRequired();
+                entity.Property(e => e.AccessFailedCount).HasComment("登录失败次数");
+
+                entity.Property(e => e.ConcurrencyStamp).HasComment("版本标识");
+
+                entity.Property(e => e.CreatedTime).HasComment("创建时间");
+
+                entity.Property(e => e.DeletedTime).HasComment("数据逻辑删除时间");
+
+                entity.Property(e => e.Email).HasComment("电子邮箱");
+
+                entity.Property(e => e.EmailConfirmed).HasComment("电子邮箱确认");
+
+                entity.Property(e => e.HeadImg).HasComment("用户头像");
+
+                entity.Property(e => e.IsLocked).HasComment("是否锁定");
+
+                entity.Property(e => e.IsSystem).HasComment("是否系统用户");
+
+                entity.Property(e => e.LockoutEnabled).HasComment("是否登录锁");
+
+                entity.Property(e => e.LockoutEnd).HasComment("锁定时间");
+
+                entity.Property(e => e.MessageId).HasComment("Message");
+
+                entity.Property(e => e.NickName).HasComment("NickName");
+
+                entity.Property(e => e.NormalizeEmail).HasComment("标准化的电子邮箱");
+
+                entity.Property(e => e.NormalizedUserName)
+                    .IsRequired()
+                    .HasComment("标准化的用户名");
+
+                entity.Property(e => e.PasswordHash).HasComment("密码哈希值");
+
+                entity.Property(e => e.PhoneNumber).HasComment("手机号码");
+
+                entity.Property(e => e.PhoneNumberConfirmed).HasComment("手机号码确定");
+
+                entity.Property(e => e.Remark).HasComment("备注");
+
+                entity.Property(e => e.SecurityStamp).HasComment("安全标识");
+
+                entity.Property(e => e.TwoFactorEnabled).HasComment("双因子身份验证");
+
+                entity.Property(e => e.UserName)
+                    .IsRequired()
+                    .HasComment("用户名");
 
                 entity.HasOne(d => d.MessageNavigation)
                     .WithMany(p => p.User)

@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
-using EFCore.Scaffolding.Extension.Models;
+using EFCore.Scaffolding.Extension;
 
-namespace EFCore.Scaffolding.Extension
+namespace OSharp.AspNetCore.CodeGeneration
 {
     public static class ScaffoldingHelper
     {
         public static IEnumerable<string> Scaffolding(string @namespace, string contextName, string writeCodePath)
         {
-            DbContextGenerator generator = new DbContextGenerator(@namespace, contextName, writeCodePath);
+            var generator = new DbContextGenerator(@namespace, contextName, writeCodePath);
             generator.WriteTo();
 
             return generator.WriteAllTextModels.Select(o => o.Code);

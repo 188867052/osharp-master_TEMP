@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Entities
 {
+    /// <summary>
+    /// 数据用户信息.
+    /// </summary>
     public partial class EntityUser
     {
         public Guid Id { get; set; }

@@ -14,7 +14,18 @@ namespace EFCore.Scaffolding.Extension
         static ConfigHelper()
         {
             DirectoryInfo di = new DirectoryInfo(Environment.CurrentDirectory);
-            file = Directory.GetFiles(di.Parent.Parent.Parent.Parent.Parent.FullName, ".Scaffolding.xml", SearchOption.AllDirectories).FirstOrDefault();
+            while (true)
+            {
+                file = Directory.GetFiles(di.Parent.FullName, ".Scaffolding.xml", SearchOption.AllDirectories).FirstOrDefault();
+                if (string.IsNullOrEmpty(file))
+                {
+                    di = di.Parent;
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
 
         public static ScaffoldConfig ScaffoldConfig => Deserialize(File.ReadAllText(file, Encoding.UTF8));

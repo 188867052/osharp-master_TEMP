@@ -3,7 +3,7 @@ import { STComponentBase } from '@shared/osharp/components/st-component-base';
 import { SFUISchema } from '@delon/form';
 import { FilterGroup } from '@shared/osharp/osharp.model';
 import { STData, STColumn } from '@delon/abc';
-import { ColumnViewComponent } from './column-view.component';
+import { ColumnViewComponent } from '@shared/components/column-view/column-view.component';
 
 @Component({
     selector: 'app-mssql',
@@ -33,8 +33,10 @@ export class MsSqlComponent extends STComponentBase implements OnInit {
                 }]
             },
             { title: 'Table名称', index: 'Name', sort: true, editable: true, ftype: 'string', filterable: true },
+            { title: '描述', index: 'Comment', sort: true, editable: true, ftype: 'string', filterable: true },
             { title: '行数', index: 'Rows', sort: true, type: 'number', filterable: true },
-            { title: '主键数', index: 'KeyCount', sort: true, type: 'number', filterable: true },
+            { title: '列数', index: 'ColumnCount', sort: true, type: 'number', filterable: true },
+            { title: '主键', index: 'PrimaryKeys', sort: true, ftype: 'string'},
             { title: '创建时间', index: 'CreateDate', sort: true, type: 'date', filterable: true },
             { title: '修改时间', index: 'ModifyDate', sort: true, type: 'date', filterable: true },
         ];
@@ -62,7 +64,7 @@ export class MsSqlComponent extends STComponentBase implements OnInit {
     @ViewChild('function', { static: false }) function: ColumnViewComponent;
 
     private viewFunction(row: STData) {
-        this.functionTitle = `查看字段功能 - ${row.Name}`;
+        this.functionTitle = `查看字段 - ${row.Name} 表`;
         this.functionVisible = true;
 
         this.functionReadUrl = `api/admin/mssql/readcolumns?tableName=${row.Name}`;

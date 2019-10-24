@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using EFCore.Scaffolding.Extension;
 
 namespace OSharp.AspNetCore.CodeGeneration
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using Entities;
 using Liuliu.Demo.Identity.Dtos;
+using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using OSharp.Entity;
 using OSharp.Mapping;
 
@@ -15,13 +16,15 @@ namespace Liuliu.Demo.Core.SqlOnline.Dtos
         /// <summary>
         /// 初始化一个<see cref="ColumnOutputDto"/>类型的新实例
         /// </summary>
-        public ColumnOutputDto(VColumns u)
+        public ColumnOutputDto(VColumns u, DatabaseColumn databaseColumn)
         {
             this.OrdinalPosition = u.OrdinalPosition;
             this.TableName = u.TableName;
             this.ColumnName = u.ColumnName;
             this.IsNullable = u.IsNullable;
             this.DataType = u.DataType;
+            this.StoreType = databaseColumn.StoreType;
+            this.Comment = databaseColumn.Comment;
         }
 
         public string TableCatalog { get; set; }
@@ -39,6 +42,10 @@ namespace Liuliu.Demo.Core.SqlOnline.Dtos
         public string IsNullable { get; set; }
 
         public string DataType { get; set; }
+
+        public string StoreType { get; set; }
+
+        public string Comment { get;  set; }
 
         public int? CharacterMaximumLength { get; set; }
 
