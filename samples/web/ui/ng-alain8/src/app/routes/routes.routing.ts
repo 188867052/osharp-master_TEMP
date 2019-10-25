@@ -28,7 +28,8 @@ const routes: Routes = [
             { path: 'infos', loadChildren: () => import('./infos/infos.module').then(m => m.InfosModule), canActivateChild: [ACLGuard], data: { guard: 'Root.Admin.Infos' } },
             { path: 'release', loadChildren: () => import('./release.manage/release.module').then(m => m.ReleaseModule) },
             { path: 'sqlonline', loadChildren: () => import('./sqlonline/sqlonline.module').then(m => m.SqlOnlineModule) },
-            { path: 'dependencyinjection', loadChildren: () => import('./dependencyinjection/DependencyInjection.module').then(m => m.DependencyInjectionModule) },
+            { path: 'dependencyinjection', loadChildren: () => import('./dependencyinjection/dependencyinjection.module').then(m => m.DependencyInjectionModule) },
+            { path: 'routeanalyzer', loadChildren: () => import('./routeanalyzer/routeanalyzer.module').then(m => m.RouteAnalyzerModule) },
         ]
     },
     // 全屏布局

@@ -71,6 +71,12 @@
               "i18n": "menu.nav.dependencyinjection",
               "link": "/dependencyinjection/dependencyinjection",
               "acl": "Root.Admin.Identity.User"
+            },
+            {
+              "text": "RouteAnalyzer",
+              "i18n": "menu.nav.routeanalyzer",
+              "link": "/routeanalyzer/routeanalyzer",
+              "acl": "Root.Admin.Identity.User"
             }
           ]
         }

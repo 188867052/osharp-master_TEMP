@@ -212,7 +212,7 @@ namespace OSharp.Entity
                 }
 
                 // TODO: Skip if it is not a table
-                else if (typeof(TEntity).Name == "VTables" || typeof(TEntity).Name == "VColumns" || typeof(TEntity).Name == "DependencyInjectionInfo")
+                else if (typeof(TEntity).Name == "VTables" || typeof(TEntity).Name == "VColumns" || typeof(TEntity).Name == "DependencyInjectionInfo" || typeof(TEntity).Name == "RouteInfo")
                 {
                 }
                 else if (typeof(TEntity).IsBaseOn<ICreatedTime>())

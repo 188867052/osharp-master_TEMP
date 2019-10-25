@@ -18,6 +18,7 @@ namespace Liuliu.Demo.Web
             services.AddOSharp<AspOsharpPackManager>();
             services.AddDbContext<OSharpDbContext>(options => options.UseSqlServer(EFCore.Scaffolding.Extension.Connection.ConnectionString));
             services.AddDependencyInjectionAnalyzer();
+            services.AddSingleton<IRouteAnalyzer, RouteAnalyzer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
