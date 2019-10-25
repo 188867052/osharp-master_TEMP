@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Data.SqlClient;
     using System.IO;
-    using System.Linq;
     using System.Text;
     using EFCore.Scaffolding.Extension.Models;
     using Microsoft.EntityFrameworkCore;

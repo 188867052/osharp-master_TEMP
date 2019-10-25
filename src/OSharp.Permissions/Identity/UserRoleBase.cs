@@ -1,15 +1,5 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="UserRoleBase.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2017 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2017-09-04 23:50</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.ComponentModel;
-
 using OSharp.Entity;
 
 namespace OSharp.Identity
