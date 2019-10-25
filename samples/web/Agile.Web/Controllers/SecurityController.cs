@@ -14,18 +14,16 @@ using System.Linq;
 
 using Liuliu.Demo.Security;
 using Liuliu.Demo.Security.Entities;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-
 using OSharp.AspNetCore.Mvc;
 using OSharp.Collections;
 using OSharp.Core.Functions;
 using OSharp.Core.Modules;
 using OSharp.Security;
 
-namespace Liuliu.Demo.Web.Controllers
+namespace Agile.Core.Web.Controllers
 {
     [Description("网站-授权")]
     [ModuleInfo(Order = 2)]

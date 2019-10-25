@@ -40,7 +40,8 @@ namespace Liuliu.Demo.Web.Controllers
         private readonly IVerifyCodeService _verifyCodeService;
         private readonly UserManager<User> _userManager;
 
-        public IdentityController(IIdentityContract identityContract,
+        public IdentityController(
+            IIdentityContract identityContract,
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             IVerifyCodeService verifyCodeService)
@@ -60,12 +61,7 @@ namespace Liuliu.Demo.Web.Controllers
         [Description("用户名是否存在")]
         public bool CheckUserNameExists(string userName)
         {
-#if NETCOREAPP3_0
-            bool exists = this._userManager.Users.Any(m => m.NormalizedUserName == this._userManager.NormalizeName(userName));
-#else
-            bool exists = _userManager.Users.Any(m => m.NormalizedUserName == _userManager.NormalizeKey(userName));
-#endif
-            return exists;
+            return this._userManager.Users.Any(m => m.NormalizedUserName == this._userManager.NormalizeName(userName));
         }
 
         /// <summary>
@@ -77,12 +73,7 @@ namespace Liuliu.Demo.Web.Controllers
         [Description("用户Email是否存在")]
         public bool CheckEmailExists(string email)
         {
-#if NETCOREAPP3_0
-            bool exists = this._userManager.Users.Any(m => m.NormalizeEmail == this._userManager.NormalizeEmail(email));
-#else
-            bool exists = _userManager.Users.Any(m => m.NormalizeEmail == _userManager.NormalizeKey(email));
-#endif
-            return exists;
+            return this._userManager.Users.Any(m => m.NormalizeEmail == this._userManager.NormalizeEmail(email));
         }
 
         /// <summary>
@@ -94,8 +85,7 @@ namespace Liuliu.Demo.Web.Controllers
         [Description("用户昵称是否存在")]
         public async Task<bool> CheckNickNameExists(string nickName)
         {
-            IUserValidator<User> nickNameValidator =
-                this._userManager.UserValidators.FirstOrDefault(m => m.GetType() == typeof(UserNickNameValidator<User, int>));
+            var nickNameValidator = this._userManager.UserValidators.FirstOrDefault(m => m.GetType() == typeof(UserNickNameValidator<User, int>));
             if (nickNameValidator == null)
             {
                 return false;
@@ -135,8 +125,7 @@ namespace Liuliu.Demo.Web.Controllers
             dto.NickName = $"User_{new Random().NextLetterAndNumberString(8)}"; // 随机用户昵称
             dto.RegisterIp = this.HttpContext.GetClientIp();
 
-            OperationResult<User> result = await this._identityContract.Register(dto);
-
+            var result = await this._identityContract.Register(dto);
             if (result.Succeeded)
             {
                 User user = result.Data;
@@ -174,8 +163,7 @@ namespace Liuliu.Demo.Web.Controllers
                 return new AjaxResult("提交信息验证失败", AjaxResultType.Error);
             }
 
-            // todo: 校验验证码
-
+            // TODO: 校验验证码
             dto.Ip = this.HttpContext.GetClientIp();
             dto.UserAgent = this.Request.Headers["User-Agent"].FirstOrDefault();
 
@@ -213,7 +201,7 @@ namespace Liuliu.Demo.Web.Controllers
             dto.Ip = this.HttpContext.GetClientIp();
             dto.UserAgent = this.Request.Headers["User-Agent"].FirstOrDefault();
 
-            OperationResult<User> result = await this._identityContract.Login(dto);
+            var result = await this._identityContract.Login(dto);
             IUnitOfWork unitOfWork = this.HttpContext.RequestServices.GetUnitOfWork<User, int>();
             unitOfWork.Commit();
 
@@ -250,7 +238,7 @@ namespace Liuliu.Demo.Web.Controllers
                     UserAgent = this.Request.Headers["User-Agent"].FirstOrDefault(),
                 };
 
-                OperationResult<User> result = await this._identityContract.Login(loginDto);
+                var result = await this._identityContract.Login(loginDto);
                 IUnitOfWork unitOfWork = this.HttpContext.RequestServices.GetUnitOfWork<User, int>();
                 unitOfWork.Commit();
                 if (!result.Succeeded)

@@ -1,13 +1,4 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="CommonController.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2018 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2018-06-27 4:50</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Dynamic;
@@ -15,12 +6,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-
 using OSharp.AspNetCore;
 using OSharp.AspNetCore.Mvc;
 using OSharp.AspNetCore.UI;
@@ -32,21 +21,20 @@ using OSharp.Data;
 using OSharp.Drawing;
 using OSharp.IO;
 using OSharp.Reflection;
-
 using AssemblyExtensions = OSharp.Reflection.AssemblyExtensions;
 
-namespace Liuliu.Demo.Web.Controllers
+namespace Agile.Core.Web.Controllers
 {
     [Description("网站-通用")]
     [ModuleInfo(Order = 3)]
     public class CommonController : ApiController
     {
         private readonly IVerifyCodeService _verifyCodeService;
-        private readonly IHostingEnvironment _environment;
+        private readonly IWebHostEnvironment _environment;
 
         public CommonController(
             IVerifyCodeService verifyCodeService,
-            IHostingEnvironment environment)
+            IWebHostEnvironment environment)
         {
             this._verifyCodeService = verifyCodeService;
             this._environment = environment;
@@ -160,17 +148,14 @@ namespace Liuliu.Demo.Web.Controllers
                 return new TypeMetadata[0];
             }
 
-            switch (type?.ToLower())
+            return type?.ToLower() switch
             {
-                case "entity":
-                    return handler.GetEntityTypeMetadatas();
-                case "inputdto":
-                    return handler.GetInputDtoMetadatas();
-                case "outputdto":
-                    return handler.GetOutputDtoMetadata();
-            }
+                "entity" => handler.GetEntityTypeMetadatas(),
+                "inputdto" => handler.GetInputDtoMetadatas(),
+                "outputdto" => handler.GetOutputDtoMetadata(),
 
-            return new TypeMetadata[0];
+                _ => new TypeMetadata[0],
+            };
         }
 
         /// <summary>

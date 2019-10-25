@@ -6,13 +6,12 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Agile.Core.Common.Dtos;
 using Agile.Core.Identity;
-using Agile.Core.Identity.Dtos;
+using Liuliu.Demo.Core.Release.Entities;
 using Liuliu.Demo.Identity.Entities;
 using Liuliu.Demo.Security;
 using Liuliu.Demo.Security.Dtos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using OSharp.AspNetCore.Mvc;
 using OSharp.AspNetCore.Mvc.Filters;
 using OSharp.AspNetCore.UI;
@@ -21,69 +20,72 @@ using OSharp.Collections;
 using OSharp.Core.Functions;
 using OSharp.Core.Modules;
 using OSharp.Data;
-using OSharp.Extensions;
+using OSharp.Entity;
 using OSharp.Filter;
-using OSharp.Identity;
 using OSharp.Mapping;
 using OSharp.Security;
+using VersionInputDto = Liuliu.Demo.Core.Release.Dtos.VersionInputDto;
+using VersionOutputDto = Liuliu.Demo.Identity.Dtos.VersionOutputDto;
 
-namespace Liuliu.Demo.Web.Areas.Admin.Controllers
+namespace Liuliu.Demo.Web.Areas.Admin.Controllers.Release
 {
-    [ModuleInfo(Order = 1, Position = "Identity", PositionName = "身份认证模块")]
-    [Description("管理-用户信息")]
-    public class UserController : AdminApiController
+    [ModuleInfo(Order = 1, Position = "Release", PositionName = "版本管理模块")]
+    [Description("管理-版本管理")]
+    public class VersionController : AdminApiController
     {
         private readonly IIdentityContract _identityContract;
         private readonly ICacheService _cacheService;
+        private readonly IRepository<Versions, int> versionRepository;
         private readonly IFilterService _filterService;
         private readonly SecurityManager _securityManager;
         private readonly UserManager<User> _userManager;
 
-        public UserController(
+        public VersionController(
             UserManager<User> userManager,
             SecurityManager securityManager,
             IIdentityContract identityContract,
-            ILoggerFactory loggerFactory,
             ICacheService cacheService,
+            IRepository<Versions, int> versionRepository,
             IFilterService filterService)
         {
             this._userManager = userManager;
             this._securityManager = securityManager;
             this._identityContract = identityContract;
             this._cacheService = cacheService;
+            this.versionRepository = versionRepository;
             this._filterService = filterService;
         }
 
         /// <summary>
-        /// 读取用户列表信息
+        /// 读取版本列表信息
         /// </summary>
-        /// <returns>用户列表信息</returns>
+        /// <returns>版本列表信息</returns>
         [HttpPost]
         [ModuleInfo]
         [Description("读取")]
-        public PageData<UserOutputDto> Read(PageRequest request)
+        public PageData<VersionOutputDto> Read(PageRequest request)
         {
             Check.NotNull(request, nameof(request));
             IFunction function = this.GetExecuteFunction();
 
-            Func<User, bool> updateFunc = this._filterService.GetDataFilterExpression<User>(null, DataAuthOperation.Update).Compile();
-            Func<User, bool> deleteFunc = this._filterService.GetDataFilterExpression<User>(null, DataAuthOperation.Delete).Compile();
-            Expression<Func<User, bool>> predicate = this._filterService.GetExpression<User>(request.FilterGroup);
-            var page = this._cacheService.ToPageCache(this._userManager.Users, predicate, request.PageCondition, m => new
+            Func<Versions, bool> updateFunc = this._filterService.GetDataFilterExpression<Versions>(null, DataAuthOperation.Update).Compile();
+            Func<Versions, bool> deleteFunc = this._filterService.GetDataFilterExpression<Versions>(null, DataAuthOperation.Delete).Compile();
+            Expression<Func<Versions, bool>> predicate = this._filterService.GetExpression<Versions>(request.FilterGroup);
+            var source = ((Repository<Versions, int>)this.versionRepository).Entities;
+            var page = this._cacheService.ToPageCache(source, predicate, request.PageCondition, m => new
             {
                 D = m,
-                Roles = m.UserRoles.Select(n => n.Role.Name),
-            }, function).ToPageResult(data => data.Select(m => new UserOutputDto(m.D)
-            {
-                Roles = m.Roles.ToArray(),
-                Updatable = updateFunc(m.D),
-                Deletable = deleteFunc(m.D),
-            }).ToArray());
+            }, function)
+                .ToPageResult(data => data.Select(m => new VersionOutputDto(m.D)
+                {
+                    Updatable = updateFunc(m.D),
+                    Deletable = deleteFunc(m.D),
+                }).ToArray());
             return page.ToPageData();
         }
 
         /// <summary>
-        /// 读取用户节点信息
+        /// 读取版本节点信息
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
@@ -94,79 +96,78 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             Check.NotNull(group, nameof(group));
             IFunction function = this.GetExecuteFunction();
             Expression<Func<User, bool>> exp = this._filterService.GetExpression<User>(group);
-            ListNode[] nodes = this._cacheService.ToCacheArray<User, ListNode>(this._userManager.Users, exp, m => new ListNode()
+            Expression<Func<User, ListNode>> selector = m => new ListNode()
             {
                 Id = m.Id,
                 Name = m.NickName,
-            }, function);
+            };
+            ListNode[] nodes = this._cacheService.ToCacheArray(this._userManager.Users, exp, selector, function);
             return nodes;
         }
 
         /// <summary>
-        /// 新增用户信息
+        /// 新增版本信息
         /// </summary>
-        /// <param name="dtos">用户信息</param>
+        /// <param name="dtos">版本信息</param>
         /// <returns>JSON操作结果</returns>
         [HttpPost]
         [ModuleInfo]
         [DependOnFunction("Read")]
         [UnitOfWork]
         [Description("新增")]
-        public async Task<AjaxResult> Create(UserInputDto[] dtos)
+        public async Task<AjaxResult> Create(VersionInputDto[] dtos)
         {
             Check.NotNull(dtos, nameof(dtos));
             List<string> names = new List<string>();
             foreach (var dto in dtos)
             {
-                User user = dto.MapTo<User>();
-                IdentityResult result = dto.Password.IsMissing()
-                    ? await this._userManager.CreateAsync(user)
-                    : await this._userManager.CreateAsync(user, dto.Password);
-                if (!result.Succeeded)
+                Versions version = dto.MapTo<Versions>();
+                var count = await this.versionRepository.InsertAsync(version);
+                if (count == 0)
                 {
-                    return result.ToOperationResult().ToAjaxResult();
+                    return new AjaxResult($"版本“{version.Name}”创建失败");
                 }
 
-                names.Add(user.UserName);
+                names.Add(version.Name);
             }
 
-            return new AjaxResult($"用户“{names.ExpandAndToString()}”创建成功");
+            return new AjaxResult($"版本“{names.ExpandAndToString()}”创建成功");
         }
 
         /// <summary>
-        /// 更新用户信息
+        /// 更新版本信息
         /// </summary>
-        /// <param name="dtos">用户信息</param>
+        /// <param name="dtos">版本信息</param>
         /// <returns>JSON操作结果</returns>
         [HttpPost]
         [ModuleInfo]
         [DependOnFunction("Read")]
         [UnitOfWork]
         [Description("更新")]
-        public async Task<AjaxResult> Update(UserInputDto[] dtos)
+        public async Task<AjaxResult> Update(VersionInputDto[] dtos)
         {
             Check.NotNull(dtos, nameof(dtos));
             List<string> names = new List<string>();
             foreach (var dto in dtos)
             {
-                User user = await this._userManager.FindByIdAsync(dto.Id.ToString());
-                user = dto.MapTo(user);
-                IdentityResult result = await this._userManager.UpdateAsync(user);
-                if (!result.Succeeded)
+                var version = await this.versionRepository.GetAsync(dto.Id);
+                var newVersion = dto.MapTo(version);
+                var count = await this.versionRepository.UpdateAsync(newVersion);
+                if (count == 0)
                 {
-                    return result.ToOperationResult().ToAjaxResult();
+                    return new AjaxResult($"版本“{version.Name}”更新失败");
                 }
 
-                names.Add(user.UserName);
+                names.Add(version.Name);
             }
 
-            return new AjaxResult($"用户“{names.ExpandAndToString()}”更新成功");
+            return new AjaxResult($"版本“{names.ExpandAndToString()}”更新成功");
         }
 
         /// <summary>
-        /// 删除用户信息
+        /// 删除版本信息
         /// </summary>
-        /// <param name="ids">用户信息</param>
+        /// <param name="ids">版本信息</param>
         /// <returns>JSON操作结果</returns>
         [HttpPost]
         [ModuleInfo]
@@ -179,23 +180,23 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             List<string> names = new List<string>();
             foreach (int id in ids)
             {
-                User user = await this._userManager.FindByIdAsync(id.ToString());
-                IdentityResult result = await this._userManager.DeleteAsync(user);
-                if (!result.Succeeded)
+                var version = await this.versionRepository.GetAsync(id);
+                var count = await this.versionRepository.DeleteAsync(id);
+                if (count == 0)
                 {
-                    return result.ToOperationResult().ToAjaxResult();
+                    return new AjaxResult($"版本“{names.ExpandAndToString()}”删除失败");
                 }
 
-                names.Add(user.UserName);
+                names.Add(version.Name);
             }
 
-            return new AjaxResult($"用户“{names.ExpandAndToString()}”删除成功");
+            return new AjaxResult($"版本“{names.ExpandAndToString()}”删除成功");
         }
 
         /// <summary>
-        /// 设置用户角色
+        /// 设置版本角色
         /// </summary>
-        /// <param name="dto">用户角色信息</param>
+        /// <param name="dto">版本角色信息</param>
         /// <returns>JSON操作结果</returns>
         [HttpPost]
         [ModuleInfo]
@@ -210,9 +211,9 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// 设置用户模块
+        /// 设置版本模块
         /// </summary>
-        /// <param name="dto">用户模块信息</param>
+        /// <param name="dto">版本模块信息</param>
         /// <returns>JSON操作结果</returns>
         [HttpPost]
         [ModuleInfo]

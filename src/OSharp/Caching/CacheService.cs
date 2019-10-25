@@ -41,7 +41,8 @@ namespace OSharp.Caching
         /// <param name="cacheSeconds">缓存时间</param>
         /// <param name="keyParams">缓存键参数</param>
         /// <returns></returns>
-        public virtual PageResult<TResult> ToPageCache<TSource, TResult>(IQueryable<TSource> source,
+        public virtual PageResult<TResult> ToPageCache<TSource, TResult>(
+            IQueryable<TSource> source,
             Expression<Func<TSource, bool>> predicate,
             PageCondition pageCondition,
             Expression<Func<TSource, TResult>> selector,
@@ -64,7 +65,8 @@ namespace OSharp.Caching
         /// <param name="function">当前功能信息</param>
         /// <param name="keyParams">缓存键参数</param>
         /// <returns></returns>
-        public virtual PageResult<TResult> ToPageCache<TSource, TResult>(IQueryable<TSource> source,
+        public virtual PageResult<TResult> ToPageCache<TSource, TResult>(
+            IQueryable<TSource> source,
             Expression<Func<TSource, bool>> predicate,
             PageCondition pageCondition,
             Expression<Func<TSource, TResult>> selector,
@@ -86,7 +88,8 @@ namespace OSharp.Caching
         /// <param name="cacheSeconds">缓存时间：秒</param>
         /// <param name="keyParams">缓存键参数</param>
         /// <returns></returns>
-        public virtual List<TResult> ToCacheList<TSource, TResult>(IQueryable<TSource> source,
+        public virtual List<TResult> ToCacheList<TSource, TResult>(
+            IQueryable<TSource> source,
             Expression<Func<TSource, bool>> predicate,
             Expression<Func<TSource, TResult>> selector,
             int cacheSeconds = 60,
@@ -106,7 +109,8 @@ namespace OSharp.Caching
         /// <param name="cacheSeconds">缓存时间：秒</param>
         /// <param name="keyParams">缓存键参数</param>
         /// <returns></returns>
-        public virtual TResult[] ToCacheArray<TSource, TResult>(IQueryable<TSource> source,
+        public virtual TResult[] ToCacheArray<TSource, TResult>(
+            IQueryable<TSource> source,
             Expression<Func<TSource, bool>> predicate,
             Expression<Func<TSource, TResult>> selector,
             int cacheSeconds = 60,
@@ -126,7 +130,8 @@ namespace OSharp.Caching
         /// <param name="function">缓存策略相关功能</param>
         /// <param name="keyParams">缓存键参数</param>
         /// <returns></returns>
-        public virtual List<TResult> ToCacheList<TSource, TResult>(IQueryable<TSource> source,
+        public virtual List<TResult> ToCacheList<TSource, TResult>(
+            IQueryable<TSource> source,
             Expression<Func<TSource, bool>> predicate,
             Expression<Func<TSource, TResult>> selector,
             IFunction function,
@@ -146,7 +151,8 @@ namespace OSharp.Caching
         /// <param name="function">缓存策略相关功能</param>
         /// <param name="keyParams">缓存键参数</param>
         /// <returns></returns>
-        public virtual TResult[] ToCacheArray<TSource, TResult>(IQueryable<TSource> source,
+        public virtual TResult[] ToCacheArray<TSource, TResult>(
+            IQueryable<TSource> source,
             Expression<Func<TSource, bool>> predicate,
             Expression<Func<TSource, TResult>> selector,
             IFunction function,
@@ -165,7 +171,8 @@ namespace OSharp.Caching
         /// <param name="cacheSeconds">缓存的秒数</param>
         /// <param name="keyParams">缓存键参数</param>
         /// <returns>查询结果</returns>
-        public virtual List<TResult> ToCacheList<TSource, TResult>(IQueryable<TSource> source,
+        public virtual List<TResult> ToCacheList<TSource, TResult>(
+            IQueryable<TSource> source,
             Expression<Func<TSource, TResult>> selector,
             int cacheSeconds = 60,
             params object[] keyParams)
@@ -184,7 +191,8 @@ namespace OSharp.Caching
         /// <param name="cacheSeconds">缓存的秒数</param>
         /// <param name="keyParams">缓存键参数</param>
         /// <returns>查询结果</returns>
-        public virtual TResult[] ToCacheArray<TSource, TResult>(IQueryable<TSource> source,
+        public virtual TResult[] ToCacheArray<TSource, TResult>(
+            IQueryable<TSource> source,
             Expression<Func<TSource, TResult>> selector,
             int cacheSeconds = 60,
             params object[] keyParams)
@@ -203,7 +211,8 @@ namespace OSharp.Caching
         /// <param name="function">缓存策略相关功能</param>
         /// <param name="keyParams">缓存键参数</param>
         /// <returns>查询结果</returns>
-        public virtual List<TResult> ToCacheList<TSource, TResult>(IQueryable<TSource> source,
+        public virtual List<TResult> ToCacheList<TSource, TResult>(
+            IQueryable<TSource> source,
             Expression<Func<TSource, TResult>> selector,
             IFunction function,
             params object[] keyParams)
@@ -222,7 +231,8 @@ namespace OSharp.Caching
         /// <param name="function">缓存策略相关功能</param>
         /// <param name="keyParams">缓存键参数</param>
         /// <returns>查询结果</returns>
-        public virtual TResult[] ToCacheArray<TSource, TResult>(IQueryable<TSource> source,
+        public virtual TResult[] ToCacheArray<TSource, TResult>(
+            IQueryable<TSource> source,
             Expression<Func<TSource, TResult>> selector,
             IFunction function,
             params object[] keyParams)
@@ -308,7 +318,8 @@ namespace OSharp.Caching
         /// <param name="cacheSeconds">缓存的秒数</param>
         /// <param name="keyParams">缓存键参数</param>
         /// <returns>查询的分页结果</returns>
-        public virtual PageResult<TOutputDto> ToPageCache<TEntity, TOutputDto>(IQueryable<TEntity> source,
+        public virtual PageResult<TOutputDto> ToPageCache<TEntity, TOutputDto>(
+            IQueryable<TEntity> source,
             Expression<Func<TEntity, bool>> predicate,
             PageCondition pageCondition,
             int cacheSeconds = 60,
@@ -329,7 +340,8 @@ namespace OSharp.Caching
         /// <param name="function">缓存策略相关功能</param>
         /// <param name="keyParams">缓存键参数</param>
         /// <returns>查询的分页结果</returns>
-        public virtual PageResult<TOutputDto> ToPageCache<TEntity, TOutputDto>(IQueryable<TEntity> source,
+        public virtual PageResult<TOutputDto> ToPageCache<TEntity, TOutputDto>(
+            IQueryable<TEntity> source,
             Expression<Func<TEntity, bool>> predicate,
             PageCondition pageCondition,
             IFunction function,
@@ -349,7 +361,8 @@ namespace OSharp.Caching
         /// <param name="cacheSeconds">缓存时间：秒</param>
         /// <param name="keyParams">缓存键参数</param>
         /// <returns></returns>
-        public virtual List<TOutputDto> ToCacheList<TSource, TOutputDto>(IQueryable<TSource> source,
+        public virtual List<TOutputDto> ToCacheList<TSource, TOutputDto>(
+            IQueryable<TSource> source,
             Expression<Func<TSource, bool>> predicate,
             int cacheSeconds = 60,
             params object[] keyParams)
@@ -367,7 +380,8 @@ namespace OSharp.Caching
         /// <param name="cacheSeconds">缓存时间：秒</param>
         /// <param name="keyParams">缓存键参数</param>
         /// <returns></returns>
-        public virtual TOutputDto[] ToCacheArray<TSource, TOutputDto>(IQueryable<TSource> source,
+        public virtual TOutputDto[] ToCacheArray<TSource, TOutputDto>(
+            IQueryable<TSource> source,
             Expression<Func<TSource, bool>> predicate,
             int cacheSeconds = 60,
             params object[] keyParams)
@@ -385,7 +399,8 @@ namespace OSharp.Caching
         /// <param name="function">缓存策略相关功能</param>
         /// <param name="keyParams">缓存键参数</param>
         /// <returns></returns>
-        public virtual List<TOutputDto> ToCacheList<TSource, TOutputDto>(IQueryable<TSource> source,
+        public virtual List<TOutputDto> ToCacheList<TSource, TOutputDto>(
+            IQueryable<TSource> source,
             Expression<Func<TSource, bool>> predicate,
             IFunction function,
             params object[] keyParams)
@@ -403,7 +418,8 @@ namespace OSharp.Caching
         /// <param name="function">缓存策略相关功能</param>
         /// <param name="keyParams">缓存键参数</param>
         /// <returns></returns>
-        public virtual TOutputDto[] ToCacheArray<TSource, TOutputDto>(IQueryable<TSource> source,
+        public virtual TOutputDto[] ToCacheArray<TSource, TOutputDto>(
+            IQueryable<TSource> source,
             Expression<Func<TSource, bool>> predicate,
             IFunction function,
             params object[] keyParams)
@@ -471,7 +487,8 @@ namespace OSharp.Caching
             return this._cache.Get(key, () => source.ToOutput<TSource, TOutputDto>().ToArray(), function);
         }
 
-        private static string GetKey<TEntity, TResult>(IQueryable<TEntity> source,
+        private static string GetKey<TEntity, TResult>(
+            IQueryable<TEntity> source,
             Expression<Func<TEntity, bool>> predicate,
             PageCondition pageCondition,
             Expression<Func<TEntity, TResult>> selector,
@@ -522,7 +539,8 @@ namespace OSharp.Caching
             return GetKey(query.Expression, keyParams);
         }
 
-        private static string GetKey<TEntity, TOutputDto>(IQueryable<TEntity> source,
+        private static string GetKey<TEntity, TOutputDto>(
+            IQueryable<TEntity> source,
             Expression<Func<TEntity, bool>> predicate,
             PageCondition pageCondition,
             params object[] keyParams)
@@ -568,14 +586,16 @@ namespace OSharp.Caching
             return GetKey(query.Expression, keyParams);
         }
 
-        private static string GetKey<TSource, TOutputDto>(IQueryable<TSource> source,
+        private static string GetKey<TSource, TOutputDto>(
+            IQueryable<TSource> source,
             params object[] keyParams)
         {
             IQueryable<TOutputDto> query = source.ToOutput<TSource, TOutputDto>();
             return GetKey(query.Expression, keyParams);
         }
 
-        private static string GetKey<TSource, TResult>(IQueryable<TSource> source,
+        private static string GetKey<TSource, TResult>(
+            IQueryable<TSource> source,
             Expression<Func<TSource, TResult>> selector,
             params object[] keyParams)
         {
