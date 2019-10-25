@@ -13,6 +13,7 @@
   "menu.nav.home": "主页",
   "menu.nav.docs": "文档中心",
   "menu.nav.release.version": "版本管理",
+  "menu.nav.dependencyinjection": "依赖注入",
   "menu.nav.sqlonline.sql": "Sql Server",
   "menu.nav.permission": "权限模块",
   "menu.nav.permission.identity": "身份认证",

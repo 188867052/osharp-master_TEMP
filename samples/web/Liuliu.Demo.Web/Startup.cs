@@ -1,22 +1,11 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="Startup.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2018 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2018-06-27 4:50</last-date>
-// -----------------------------------------------------------------------
-
+﻿using DependencyInjection.Analyzer;
 using Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-#if NETCOREAPP3_0
 using Microsoft.Extensions.Hosting;
-#endif
 using Microsoft.Extensions.Logging;
-
 using OSharp.AspNetCore;
 
 namespace Liuliu.Demo.Web
@@ -28,16 +17,11 @@ namespace Liuliu.Demo.Web
         {
             services.AddOSharp<AspOsharpPackManager>();
             services.AddDbContext<OSharpDbContext>(options => options.UseSqlServer(EFCore.Scaffolding.Extension.Connection.ConnectionString));
+            services.AddDependencyInjectionAnalyzer();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-#if NETCOREAPP3_0
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
-
-#else
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-
-#endif
         {
             if (env.IsDevelopment())
             {
@@ -51,7 +35,6 @@ namespace Liuliu.Demo.Web
             }
 
             app
-
                 // .UseMiddleware<NodeNoFoundHandlerMiddleware>()
                 .UseMiddleware<NodeExceptionHandlerMiddleware>()
                 .UseDefaultFiles()

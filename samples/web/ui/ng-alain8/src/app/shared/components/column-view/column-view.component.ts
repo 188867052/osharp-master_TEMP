@@ -31,7 +31,7 @@ export class ColumnViewComponent extends STComponentBase implements OnInit {
     protected GetSTColumns(): OsharpSTColumn[] {
         return [
             { title: '序号', index: 'OrdinalPosition' },
-            { title: '字段名', index: 'ColumnName' },
+            { title: '字段名', index: 'ColumnName', sort: true, },
             { title: '描述', index: 'Comment' },
             { title: '数据类型', index: 'StoreType' },
             { title: '是否可空', index: 'IsNullable' },

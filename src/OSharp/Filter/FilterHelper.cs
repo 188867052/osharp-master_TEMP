@@ -1,13 +1,4 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="FilterHelper.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2018 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2018-07-15 10:22</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -61,7 +52,8 @@ namespace OSharp.Filter
                             throw new NotSupportedException("“StartsWith”比较方式只支持字符串类型的数据");
                         }
 
-                        return Expression.Call(left,
+                        return Expression.Call(
+                            left,
                             typeof(string).GetMethod("StartsWith", new[] { typeof(string) })
                             ?? throw new InvalidOperationException($"名称为“StartsWith”的方法不存在"),
                             right);
@@ -76,7 +68,8 @@ namespace OSharp.Filter
                             throw new NotSupportedException("“EndsWith”比较方式只支持字符串类型的数据");
                         }
 
-                        return Expression.Call(left,
+                        return Expression.Call(
+                            left,
                             typeof(string).GetMethod("EndsWith", new[] { typeof(string) })
                             ?? throw new InvalidOperationException($"名称为“EndsWith”的方法不存在"),
                             right);
@@ -91,7 +84,8 @@ namespace OSharp.Filter
                             throw new NotSupportedException("“Contains”比较方式只支持字符串类型的数据");
                         }
 
-                        return Expression.Call(left,
+                        return Expression.Call(
+                            left,
                             typeof(string).GetMethod("Contains", new[] { typeof(string) })
                             ?? throw new InvalidOperationException($"名称为“Contains”的方法不存在"),
                             right);
@@ -106,7 +100,8 @@ namespace OSharp.Filter
                             throw new NotSupportedException("“NotContains”比较方式只支持字符串类型的数据");
                         }
 
-                        return Expression.Not(Expression.Call(left,
+                        return Expression.Not(Expression.Call(
+                            left,
                             typeof(string).GetMethod("Contains", new[] { typeof(string) })
                             ?? throw new InvalidOperationException($"名称为“Contains”的方法不存在"),
                             right));

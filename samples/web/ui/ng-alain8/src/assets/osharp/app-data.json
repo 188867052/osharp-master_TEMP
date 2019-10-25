@@ -65,6 +65,12 @@
               "i18n": "menu.nav.sqlonline.sql",
               "link": "/sqlonline/mssql",
               "acl": "Root.Admin.Identity.User"
+            },
+            {
+              "text": "依赖注入",
+              "i18n": "menu.nav.dependencyinjection",
+              "link": "/dependencyinjection/dependencyinjection",
+              "acl": "Root.Admin.Identity.User"
             }
           ]
         }

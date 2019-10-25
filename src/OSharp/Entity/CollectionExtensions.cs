@@ -189,7 +189,8 @@ namespace OSharp.Entity
         /// <param name="total">输出符合条件的总记录数</param>
         /// <param name="sortConditions">排序条件集合</param>
         /// <returns></returns>
-        public static IQueryable<TEntity> Where<TEntity>(this IQueryable<TEntity> source,
+        public static IQueryable<TEntity> Where<TEntity>(
+            this IQueryable<TEntity> source,
             Expression<Func<TEntity, bool>> predicate,
             int pageIndex,
             int pageSize,
@@ -210,8 +211,8 @@ namespace OSharp.Entity
                     source = source.OrderBy("Id");
                 }
 
-                // TODO: Skip if it is a view
-                else if (typeof(TEntity).Name == "VTables" || typeof(TEntity).Name == "VColumns")
+                // TODO: Skip if it is not a table
+                else if (typeof(TEntity).Name == "VTables" || typeof(TEntity).Name == "VColumns" || typeof(TEntity).Name == "DependencyInjectionInfo")
                 {
                 }
                 else if (typeof(TEntity).IsBaseOn<ICreatedTime>())
