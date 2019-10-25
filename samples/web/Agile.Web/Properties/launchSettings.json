@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Liuliu.Demo.Web": {
+    "Agile.Web": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

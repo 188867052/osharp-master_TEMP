@@ -5,4 +5,4 @@ WORKDIR /app
 EXPOSE 80
 
 COPY ./bin/Release/netcoreapp2.2/publish /app
-ENTRYPOINT ["dotnet", "Liuliu.Demo.Web.dll"]
+ENTRYPOINT ["dotnet", "Agile.Web.dll"]
