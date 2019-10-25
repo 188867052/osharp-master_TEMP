@@ -9,6 +9,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="appsettings.Development.json" />
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.Development.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="3.0.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.9.6">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -32,6 +51,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Agile.Core\Agile.Core.csproj" />
+    <ProjectReference Include="..\Agile.Web\Agile.Web.csproj" />
   </ItemGroup>
 
 </Project>

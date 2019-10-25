@@ -8,7 +8,7 @@ namespace Liuliu.Demo.Core.SqlOnline.Dtos
     /// 输入DTO：版本信息
     /// </summary>
     [MapTo(typeof(Versions))]
-    public class VersionInputDto : VersionInputDtoBase<int>
+    public class MsSqlInputDto : VersionInputDtoBase<int>
     {
     }
 }

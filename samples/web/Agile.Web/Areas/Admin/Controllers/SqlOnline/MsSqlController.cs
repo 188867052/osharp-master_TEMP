@@ -24,7 +24,6 @@ using OSharp.Entity;
 using OSharp.Filter;
 using Check = OSharp.Data.Check;
 using User = Liuliu.Demo.Identity.Entities.User;
-using VersionInputDto = Liuliu.Demo.Core.SqlOnline.Dtos.VersionInputDto;
 
 namespace Liuliu.Demo.Web.Areas.Admin.Controllers.Release
 {
@@ -130,7 +129,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers.Release
         [DependOnFunction("Read")]
         [UnitOfWork]
         [Description("新增")]
-        public async Task<AjaxResult> Create(VersionInputDto[] dtos)
+        public async Task<AjaxResult> Create(MsSqlInputDto[] dtos)
         {
             //Check.NotNull(dtos, nameof(dtos));
             //List<string> names = new List<string>();
@@ -160,7 +159,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers.Release
         [DependOnFunction("Read")]
         [UnitOfWork]
         [Description("更新")]
-        public async Task<AjaxResult> Update(VersionInputDto[] dtos)
+        public async Task<AjaxResult> Update(MsSqlInputDto[] dtos)
         {
             //Check.NotNull(dtos, nameof(dtos));
             //List<string> names = new List<string>();
