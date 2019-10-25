@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Entities;
 using Liuliu.Demo.Identity.Dtos;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
@@ -22,6 +23,16 @@ namespace Liuliu.Demo.Core.SqlOnline.Dtos
             this.TableName = u.TableName;
             this.ColumnName = u.ColumnName;
             this.IsNullable = u.IsNullable;
+            this.IsPrimaryKey = databaseColumn.Table.PrimaryKey.Columns.Any(o => o.Name == u.ColumnName);
+
+            bool isForeignKey = databaseColumn.Table.ForeignKeys.SelectMany(t => t.Columns).Any(o => o.Name == u.ColumnName);
+            this.IsForeignKey = isForeignKey;
+            if (isForeignKey)
+            {
+                this.ForeignKeyTableName = databaseColumn.Table.ForeignKeys.FirstOrDefault(t => t.Columns.Any(o => o.Name == u.ColumnName)).PrincipalTable.Name;
+            }
+
+            this.IsNullable = u.IsNullable;
             this.DataType = u.DataType;
             this.StoreType = databaseColumn.StoreType;
             this.Comment = databaseColumn.Comment;
@@ -41,11 +52,17 @@ namespace Liuliu.Demo.Core.SqlOnline.Dtos
 
         public string IsNullable { get; set; }
 
+        public bool IsPrimaryKey { get; set; }
+
+        public bool IsForeignKey { get; set; }
+
+        public string ForeignKeyTableName { get; set; }
+
         public string DataType { get; set; }
 
         public string StoreType { get; set; }
 
-        public string Comment { get;  set; }
+        public string Comment { get; set; }
 
         public int? CharacterMaximumLength { get; set; }
 

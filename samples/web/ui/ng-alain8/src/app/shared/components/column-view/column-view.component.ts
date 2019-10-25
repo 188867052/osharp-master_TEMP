@@ -35,6 +35,9 @@ export class ColumnViewComponent extends STComponentBase implements OnInit {
             { title: '描述', index: 'Comment' },
             { title: '数据类型', index: 'StoreType' },
             { title: '是否可空', index: 'IsNullable' },
+            { title: '是否是主键', index: 'IsPrimaryKey' },
+            { title: '是否是外键', index: 'IsForeignKey' },
+            { title: '外键表', index: 'ForeignKeyTableName' },
         ];
     }
 
