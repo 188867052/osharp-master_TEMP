@@ -27,7 +27,7 @@ using OSharp.Security;
 using VersionInputDto = Liuliu.Demo.Core.Release.Dtos.VersionInputDto;
 using VersionOutputDto = Liuliu.Demo.Identity.Dtos.VersionOutputDto;
 
-namespace Liuliu.Demo.Web.Areas.Admin.Controllers.Release
+namespace Agile.Web.Areas.Admin.Controllers.Release
 {
     [ModuleInfo(Order = 1, Position = "Release", PositionName = "版本管理模块")]
     [Description("管理-版本管理")]

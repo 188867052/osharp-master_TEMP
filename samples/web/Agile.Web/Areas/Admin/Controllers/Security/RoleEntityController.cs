@@ -1,13 +1,4 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="RoleEntityController.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2018 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2018-07-05 14:45</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
@@ -16,11 +7,9 @@ using Agile.Core.Identity.Entities;
 using Liuliu.Demo.Security;
 using Liuliu.Demo.Security.Dtos;
 using Liuliu.Demo.Security.Entities;
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-
 using OSharp.AspNetCore.Mvc.Filters;
 using OSharp.AspNetCore.UI;
 using OSharp.Core.Modules;
@@ -29,7 +18,7 @@ using OSharp.Entity;
 using OSharp.Filter;
 using OSharp.Security;
 
-namespace Liuliu.Demo.Web.Areas.Admin.Controllers
+namespace Agile.Web.Areas.Admin.Controllers.Security
 {
     [ModuleInfo(Order = 6, Position = "Security", PositionName = "权限安全模块")]
     [Description("管理-角色数据权限")]
@@ -38,7 +27,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         private readonly SecurityManager _securityManager;
         private readonly IFilterService _filterService;
 
-        public RoleEntityController(SecurityManager securityManager,
+        public RoleEntityController(
+            SecurityManager securityManager,
             IFilterService filterService)
         {
             this._securityManager = securityManager;
@@ -70,7 +60,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             RoleManager<Role> roleManager = this.HttpContext.RequestServices.GetService<RoleManager<Role>>();
             Func<EntityRole, bool> updateFunc = this._filterService.GetDataFilterExpression<EntityRole>(null, DataAuthOperation.Update).Compile();
             Func<EntityRole, bool> deleteFunc = this._filterService.GetDataFilterExpression<EntityRole>(null, DataAuthOperation.Delete).Compile();
-            var page = this._securityManager.EntityRoles.ToPage(predicate,
+            var page = this._securityManager.EntityRoles.ToPage(
+                predicate,
                 request.PageCondition,
                 m => new
                 {

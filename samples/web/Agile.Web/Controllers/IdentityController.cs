@@ -29,7 +29,7 @@ using OSharp.Mapping;
 using OSharp.Net;
 using OSharp.Security.Claims;
 
-namespace Liuliu.Demo.Web.Controllers
+namespace Agile.Web.Controllers
 {
     [Description("网站-认证")]
     [ModuleInfo(Order = 1)]

@@ -37,7 +37,7 @@ using OSharp.Security;
 using Liuliu.Demo.Infos;
 using Liuliu.Demo.Infos.Dtos;
 using Liuliu.Demo.Infos.Entities;
-
+using Agile.Web.Areas.Admin.Controllers;
 
 namespace Liuliu.Demo.Web.Areas.Admin.Controllers
 {

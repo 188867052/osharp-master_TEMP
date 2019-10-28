@@ -1,13 +1,4 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="RoleFunctionController.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2018 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2018-06-27 4:49</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
@@ -23,7 +14,7 @@ using OSharp.Entity;
 using OSharp.Filter;
 using OSharp.Linq;
 
-namespace Liuliu.Demo.Web.Areas.Admin.Controllers
+namespace Agile.Web.Areas.Admin.Controllers.Security
 {
     [ModuleInfo(Order = 3, Position = "Security", PositionName = "权限安全模块")]
     [Description("管理-角色功能")]
@@ -33,7 +24,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         private readonly IFilterService _filterService;
         private readonly SecurityManager _securityManager;
 
-        public RoleFunctionController(SecurityManager securityManager,
+        public RoleFunctionController(
+            SecurityManager securityManager,
             RoleManager<Role> roleManager,
             IFilterService filterService)
         {

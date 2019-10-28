@@ -26,7 +26,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         /// <summary>
         /// 初始化一个<see cref="MessageController"/>类型的新实例
         /// </summary>
-        public MessageController(IInfosContract infosContract,
+        public MessageController(
+            IInfosContract infosContract,
             IFilterService filterService)
             : base(infosContract, filterService)
         {
@@ -40,7 +41,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         /// <summary>
         /// 初始化一个<see cref="MessageController"/>类型的新实例
         /// </summary>
-        public Message2Controller(IInfosContract infosContract,
+        public Message2Controller(
+            IInfosContract infosContract,
             IFilterService filterService)
             : base(infosContract, filterService)
         {

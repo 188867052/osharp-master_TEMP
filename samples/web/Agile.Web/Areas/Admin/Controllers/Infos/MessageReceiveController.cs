@@ -24,7 +24,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         /// <summary>
         /// 初始化一个<see cref="MessageReceiveController"/>类型的新实例
         /// </summary>
-        public MessageReceiveController(IInfosContract infosContract,
+        public MessageReceiveController(
+            IInfosContract infosContract,
             IFilterService filterService)
             : base(infosContract, filterService)
         {

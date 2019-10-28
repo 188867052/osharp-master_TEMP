@@ -1,13 +1,4 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="DashboardController.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2018 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor></last-editor>
-//  <last-date>2018-07-26 16:07</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
@@ -16,7 +7,6 @@ using Liuliu.Demo.Identity.Entities;
 using Liuliu.Demo.Security;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
 using OSharp.AspNetCore.Mvc;
 using OSharp.Caching;
 using OSharp.Core;
@@ -24,7 +14,7 @@ using OSharp.Core.Functions;
 using OSharp.Core.Modules;
 using OSharp.Entity;
 
-namespace Liuliu.Demo.Web.Areas.Admin.Controllers
+namespace Agile.Web.Areas.Admin.Controllers
 {
     [ModuleInfo(Order = 1)]
     [Description("管理-信息汇总")]
@@ -38,7 +28,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         /// <summary>
         /// 初始化一个<see cref="DashboardController"/>类型的新实例
         /// </summary>
-        public DashboardController(UserManager<User> userManager,
+        public DashboardController(
+            UserManager<User> userManager,
             RoleManager<Role> roleManager,
             SecurityManager securityManager,
             ICacheService cacheService)
@@ -64,33 +55,38 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             IFunction function = this.GetExecuteFunction();
             Expression<Func<User, bool>> userExp = GetExpression<User>(start, end);
 
-            var users = this._cacheService.ToCacheList(this._userManager.Users.Where(userExp).GroupBy(m => 1).Select(g => new
+            var users = this._cacheService.ToCacheList(
+                this._userManager.Users.Where(userExp).GroupBy(m => 1).Select(g => new
             {
                 TotalCount = g.Sum(m => 1),
                 ValidCount = g.Count(n => n.EmailConfirmed),
             }), function, "Dashboard_Summary_User", start, end).FirstOrDefault()
                 ?? new { TotalCount = 0, ValidCount = 0 };
 
-            var roles = this._cacheService.ToCacheList(this._roleManager.Roles.GroupBy(m => 1).Select(g => new
+            var roles = this._cacheService.ToCacheList(
+                this._roleManager.Roles.GroupBy(m => 1).Select(g => new
             {
                 TotalCount = g.Sum(m => 1),
                 AdminCount = g.Count(m => m.IsAdmin),
             }), function, "Dashboard_Summary_Role", start, end).FirstOrDefault()
                 ?? new { TotalCount = 0, AdminCount = 0 };
-            var modules = this._cacheService.ToCacheList(this._securityManager.Modules.GroupBy(m => 1).Select(g => new
+            var modules = this._cacheService.ToCacheList(
+                this._securityManager.Modules.GroupBy(m => 1).Select(g => new
             {
                 TotalCount = g.Sum(m => 1),
                 SiteCount = g.Count(m => m.TreePathString.Contains("$2$")),
                 AdminCount = g.Count(m => m.TreePathString.Contains("$3$")),
             }), function, "Dashboard_Summary_Module").FirstOrDefault()
                 ?? new { TotalCount = 0, SiteCount = 0, AdminCount = 0 };
-            var functions = this._cacheService.ToCacheList(this._securityManager.Functions.GroupBy(m => 1).Select(g => new
+            var functions = this._cacheService.ToCacheList(
+                this._securityManager.Functions.GroupBy(m => 1).Select(g => new
             {
                 TotalCount = g.Sum(m => 1),
                 ControllerCount = g.Count(m => m.IsController),
             }), function, "Dashboard_Summary_Function").FirstOrDefault()
                 ?? new { TotalCount = 0, ControllerCount = 0 };
-            var entityInfos = this._cacheService.ToCacheList(this._securityManager.EntityInfos.GroupBy(m => 1).Select(g => new
+            var entityInfos = this._cacheService.ToCacheList(
+                this._securityManager.EntityInfos.GroupBy(m => 1).Select(g => new
             {
                 TotalCount = g.Sum(m => 1),
                 AuditCount = g.Count(m => m.AuditEnabled),
@@ -110,7 +106,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             IFunction function = this.GetExecuteFunction();
             Expression<Func<User, bool>> userExp = GetExpression<User>(start, end);
 
-            var userData = this._cacheService.ToCacheList(this._userManager.Users.Where(userExp).GroupBy(m => m.CreatedTime.Date).Select(g => new
+            var userData = this._cacheService.ToCacheList(
+                this._userManager.Users.Where(userExp).GroupBy(m => m.CreatedTime.Date).Select(g => new
             {
                 Date = g.Key,
                 DailyCount = g.Count(),

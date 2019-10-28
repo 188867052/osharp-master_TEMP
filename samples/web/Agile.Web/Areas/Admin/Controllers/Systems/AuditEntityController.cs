@@ -1,28 +1,16 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="AuditEntityController.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2018 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2018-08-02 14:57</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
-
 using Liuliu.Demo.Systems;
 using Liuliu.Demo.Systems.Dtos;
 using Liuliu.Demo.Systems.Entities;
-
 using Microsoft.AspNetCore.Mvc;
-
 using OSharp.Core.Modules;
 using OSharp.Entity;
 using OSharp.Filter;
 
-namespace Liuliu.Demo.Web.Areas.Admin.Controllers
+namespace Agile.Web.Areas.Admin.Controllers.Systems
 {
     [ModuleInfo(Order = 3, Position = "Systems", PositionName = "系统管理模块")]
     [Description("管理-数据审计信息")]

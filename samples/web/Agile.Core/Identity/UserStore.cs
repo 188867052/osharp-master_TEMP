@@ -5,7 +5,7 @@ using OSharp.Entity;
 using OSharp.EventBuses;
 using OSharp.Identity;
 
-namespace Liuliu.Demo.Identity
+namespace Agile.Core.Identity
 {
     /// <summary>
     /// 用户仓储

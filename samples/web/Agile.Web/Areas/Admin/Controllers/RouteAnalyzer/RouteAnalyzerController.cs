@@ -9,7 +9,7 @@ using OSharp.Core.Modules;
 using OSharp.Filter;
 using Check = OSharp.Data.Check;
 
-namespace Liuliu.Demo.Web.Areas.Admin.Controllers.Release
+namespace Agile.Web.Areas.Admin.Controllers.RouteAnalyzer
 {
     [ModuleInfo(Order = 1, Position = "RouteAnalyzer", PositionName = "RouteAnalyzer模块")]
     [Description("管理-RouteAnalyzer")]

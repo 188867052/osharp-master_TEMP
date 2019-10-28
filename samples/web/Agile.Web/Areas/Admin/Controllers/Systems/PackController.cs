@@ -1,22 +1,10 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="PackController.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2018 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2018-08-13 15:00</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
-
 using Liuliu.Demo.Systems.Dtos;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-
 using OSharp.AspNetCore.Mvc;
 using OSharp.Caching;
 using OSharp.Core.Functions;
@@ -25,7 +13,7 @@ using OSharp.Core.Packs;
 using OSharp.Filter;
 using OSharp.Reflection;
 
-namespace Liuliu.Demo.Web.Areas.Admin.Controllers
+namespace Agile.Web.Areas.Admin.Controllers.Systems
 {
     [ModuleInfo(Order = 4, Position = "Systems", PositionName = "系统管理模块")]
     [Description("管理-模块包信息")]
@@ -37,7 +25,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         /// <summary>
         /// 初始化一个<see cref="PackController"/>类型的新实例
         /// </summary>
-        public PackController(ICacheService cacheService,
+        public PackController(
+            ICacheService cacheService,
             IFilterService filterService)
         {
             this._cacheService = cacheService;

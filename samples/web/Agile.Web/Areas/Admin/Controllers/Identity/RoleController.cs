@@ -9,10 +9,8 @@ using Agile.Core.Identity.Dtos;
 using Agile.Core.Identity.Entities;
 using Liuliu.Demo.Security;
 using Liuliu.Demo.Security.Dtos;
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
 using OSharp.AspNetCore.Mvc;
 using OSharp.AspNetCore.Mvc.Filters;
 using OSharp.AspNetCore.UI;
@@ -26,7 +24,7 @@ using OSharp.Filter;
 using OSharp.Identity;
 using OSharp.Mapping;
 
-namespace Liuliu.Demo.Web.Areas.Admin.Controllers
+namespace Agile.Web.Areas.Admin.Controllers.Identity
 {
     [ModuleInfo(Order = 2, Position = "Identity", PositionName = "身份认证模块")]
     [Description("管理-角色信息")]
@@ -38,7 +36,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         private readonly RoleManager<Role> _roleManager;
         private readonly SecurityManager _securityManager;
 
-        public RoleController(RoleManager<Role> roleManager,
+        public RoleController(
+            RoleManager<Role> roleManager,
             SecurityManager securityManager,
             IIdentityContract identityContract,
             ICacheService cacheService,

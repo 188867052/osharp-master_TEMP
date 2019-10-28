@@ -27,7 +27,7 @@ using OSharp.Identity;
 using OSharp.Mapping;
 using OSharp.Security;
 
-namespace Liuliu.Demo.Web.Areas.Admin.Controllers
+namespace Agile.Web.Areas.Admin.Controllers.Identity
 {
     [ModuleInfo(Order = 1, Position = "Identity", PositionName = "身份认证模块")]
     [Description("管理-用户信息")]
@@ -94,7 +94,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             Check.NotNull(group, nameof(group));
             IFunction function = this.GetExecuteFunction();
             Expression<Func<User, bool>> exp = this._filterService.GetExpression<User>(group);
-            ListNode[] nodes = this._cacheService.ToCacheArray<User, ListNode>(this._userManager.Users, exp, m => new ListNode()
+            ListNode[] nodes = this._cacheService.ToCacheArray(this._userManager.Users, exp, m => new ListNode()
             {
                 Id = m.Id,
                 Name = m.NickName,

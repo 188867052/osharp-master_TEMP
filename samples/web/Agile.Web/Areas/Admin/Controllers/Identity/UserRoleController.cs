@@ -1,13 +1,4 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="UserRoleController.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2018 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2018-06-27 4:49</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
@@ -15,9 +6,7 @@ using System.Threading.Tasks;
 using Agile.Core.Identity;
 using Agile.Core.Identity.Dtos;
 using Agile.Core.Identity.Entities;
-
 using Microsoft.AspNetCore.Mvc;
-
 using OSharp.AspNetCore.Mvc.Filters;
 using OSharp.AspNetCore.UI;
 using OSharp.Core.Modules;
@@ -26,7 +15,7 @@ using OSharp.Entity;
 using OSharp.Filter;
 using OSharp.Security;
 
-namespace Liuliu.Demo.Web.Areas.Admin.Controllers
+namespace Agile.Web.Areas.Admin.Controllers.Identity
 {
     [ModuleInfo(Order = 3, Position = "Identity", PositionName = "身份认证模块")]
     [Description("管理-用户角色信息")]
@@ -35,7 +24,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         private readonly IIdentityContract _identityContract;
         private readonly IFilterService _filterService;
 
-        public UserRoleController(IIdentityContract identityContract,
+        public UserRoleController(
+            IIdentityContract identityContract,
             IFilterService filterService)
         {
             this._identityContract = identityContract;
@@ -58,7 +48,7 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
             PageResult<UserRoleOutputDto> page = this._identityContract.UserRoles.ToPage(predicate, request.PageCondition, m => new
             {
                 D = m,
-                UserName = m.User.UserName,
+                m.User.UserName,
                 RoleName = m.Role.Name,
             }).ToPageResult(data => data.Select(m => new UserRoleOutputDto(m.D)
             {

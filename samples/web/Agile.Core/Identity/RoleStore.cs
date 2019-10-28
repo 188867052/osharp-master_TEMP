@@ -2,7 +2,7 @@
 using OSharp.Entity;
 using OSharp.Identity;
 
-namespace Liuliu.Demo.Identity
+namespace Agile.Core.Identity
 {
     /// <summary>
     /// 角色仓储

@@ -25,7 +25,7 @@ using OSharp.Filter;
 using Check = OSharp.Data.Check;
 using User = Liuliu.Demo.Identity.Entities.User;
 
-namespace Liuliu.Demo.Web.Areas.Admin.Controllers.Release
+namespace Agile.Web.Areas.Admin.Controllers.SqlOnline
 {
     [ModuleInfo(Order = 1, Position = "SqlOnline", PositionName = "SqlOnline模块")]
     [Description("管理-MsSql管理")]

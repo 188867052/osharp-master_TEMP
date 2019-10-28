@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using System.Threading.Tasks;
-using Agile.Core.Identity;
 using Agile.Core.Identity.Entities;
+using Liuliu.Demo.Identity;
 using Liuliu.Demo.Identity.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -21,7 +21,7 @@ using OSharp.Extensions;
 using OSharp.Identity;
 using OSharp.Identity.JwtBearer;
 
-namespace Liuliu.Demo.Identity
+namespace Agile.Core.Identity
 {
     /// <summary>
     /// 身份认证模块，此模块必须在MVC模块之前启动
@@ -217,7 +217,7 @@ namespace Liuliu.Demo.Identity
         {
             app.UseAuthentication();
 
-            this.IsEnabled = true;
+            IsEnabled = true;
         }
     }
 }

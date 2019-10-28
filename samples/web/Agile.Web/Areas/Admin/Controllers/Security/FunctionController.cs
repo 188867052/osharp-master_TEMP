@@ -1,13 +1,4 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="FunctionController.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2018 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2018-06-27 4:49</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
@@ -15,9 +6,7 @@ using System.Threading.Tasks;
 using Agile.Core.Common.Dtos;
 using Liuliu.Demo.Security;
 using Liuliu.Demo.Security.Dtos;
-
 using Microsoft.AspNetCore.Mvc;
-
 using OSharp.AspNetCore.Mvc;
 using OSharp.AspNetCore.Mvc.Filters;
 using OSharp.AspNetCore.UI;
@@ -29,7 +18,7 @@ using OSharp.Entity;
 using OSharp.Filter;
 using OSharp.Security;
 
-namespace Liuliu.Demo.Web.Areas.Admin.Controllers
+namespace Agile.Web.Areas.Admin.Controllers.Security
 {
     [ModuleInfo(Order = 2, Position = "Security", PositionName = "权限安全模块")]
     [Description("管理-功能信息")]
@@ -39,7 +28,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         private readonly ICacheService _cacheService;
         private readonly IFilterService _filterService;
 
-        public FunctionController(SecurityManager securityManager,
+        public FunctionController(
+            SecurityManager securityManager,
             ICacheService cacheService,
             IFilterService filterService)
         {

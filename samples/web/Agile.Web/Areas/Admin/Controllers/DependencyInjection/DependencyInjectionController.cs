@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Linq;
 using DependencyInjection.Analyzer;
-using Liuliu.Demo.Web.Areas.Admin.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using OSharp.AspNetCore.Mvc;
 using OSharp.Caching;

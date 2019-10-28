@@ -1,24 +1,12 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="EntityInfoController.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2018 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2018-06-27 4:49</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-
 using Liuliu.Demo.Security;
 using Liuliu.Demo.Security.Dtos;
-
 using Microsoft.AspNetCore.Mvc;
-
 using OSharp.AspNetCore.Mvc.Filters;
 using OSharp.AspNetCore.UI;
 using OSharp.Core.EntityInfos;
@@ -29,7 +17,7 @@ using OSharp.Extensions;
 using OSharp.Filter;
 using OSharp.Security;
 
-namespace Liuliu.Demo.Web.Areas.Admin.Controllers
+namespace Agile.Web.Areas.Admin.Controllers.Security
 {
     [ModuleInfo(Order = 5, Position = "Security", PositionName = "权限安全模块")]
     [Description("管理-实体信息")]
@@ -38,7 +26,8 @@ namespace Liuliu.Demo.Web.Areas.Admin.Controllers
         private readonly SecurityManager _securityManager;
         private readonly IFilterService _filterService;
 
-        public EntityInfoController(SecurityManager securityManager,
+        public EntityInfoController(
+            SecurityManager securityManager,
             IFilterService filterService)
         {
             this._securityManager = securityManager;

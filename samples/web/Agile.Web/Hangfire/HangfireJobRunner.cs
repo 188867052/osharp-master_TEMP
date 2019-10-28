@@ -14,20 +14,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-
 using Hangfire;
-
 using Liuliu.Demo.Identity;
 using Liuliu.Demo.Identity.Entities;
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-
 using OSharp.Collections;
 using OSharp.Dependency;
 using OSharp.Entity;
 using OSharp.Hangfire;
-
 
 namespace Liuliu.Demo.Web.Hangfire
 {

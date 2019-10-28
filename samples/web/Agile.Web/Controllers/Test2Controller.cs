@@ -7,7 +7,7 @@ using OSharp.Collections;
 using OSharp.Core.Modules;
 using OSharp.Entity;
 
-namespace Liuliu.Demo.Web.Controllers
+namespace Agile.Web.Controllers
 {
     public class Test2Controller : ApiController
     {

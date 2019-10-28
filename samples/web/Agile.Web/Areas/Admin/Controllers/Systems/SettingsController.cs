@@ -1,22 +1,9 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="SettingsController.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2018 OSharp. All rights reserved.
-//  </copyright>
-//  <site>http://www.osharp.org</site>
-//  <last-editor>郭明锋</last-editor>
-//  <last-date>2018-06-27 4:50</last-date>
-// -----------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
-
 using Liuliu.Demo.Systems.Dtos;
-
 using Microsoft.AspNetCore.Mvc;
-
 using Newtonsoft.Json;
-
 using OSharp.AspNetCore.Mvc.Filters;
 using OSharp.AspNetCore.UI;
 using OSharp.Core.Modules;
@@ -24,7 +11,7 @@ using OSharp.Core.Systems;
 using OSharp.Data;
 using OSharp.Exceptions;
 
-namespace Liuliu.Demo.Web.Areas.Admin.Controllers
+namespace Agile.Web.Areas.Admin.Controllers.Systems
 {
     [ModuleInfo(Order = 1, Position = "Systems", PositionName = "系统管理模块")]
     [Description("管理-系统设置")]
